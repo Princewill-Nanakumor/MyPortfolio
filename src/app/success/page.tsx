@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { HiCheckCircle, HiArrowLeft, HiHome } from "react-icons/hi";
 
-const SuccessPage = () => {
+const SuccessPage = (): JSX.Element => {
   return (
     <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-accent">
       {/* Background Elements */}

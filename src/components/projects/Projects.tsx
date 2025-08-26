@@ -1,10 +1,21 @@
+// src/components/projects/Projects.tsx
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BsGithub, BsArrowUpRightSquare } from "react-icons/bs";
 import { motion } from "framer-motion";
 
-const projects = [
+interface Project {
+  image: string;
+  name: string;
+  description: string;
+  technology: string;
+  github: string;
+  link: string;
+  year: string;
+}
+
+const projects: Project[] = [
   {
     image: "/crm.png",
     name: "CRM",
@@ -36,7 +47,7 @@ const projects = [
   },
 ];
 
-const ProjectsSection = () => {
+const ProjectsSection: React.FC = () => {
   return (
     <section
       id="projects"

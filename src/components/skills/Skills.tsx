@@ -1,8 +1,15 @@
+// src/components/skills/Skills.tsx
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 
-const skills = [
+interface Skill {
+  image: string;
+  description: string;
+  category: string;
+}
+
+const skills: Skill[] = [
   { image: "/html.png", description: "HTML", category: "Frontend" },
   { image: "/css.png", description: "CSS", category: "Frontend" },
   { image: "/tailwind.png", description: "Tailwind", category: "Frontend" },
@@ -21,8 +28,8 @@ const skills = [
   { image: "/Npm-logo.svg.png", description: "NPM", category: "Tools" },
 ];
 
-const Skills = () => {
-  const [isClient, setIsClient] = useState(false);
+const Skills: React.FC = () => {
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
     setIsClient(true);

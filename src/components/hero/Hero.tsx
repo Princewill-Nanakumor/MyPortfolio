@@ -1,4 +1,6 @@
+// src/components/hero/Hero.tsx
 "use client";
+import React from "react";
 import { AiOutlineMail } from "react-icons/ai";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { HiArrowDown } from "react-icons/hi";
@@ -7,10 +9,10 @@ import Link from "next/link";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 import { motion } from "framer-motion";
 
-const Hero = () => {
+const Hero: React.FC = () => {
   const [typeEffect] = useTypewriter({
     words: ["<Princewill/>", "<React/>", "<Typescript/>"],
-    loop: {},
+    loop: true, // Changed from {} to true for infinite loop
     typeSpeed: 100,
     deleteSpeed: 150,
   });

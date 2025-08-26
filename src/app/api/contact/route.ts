@@ -1,14 +1,40 @@
+// src/app/api/contact/route.ts
 import { mailOptions, transporter } from "@/nodemailer/nodemailer";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function POST(request) {
+interface ContactFormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface ContactSuccess {
+  message: string;
+  success: true;
+}
+
+interface ContactError {
+  error: string;
+}
+
+type ContactResponse = ContactSuccess | ContactError;
+
+interface EmailError extends Error {
+  code?: string;
+}
+
+export async function POST(
+  request: NextRequest
+): Promise<NextResponse<ContactResponse>> {
   try {
     // Parse request body
-    const { name, email, subject, message } = await request.json();
+    const { name, email, subject, message }: ContactFormData =
+      await request.json();
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
-      return NextResponse.json(
+      return NextResponse.json<ContactError>(
         { error: "All fields are required" },
         { status: 400 }
       );
@@ -17,7 +43,7 @@ export async function POST(request) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
+      return NextResponse.json<ContactError>(
         { error: "Please provide a valid email address" },
         { status: 400 }
       );
@@ -25,21 +51,21 @@ export async function POST(request) {
 
     // Validate field lengths
     if (name.length < 2) {
-      return NextResponse.json(
+      return NextResponse.json<ContactError>(
         { error: "Name must be at least 2 characters long" },
         { status: 400 }
       );
     }
 
     if (subject.length < 5) {
-      return NextResponse.json(
+      return NextResponse.json<ContactError>(
         { error: "Subject must be at least 5 characters long" },
         { status: 400 }
       );
     }
 
     if (message.length < 10) {
-      return NextResponse.json(
+      return NextResponse.json<ContactError>(
         { error: "Message must be at least 10 characters long" },
         { status: 400 }
       );
@@ -192,42 +218,44 @@ export async function POST(request) {
     });
 
     // Return success response
-    return NextResponse.json(
+    return NextResponse.json<ContactSuccess>(
       {
         message: "Message sent successfully! I'll get back to you soon.",
         success: true,
       },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Contact form error:", error);
 
+    const emailError = error as EmailError;
+
     // Handle specific email errors
-    if (error.code === "EAUTH") {
-      return NextResponse.json(
+    if (emailError.code === "EAUTH") {
+      return NextResponse.json<ContactError>(
         { error: "Email service configuration error. Please try again later." },
         { status: 500 }
       );
     }
 
-    if (error.code === "ECONNECTION") {
-      return NextResponse.json(
+    if (emailError.code === "ECONNECTION") {
+      return NextResponse.json<ContactError>(
         {
-          error: "Unable to send email at the moment. Please try again ",
+          error: "Unable to send email at the moment. Please try again later.",
         },
         { status: 500 }
       );
     }
 
     // Generic error response
-    return NextResponse.json(
+    return NextResponse.json<ContactError>(
       { error: "Something went wrong. Please try again later." },
       { status: 500 }
     );
   }
 }
 
-export async function OPTIONS(request) {
+export async function OPTIONS(_request: NextRequest): Promise<NextResponse> {
   return new NextResponse(null, {
     status: 200,
     headers: {

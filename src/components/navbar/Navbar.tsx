@@ -1,28 +1,21 @@
+// src/components/navbar/Navbar.tsx
 "use client";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { AiOutlineClose, AiOutlineMail, AiOutlineMenu } from "react-icons/ai";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { BsFillPersonLinesFill } from "react-icons/bs";
-import { useTypewriter, Cursor } from "react-simple-typewriter";
 
-const Navbar = () => {
-  const [nav, setNav] = useState(false);
-  const [shadow, setShadow] = useState(false);
+const Navbar: React.FC = () => {
+  const [nav, setNav] = useState<boolean>(false);
+  const [shadow, setShadow] = useState<boolean>(false);
 
-  const [typeEffect] = useTypewriter({
-    words: ["<Princewill/>"],
-    loop: {},
-    typeSpeed: 100,
-    deleteSpeed: 150,
-  });
-
-  const handleNav = () => {
+  const handleNav = (): void => {
     setNav(!nav);
   };
 
   useEffect(() => {
-    const handleShadow = () => {
+    const handleShadow = (): void => {
       if (window.scrollY >= 90) {
         setShadow(true);
       } else {
@@ -69,6 +62,11 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="font-medium tracking-wide transition-colors duration-300 hover:text-secondary-indigo">
+              <Link href="/#blog" className="label-large">
+                Blog
+              </Link>
+            </li>
+            <li className="font-medium tracking-wide transition-colors duration-300 hover:text-secondary-indigo">
               <Link href="/#contact" className="label-large">
                 Contact
               </Link>
@@ -101,7 +99,7 @@ const Navbar = () => {
               ? "fixed left-0 top-0 w-[75%] sm:w-[60%] md:w-[45%] h-screen bg-white shadow-large z-[300] p-8 ease-in duration-500"
               : "fixed left-[-100%] top-0 p-8 ease-in duration-500"
           }
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
         >
           <div>
             <div className="flex items-center justify-between w-full">
@@ -154,6 +152,14 @@ const Navbar = () => {
                   className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">Projects</span>
+                </li>
+              </Link>
+              <Link href="/#blog">
+                <li
+                  onClick={() => setNav(false)}
+                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                >
+                  <span className="label-large">Blog</span>
                 </li>
               </Link>
               <Link href="/#contact">

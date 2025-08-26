@@ -1,7 +1,9 @@
+import React from "react";
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+import { ToastProvider } from "@/context/ToastContext";
+import { ReactNode } from "react";
 
 // Primary Font: Inter - Modern, clean, highly readable
 const inter = Inter({
@@ -110,7 +112,13 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({
+  children,
+}: RootLayoutProps): React.JSX.Element {
   return (
     <html lang="en" className="!scroll-smooth">
       <head>
@@ -128,7 +136,6 @@ export default function RootLayout({ children }) {
         />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="//favicon.ico" />
-        <link rel="manifest" href="/site.webmanifest" />
 
         {/* Structured Data for better search results */}
         <script
@@ -166,21 +173,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: "#0f172a",
-              color: "#f8fafc",
-              border: "1px solid #334155",
-              borderRadius: "12px",
-              fontFamily: "var(--font-inter)",
-            },
-          }}
-        />
-        <Navbar />
-        {children}
+        <ToastProvider>
+          <Navbar />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

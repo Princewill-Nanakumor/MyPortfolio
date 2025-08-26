@@ -1,16 +1,22 @@
+// src/components/about/About.tsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
-const About = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const timerRef = useRef(null);
-  const pauseTimerRef = useRef(null);
+interface ImageItem {
+  src: string;
+  alt: string;
+}
+
+const About: React.FC = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const pauseTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Add your images here
-  const images = [
+  const images: ImageItem[] = [
     {
       src: "/myPhoto.jpg",
       alt: "Princewill - Next.js Developer",
@@ -27,7 +33,7 @@ const About = () => {
   ];
 
   // Function to start the auto-advance timer
-  const startTimer = useCallback(() => {
+  const startTimer = useCallback((): void => {
     // Clear any existing timers first
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -42,7 +48,7 @@ const About = () => {
   }, [images.length]);
 
   // Function to stop the auto-advance timer
-  const stopTimer = useCallback(() => {
+  const stopTimer = useCallback((): void => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -54,7 +60,7 @@ const About = () => {
   }, []);
 
   // Function to pause timer and resume after 8 seconds
-  const pauseAndResume = useCallback(() => {
+  const pauseAndResume = useCallback((): void => {
     // Clear any existing timers
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -83,17 +89,17 @@ const About = () => {
     };
   }, [startTimer]);
 
-  const nextImage = () => {
+  const nextImage = (): void => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
     pauseAndResume();
   };
 
-  const prevImage = () => {
+  const prevImage = (): void => {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
     pauseAndResume();
   };
 
-  const goToImage = (index) => {
+  const goToImage = (index: number): void => {
     setCurrentImageIndex(index);
     pauseAndResume();
   };
