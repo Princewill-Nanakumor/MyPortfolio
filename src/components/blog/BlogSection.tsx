@@ -140,7 +140,7 @@ const BlogSection: React.FC = () => {
                         <div className="flex items-center space-x-1">
                           <HiClock className="flex-shrink-0 w-3 h-3 sm:w-4 sm:h-4" />
                           <span className="whitespace-nowrap">
-                            {post.readTime} min read
+                            {post.readTime}
                           </span>
                         </div>
                       </div>
