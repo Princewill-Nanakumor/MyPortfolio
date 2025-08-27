@@ -2,6 +2,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {},
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
   // Add this to suppress the warning
   webpack: (config, { isServer }) => {
     if (isServer) {

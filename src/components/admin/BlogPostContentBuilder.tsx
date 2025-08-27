@@ -1,6 +1,11 @@
-// src/components/admin/BlogPostContentBuilder.tsx
 "use client";
-import React, { useState, useRef } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import Image from "next/image";
 import {
   HiPlus,
@@ -24,10 +29,15 @@ interface NewContentItem {
   imageUrl?: string;
 }
 
-const BlogPostContentBuilder: React.FC<BlogPostContentBuilderProps> = ({
-  formData,
-  setFormData,
-}) => {
+// Define the ref interface
+export interface BlogPostContentBuilderRef {
+  autoSaveContent: () => void;
+}
+
+const BlogPostContentBuilder = forwardRef<
+  BlogPostContentBuilderRef,
+  BlogPostContentBuilderProps
+>(({ formData, setFormData }, ref) => {
   const [newContentItem, setNewContentItem] = useState<NewContentItem>({
     type: "paragraph",
     text: "",
@@ -36,7 +46,33 @@ const BlogPostContentBuilder: React.FC<BlogPostContentBuilderProps> = ({
   });
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [hasUnsavedContent, setHasUnsavedContent] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Check if there's unsaved content
+  useEffect(() => {
+    const hasContent =
+      newContentItem.text.trim() ||
+      newContentItem.items.length > 0 ||
+      newContentItem.imageUrl;
+    setHasUnsavedContent(!!hasContent);
+  }, [newContentItem]);
+
+  // Auto-save function
+  const autoSaveContent = (): void => {
+    if (hasUnsavedContent) {
+      addContentItem();
+    }
+  };
+
+  // Expose auto-save function to parent component
+  useImperativeHandle(
+    ref,
+    () => ({
+      autoSaveContent,
+    }),
+    [hasUnsavedContent]
+  );
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -84,27 +120,35 @@ const BlogPostContentBuilder: React.FC<BlogPostContentBuilderProps> = ({
       clearInterval(progressInterval);
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Upload failed");
       }
 
       const data = await response.json();
+      console.log("Upload response:", data);
 
-      // Update the new content item with the image URL
-      setNewContentItem((prev) => ({
-        ...prev,
-        imageUrl: data.imageUrl,
-      }));
+      if (data.success && data.imageUrl) {
+        // Update the new content item with the image URL
+        setNewContentItem((prev) => ({
+          ...prev,
+          imageUrl: data.imageUrl,
+        }));
 
-      setUploadProgress(100);
+        setUploadProgress(100);
 
-      // Reset progress after a moment
-      setTimeout(() => {
-        setUploadProgress(0);
-        setIsUploading(false);
-      }, 1000);
+        // Reset progress after a moment
+        setTimeout(() => {
+          setUploadProgress(0);
+          setIsUploading(false);
+        }, 1000);
+      } else {
+        throw new Error("Invalid response format");
+      }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Failed to upload image. Please try again.");
+      alert(
+        `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
       setIsUploading(false);
       setUploadProgress(0);
     }
@@ -127,20 +171,21 @@ const BlogPostContentBuilder: React.FC<BlogPostContentBuilderProps> = ({
       newContentItem.items.length > 0 ||
       newContentItem.imageUrl
     ) {
+      const contentBlock: ContentBlock = {
+        type: newContentItem.type,
+        text: newContentItem.text,
+        items: newContentItem.items,
+        ...(newContentItem.imageUrl && {
+          imageUrl: newContentItem.imageUrl,
+        }),
+      };
+
       setFormData((prev) => ({
         ...prev,
-        content: [
-          ...(prev.content || []),
-          {
-            type: newContentItem.type,
-            text: newContentItem.text,
-            items: newContentItem.items,
-            ...(newContentItem.imageUrl && {
-              imageUrl: newContentItem.imageUrl,
-            }),
-          },
-        ],
+        content: [...(prev.content || []), contentBlock],
       }));
+
+      // Reset form
       setNewContentItem({
         type: "paragraph",
         text: "",
@@ -238,6 +283,19 @@ const BlogPostContentBuilder: React.FC<BlogPostContentBuilderProps> = ({
       <label className="block text-sm font-medium text-text-primary">
         Content Blocks
       </label>
+
+      {/* Unsaved Content Warning */}
+      {hasUnsavedContent && (
+        <div className="p-3 border border-yellow-200 bg-yellow-50 rounded-xl">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+            <p className="text-sm text-yellow-800">
+              You have unsaved content. Click "Add Block" to save it, or it will
+              be auto-saved when you proceed.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Existing Content */}
       {(formData.content || []).length > 0 && (
@@ -465,6 +523,8 @@ const BlogPostContentBuilder: React.FC<BlogPostContentBuilderProps> = ({
       </div>
     </div>
   );
-};
+});
+
+BlogPostContentBuilder.displayName = "BlogPostContentBuilder";
 
 export default BlogPostContentBuilder;

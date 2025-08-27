@@ -13,6 +13,11 @@ export interface BlogPost {
   published: boolean;
   likes: number;
   date?: string;
+  author?: {
+    name?: string;
+    bio?: string;
+    avatar?: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 }

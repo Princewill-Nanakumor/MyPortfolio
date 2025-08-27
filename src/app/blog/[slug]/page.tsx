@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { HiArrowLeft } from "react-icons/hi";
+import { HiArrowLeft, HiShare } from "react-icons/hi";
 import { blogService } from "@/services/blogService";
 import { BlogPost as BlogPostType } from "../../../types/Blog";
 import ScrollToTop from "@/components/common/ScrollToTop";
@@ -10,7 +10,7 @@ import DesignSwitcher from "@/components/blog/DesignSwitcher";
 import MessageModal from "@/components/blog/MessageModal";
 import BlogHeader from "@/components/blog/BlogHeader";
 import BlogContent from "@/components/blog/BlogContent";
-import { designStyles, layoutOptions } from "@/components/blog/DesignConfig"; // Fixed import path
+import { designStyles, layoutOptions } from "@/components/blog/DesignConfig";
 
 interface BlogPostProps {
   params: Promise<{ slug: string }>;
@@ -28,7 +28,7 @@ const BlogPost = ({ params }: BlogPostProps) => {
 
   // Design switcher states
   const [currentDesign, setCurrentDesign] = useState<string>("minimalist");
-  const [currentLayout, setCurrentLayout] = useState<string>("default"); // Fixed default layout
+  const [currentLayout, setCurrentLayout] = useState<string>("default");
   const [modalMessage, setModalMessage] = useState<string>("");
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -231,21 +231,108 @@ const BlogPost = ({ params }: BlogPostProps) => {
       <article
         className={`px-4 py-6 mx-auto sm:px-6 sm:py-8 lg:px-8 lg:py-12 xl:px-12 ${layoutStyle.containerClass}`}
       >
-        <BlogHeader
-          post={post}
-          designStyle={designStyle}
-          layoutStyle={layoutStyle}
-          isLiked={isLiked}
-          likeCount={likeCount}
-          onLike={handleLike}
-          onShare={handleShare}
-        />
+        {currentLayout === "split" ? (
+          // Split layout structure
+          <div className={layoutStyle.proseClass}>
+            {/* Main content area (2/3 width) */}
+            <div className="lg:col-span-2">
+              <BlogHeader
+                post={post}
+                designStyle={designStyle}
+                layoutStyle={layoutStyle}
+                isLiked={isLiked}
+                likeCount={likeCount}
+                onLike={handleLike}
+                onShare={handleShare}
+              />
 
-        <BlogContent
-          post={post}
-          designStyle={designStyle}
-          layoutStyle={layoutStyle}
-        />
+              <BlogContent
+                post={post}
+                designStyle={designStyle}
+                layoutStyle={layoutStyle}
+                currentLayout={currentLayout}
+              />
+            </div>
+
+            {/* Sidebar area (1/3 width) */}
+            <div className="p-6 lg:col-span-1 lg:p-8">
+              <div className="sticky space-y-6 top-8">
+                {/* Author info */}
+                <div
+                  className={`p-6 rounded-xl ${designStyle.colors.accentBg} ${designStyle.colors.border} border`}
+                >
+                  <h3
+                    className={`text-lg font-semibold mb-3 ${designStyle.colors.accent}`}
+                  >
+                    About the Author
+                  </h3>
+                  <p className={`text-sm ${designStyle.colors.textSecondary}`}>
+                    {post.author?.bio ||
+                      "Passionate developer and writer sharing insights about technology and development."}
+                  </p>
+                </div>
+
+                {/* Share button */}
+                <div
+                  className={`p-6 rounded-xl ${designStyle.colors.accentBg} ${designStyle.colors.border} border`}
+                >
+                  <h3
+                    className={`text-lg font-semibold mb-3 ${designStyle.colors.accent}`}
+                  >
+                    Share this Article
+                  </h3>
+                  <button
+                    onClick={handleShare}
+                    className="inline-flex items-center justify-center w-full px-4 py-2 text-sm text-white transition-colors bg-secondary-indigo rounded-xl hover:bg-secondary-indigo/80"
+                  >
+                    <HiShare className="w-4 h-4 mr-2" />
+                    Share Article
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : currentLayout === "magazine" ? (
+          // Magazine layout structure
+          <div className={layoutStyle.proseClass}>
+            <BlogHeader
+              post={post}
+              designStyle={designStyle}
+              layoutStyle={layoutStyle}
+              isLiked={isLiked}
+              likeCount={likeCount}
+              onLike={handleLike}
+              onShare={handleShare}
+            />
+
+            <BlogContent
+              post={post}
+              designStyle={designStyle}
+              layoutStyle={layoutStyle}
+              currentLayout={currentLayout}
+            />
+          </div>
+        ) : (
+          // Default layout structure
+          <div>
+            <BlogHeader
+              post={post}
+              designStyle={designStyle}
+              layoutStyle={layoutStyle}
+              isLiked={isLiked}
+              likeCount={likeCount}
+              onLike={handleLike}
+              onShare={handleShare}
+            />
+
+            <BlogContent
+              post={post}
+              designStyle={designStyle}
+              layoutStyle={layoutStyle}
+              currentLayout={currentLayout}
+            />
+          </div>
+        )}
       </article>
 
       {/* Scroll to Top Button */}

@@ -12,9 +12,15 @@ interface BlogContentProps {
   post: BlogPostType;
   designStyle: DesignStyle;
   layoutStyle: LayoutOption;
+  currentLayout?: string;
 }
 
-const BlogContent = ({ post, designStyle, layoutStyle }: BlogContentProps) => {
+const BlogContent = ({
+  post,
+  designStyle,
+  layoutStyle,
+  currentLayout,
+}: BlogContentProps) => {
   const s = designStyle.colors;
 
   const handleShare = async () => {
@@ -160,7 +166,7 @@ const BlogContent = ({ post, designStyle, layoutStyle }: BlogContentProps) => {
 
       {/* Article Content */}
       <motion.div
-        className={`prose max-w-none ${designStyle.prose} ${layoutStyle.proseClass} ${s.textPrimary}`}
+        className={`prose max-w-none ${designStyle.prose} ${s.textPrimary}`}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
@@ -170,23 +176,25 @@ const BlogContent = ({ post, designStyle, layoutStyle }: BlogContentProps) => {
         )}
       </motion.div>
 
-      {/* Article Footer */}
-      <motion.footer
-        className={`pt-6 mt-8 border-t ${s.border} sm:pt-8 sm:mt-12 lg:pt-10 lg:mt-16`}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-start sm:gap-4 lg:gap-6">
-          <button
-            onClick={handleShare}
-            className="inline-flex items-center justify-center px-4 py-2 text-sm text-white transition-colors bg-secondary-indigo rounded-xl hover:bg-secondary-indigo/80 sm:px-6 sm:py-3 sm:text-base lg:px-8 lg:py-4 lg:text-lg"
-          >
-            <HiShare className="w-3 h-3 mr-2 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
-            Share Article
-          </button>
-        </div>
-      </motion.footer>
+      {/* Article Footer - Only show for non-split layouts */}
+      {currentLayout !== "split" && (
+        <motion.footer
+          className={`pt-6 mt-8 border-t ${s.border} sm:pt-8 sm:mt-12 lg:pt-10 lg:mt-16`}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-start sm:gap-4 lg:gap-6">
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center justify-center px-4 py-2 text-sm text-white transition-colors bg-secondary-indigo rounded-xl hover:bg-secondary-indigo/80 sm:px-6 sm:py-3 sm:text-base lg:px-8 lg:py-4 lg:text-lg"
+            >
+              <HiShare className="w-3 h-3 mr-2 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+              Share Article
+            </button>
+          </div>
+        </motion.footer>
+      )}
     </div>
   );
 };

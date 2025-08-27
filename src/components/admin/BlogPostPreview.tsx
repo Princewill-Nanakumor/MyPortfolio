@@ -62,7 +62,11 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
               </p>
             )}
           </div>
-        ) : null;
+        ) : (
+          <div className="p-4 mb-6 text-center text-red-500 border border-red-200 rounded-xl">
+            <p>Image URL missing</p>
+          </div>
+        );
       default:
         return null;
     }
@@ -90,7 +94,7 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
       {/* Post Preview */}
       <div className="p-6 space-y-6 bg-white border border-gray-200 rounded-2xl shadow-soft">
         {/* Featured Image */}
-        {formData.image && (
+        {formData.image ? (
           <div className="relative w-full h-64 overflow-hidden rounded-xl">
             <Image
               src={formData.image}
@@ -99,7 +103,12 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
               height={256}
               className="object-cover w-full h-full"
               priority={false}
+              unoptimized={true}
             />
+          </div>
+        ) : (
+          <div className="flex items-center justify-center w-full h-64 bg-gray-100 rounded-xl">
+            <p className="text-gray-500">No featured image</p>
           </div>
         )}
 

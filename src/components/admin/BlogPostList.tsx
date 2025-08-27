@@ -72,6 +72,7 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
                     alt={post.title}
                     fill
                     className="object-cover"
+                    unoptimized={true}
                     onError={(e) => {
                       console.error("Failed to load image:", post.image);
                       const target = e.target as HTMLImageElement;

@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiX, HiChevronLeft, HiChevronRight, HiCheck } from "react-icons/hi";
 import BlogPostBasicInfo from "./BlogPostBasicInfo";
 import BlogPostTagManager from "./BlogPostTagManager";
-import BlogPostContentBuilder from "./BlogPostContentBuilder";
+import BlogPostContentBuilder, {
+  BlogPostContentBuilderRef,
+} from "./BlogPostContentBuilder";
 import BlogPostPreview from "./BlogPostPreview";
 import BlogPostProgressBar from "./BlogPostProgressBar";
 import BlogPostNavigation from "./BlogPostNavigation";
@@ -42,6 +44,9 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [debugInfo, setDebugInfo] = useState<string>("");
+
+  // Add ref for content builder
+  const contentBuilderRef = useRef<BlogPostContentBuilderRef>(null);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -175,6 +180,12 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
     }
 
     if (currentStep < steps.length) {
+      // Auto-save content if we're on step 3 (content) and moving to next step
+      if (currentStep === 3) {
+        // Trigger auto-save of any unsaved content
+        contentBuilderRef.current?.autoSaveContent();
+      }
+
       if (currentStep < steps.length - 1 && !isStepValid(currentStep)) {
         setDebugInfo(`Cannot proceed: step ${currentStep} is not valid`);
         return;
@@ -212,6 +223,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       case 3:
         return (
           <BlogPostContentBuilder
+            ref={contentBuilderRef}
             formData={formData}
             setFormData={setFormData}
           />
