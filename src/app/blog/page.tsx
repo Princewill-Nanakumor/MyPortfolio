@@ -62,11 +62,11 @@ const BlogPage = () => {
 
   if (loading) {
     return (
-      <div className="pt-16 min-h-screen bg-bg-primary sm:pt-20">
-        <div className="px-4 mx-auto max-w-6xl sm:px-6 lg:px-12">
-          <div className="flex justify-center items-center py-8 sm:py-12">
+      <div className="min-h-screen pt-16 bg-bg-primary sm:pt-20">
+        <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-12">
+          <div className="flex items-center justify-center py-8 sm:py-12">
             <div className="text-center">
-              <div className="mx-auto mb-3 w-8 h-8 rounded-full border-2 animate-spin border-secondary-indigo border-t-transparent sm:w-12 sm:h-12 sm:mb-4"></div>
+              <div className="w-8 h-8 mx-auto mb-3 border-2 rounded-full animate-spin border-secondary-indigo border-t-transparent sm:w-12 sm:h-12 sm:mb-4"></div>
               <p className="text-sm text-text-secondary sm:text-base">
                 Loading blog posts...
               </p>
@@ -78,18 +78,18 @@ const BlogPage = () => {
   }
 
   return (
-    <div className="pt-16 min-h-screen bg-bg-primary sm:pt-20">
-      <div className="px-4 mx-auto max-w-6xl sm:px-6 lg:px-12">
+    <div className="min-h-screen pt-16 bg-bg-primary sm:pt-20">
+      <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-12">
         <div className="py-8 sm:py-12 lg:py-16">
           {/* Error Message */}
           {error && (
             <motion.div
-              className="p-3 mb-4 bg-red-50 rounded-xl border border-red-200 sm:p-4 sm:mb-6"
+              className="p-3 mb-4 border border-red-200 bg-red-50 rounded-xl sm:p-4 sm:mb-6"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
             >
               <div className="flex items-center">
-                <div className="mr-2 w-4 h-4 text-red-600 sm:w-5 sm:h-5">
+                <div className="w-4 h-4 mr-2 text-red-600 sm:w-5 sm:h-5">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -120,12 +120,12 @@ const BlogPage = () => {
             <h1 className="mb-3 text-2xl font-bold sm:text-3xl lg:text-4xl xl:text-5xl text-text-primary">
               Blog <span className="gradient-text">Articles</span>
             </h1>
-            <div className="flex justify-center items-center mb-3 space-x-1 sm:mb-4 sm:space-x-2 lg:space-x-4">
+            <div className="flex items-center justify-center mb-3 space-x-1 sm:mb-4 sm:space-x-2 lg:space-x-4">
               <div className="w-4 h-px bg-gradient-to-r from-transparent sm:w-8 lg:w-16 to-secondary-indigo"></div>
               <div className="w-1.5 h-1.5 rounded-full sm:w-2 sm:h-2 lg:w-3 lg:h-3 bg-secondary-indigo"></div>
               <div className="w-4 h-px bg-gradient-to-r to-transparent sm:w-8 lg:w-16 from-secondary-indigo"></div>
             </div>
-            <p className="mx-auto max-w-2xl text-sm sm:text-base lg:text-lg text-text-secondary">
+            <p className="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-text-secondary">
               Explore insights and thoughts on modern web development
             </p>
           </motion.div>
@@ -133,7 +133,7 @@ const BlogPage = () => {
           {/* Category Filter */}
           {categories.length > 1 && (
             <motion.div
-              className="flex flex-wrap gap-2 justify-center mb-8 sm:gap-3 sm:mb-12 lg:gap-4"
+              className="flex flex-wrap justify-center gap-2 mb-8 sm:gap-3 sm:mb-12 lg:gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -166,11 +166,11 @@ const BlogPage = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="overflow-hidden bg-white rounded-2xl border border-gray-200 transition-all duration-500 shadow-soft hover:shadow-large lg:rounded-3xl">
+                  <div className="overflow-hidden transition-all duration-500 bg-white border border-gray-200 rounded-2xl shadow-soft hover:shadow-large lg:rounded-3xl">
                     {/* Post Image */}
-                    <div className="overflow-hidden relative h-40 sm:h-48 lg:h-52">
+                    <div className="relative h-40 overflow-hidden sm:h-48 lg:h-52">
                       <Image
-                        src={post.image}
+                        src={post.image || "/placeholder-image.jpg"}
                         alt={post.title}
                         width={400}
                         height={192}
@@ -180,7 +180,7 @@ const BlogPage = () => {
                           console.error("Failed to load image:", post.image);
                           console.error("Error details:", e);
                           // Log additional info for production debugging
-                          if (typeof window !== 'undefined') {
+                          if (typeof window !== "undefined") {
                             console.log("Current URL:", window.location.href);
                             console.log("Environment:", process.env.NODE_ENV);
                           }
@@ -271,7 +271,7 @@ const BlogPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <div className="mx-auto mb-3 w-12 h-12 text-gray-400 sm:w-16 sm:h-16 sm:mb-4">
+              <div className="w-12 h-12 mx-auto mb-3 text-gray-400 sm:w-16 sm:h-16 sm:mb-4">
                 <svg
                   className="w-full h-full"
                   fill="none"
@@ -298,9 +298,9 @@ const BlogPage = () => {
                 <div className="mt-4 sm:mt-6">
                   <Link
                     href="/admin"
-                    className="inline-flex items-center px-4 py-2 text-sm text-white rounded-xl transition-colors bg-secondary-indigo hover:bg-secondary-indigo/80 sm:px-6 sm:py-3 sm:text-base"
+                    className="inline-flex items-center px-4 py-2 text-sm text-white transition-colors rounded-xl bg-secondary-indigo hover:bg-secondary-indigo/80 sm:px-6 sm:py-3 sm:text-base"
                   >
-                    <HiPlus className="mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                    <HiPlus className="w-3 h-3 mr-2 sm:w-4 sm:h-4" />
                     Create Your First Post
                   </Link>
                 </div>
@@ -317,10 +317,10 @@ const BlogPage = () => {
           >
             <button
               onClick={loadPosts}
-              className="inline-flex items-center px-4 py-2 text-sm rounded-xl border transition-colors text-secondary-indigo border-secondary-indigo hover:bg-secondary-indigo/10 sm:px-6 sm:py-3 sm:text-base"
+              className="inline-flex items-center px-4 py-2 text-sm transition-colors border rounded-xl text-secondary-indigo border-secondary-indigo hover:bg-secondary-indigo/10 sm:px-6 sm:py-3 sm:text-base"
             >
               <svg
-                className="mr-2 w-3 h-3 sm:w-4 sm:h-4"
+                className="w-3 h-3 mr-2 sm:w-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

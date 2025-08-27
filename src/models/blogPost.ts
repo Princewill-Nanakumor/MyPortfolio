@@ -2,7 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IContentBlock {
-  type: "paragraph" | "heading" | "code" | "list" | "image"; // Add "image" here
+  type: "paragraph" | "heading" | "code" | "list" | "image";
   text?: string;
   items?: string[];
   imageUrl?: string;

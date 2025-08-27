@@ -15,7 +15,7 @@ const DesignSwitcher = ({
   setCurrentLayout,
 }: DesignSwitcherProps) => {
   return (
-    <div className="fixed z-50 flex-wrap hidden gap-2 p-3 border border-gray-200 rounded-full shadow-lg md:flex bottom-4 right-4 bg-white/80 backdrop-blur-md">
+    <div className="fixed z-50 flex-wrap hidden gap-2 p-3 border border-gray-200 rounded-full shadow-lg lg:flex bottom-4 right-4 bg-white/80 backdrop-blur-md">
       {/* Design Theme Buttons */}
       <div className="flex gap-2">
         {Object.entries(designStyles).map(([key, style]) => (

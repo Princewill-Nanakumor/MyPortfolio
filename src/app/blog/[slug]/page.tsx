@@ -10,6 +10,7 @@ import DesignSwitcher from "@/components/blog/DesignSwitcher";
 import MessageModal from "@/components/blog/MessageModal";
 import BlogHeader from "@/components/blog/BlogHeader";
 import BlogContent from "@/components/blog/BlogContent";
+import SocialLinks from "@/components/common/SocialLinks";
 import { designStyles, layoutOptions } from "@/components/blog/DesignConfig";
 
 interface BlogPostProps {
@@ -272,6 +273,18 @@ const BlogPost = ({ params }: BlogPostProps) => {
                   </p>
                 </div>
 
+                {/* Social Links */}
+                <div
+                  className={`p-6 rounded-xl ${designStyle.colors.accentBg} ${designStyle.colors.border} border`}
+                >
+                  <h3
+                    className={`text-lg font-semibold mb-4 ${designStyle.colors.accent}`}
+                  >
+                    Connect With Me
+                  </h3>
+                  <SocialLinks iconSize="sm" />
+                </div>
+
                 {/* Share button */}
                 <div
                   className={`p-6 rounded-xl ${designStyle.colors.accentBg} ${designStyle.colors.border} border`}
@@ -311,6 +324,18 @@ const BlogPost = ({ params }: BlogPostProps) => {
               layoutStyle={layoutStyle}
               currentLayout={currentLayout}
             />
+
+            {/* Social Links for Magazine Layout */}
+            <div className="pt-8 mt-12 border-t border-gray-200">
+              <div className="text-center">
+                <h3
+                  className={`text-xl font-semibold mb-6 ${designStyle.colors.accent}`}
+                >
+                  Connect With Me
+                </h3>
+                <SocialLinks />
+              </div>
+            </div>
           </div>
         ) : (
           // Default layout structure
@@ -331,6 +356,13 @@ const BlogPost = ({ params }: BlogPostProps) => {
               layoutStyle={layoutStyle}
               currentLayout={currentLayout}
             />
+
+            {/* Social Links for Default Layout */}
+            <div className="pt-8 mt-12 border-t border-gray-200">
+              <div className="text-center">
+                <SocialLinks />
+              </div>
+            </div>
           </div>
         )}
       </article>

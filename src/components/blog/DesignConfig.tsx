@@ -132,12 +132,7 @@ export const layoutOptions: Record<string, LayoutOption> = {
     containerClass: "max-w-2xl",
     contentLayout: "space-y-5",
   },
-  split: {
-    name: "Split",
-    proseClass: "grid lg:grid-cols-2 gap-8 lg:gap-12",
-    containerClass: "max-w-7xl",
-    contentLayout: "space-y-6",
-  },
+
   magazine: {
     name: "Magazine",
     proseClass: "columns-1 lg:columns-2 gap-8",

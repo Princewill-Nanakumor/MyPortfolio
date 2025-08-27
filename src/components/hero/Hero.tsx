@@ -1,13 +1,10 @@
-// src/components/hero/Hero.tsx
 "use client";
 import React from "react";
-import { AiOutlineMail } from "react-icons/ai";
-import { BsFillPersonLinesFill } from "react-icons/bs";
 import { HiArrowDown } from "react-icons/hi";
-import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import Link from "next/link";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 import { motion } from "framer-motion";
+import SocialLinks from "@/components/common/SocialLinks";
 
 const Hero: React.FC = () => {
   const [typeEffect] = useTypewriter({
@@ -118,44 +115,11 @@ const Hero: React.FC = () => {
 
             {/* Social Links */}
             <motion.div
-              className="flex items-center justify-center gap-4 sm:gap-6"
               animate={{ y: 0, opacity: 1 }}
               initial={{ y: 30, opacity: 0 }}
               transition={{ type: "spring", stiffness: 100, delay: 1.2 }}
             >
-              <Link
-                href="https://www.linkedin.com/in/princewill-nanakumor-0a68b824a/"
-                target="_blank"
-                rel="noreferrer"
-                className="group"
-              >
-                <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 ease-out sm:w-14 sm:h-14 shadow-soft bg-secondary-indigo rounded-2xl hover:shadow-glow hover:scale-110 hover:-translate-y-1">
-                  <FaLinkedinIn className="text-lg sm:text-xl" />
-                </div>
-              </Link>
-
-              <Link
-                href="https://github.com/NanakumorPrincewill"
-                target="_blank"
-                rel="noreferrer"
-                className="group"
-              >
-                <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 ease-out sm:w-14 sm:h-14 shadow-soft bg-primary-slate rounded-2xl hover:shadow-medium hover:scale-110 hover:-translate-y-1">
-                  <FaGithub className="text-lg sm:text-xl" />
-                </div>
-              </Link>
-
-              <Link href="#skills" className="group">
-                <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 ease-out sm:w-14 sm:h-14 shadow-soft bg-accent-emerald rounded-2xl hover:shadow-glow-emerald hover:scale-110 hover:-translate-y-1">
-                  <BsFillPersonLinesFill className="text-lg sm:text-xl" />
-                </div>
-              </Link>
-
-              <Link href="#contact" className="group">
-                <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 ease-out sm:w-14 sm:h-14 shadow-soft bg-gradient-to-r from-secondary-indigo to-accent-emerald rounded-2xl hover:shadow-large hover:scale-110 hover:-translate-y-1">
-                  <AiOutlineMail className="text-lg sm:text-xl" />
-                </div>
-              </Link>
+              <SocialLinks />
             </motion.div>
 
             {/* Scroll Indicator */}
