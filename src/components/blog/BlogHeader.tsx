@@ -92,7 +92,7 @@ const BlogHeader = ({
                 <HiOutlineHeart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               )}
               <span className="text-xs font-medium sm:text-sm lg:text-base">
-                {likeCount}will fix
+                {likeCount}
               </span>
             </button>
 
