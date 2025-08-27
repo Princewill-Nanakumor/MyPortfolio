@@ -9,7 +9,6 @@ const ScrollToTop = () => {
   // Show button when page is scrolled up to given distance
   const toggleVisibility = () => {
     if (window.pageYOffset > 600) {
-      // Changed from 300 to 600
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -37,7 +36,7 @@ const ScrollToTop = () => {
       {isVisible && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed z-50 p-3 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 right-6 bg-secondary-indigo hover:bg-secondary-indigo/80 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-secondary-indigo/50 sm:bottom-8 sm:right-8 sm:p-4"
+          className="fixed z-40 p-3 text-white transition-all duration-300 rounded-full shadow-lg bottom-6 left-6 bg-secondary-indigo hover:bg-secondary-indigo/80 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-secondary-indigo/50 sm:bottom-8 sm:left-8 sm:p-4"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0 }}
