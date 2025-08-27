@@ -5,6 +5,7 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useCallback,
 } from "react";
 import Image from "next/image";
 import {
@@ -58,12 +59,42 @@ const BlogPostContentBuilder = forwardRef<
     setHasUnsavedContent(!!hasContent);
   }, [newContentItem]);
 
+  const addContentItem = useCallback((): void => {
+    if (
+      newContentItem.text.trim() ||
+      newContentItem.items.length > 0 ||
+      newContentItem.imageUrl
+    ) {
+      const contentBlock: ContentBlock = {
+        type: newContentItem.type,
+        text: newContentItem.text,
+        items: newContentItem.items,
+        ...(newContentItem.imageUrl && {
+          imageUrl: newContentItem.imageUrl,
+        }),
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        content: [...(prev.content || []), contentBlock],
+      }));
+
+      // Reset form
+      setNewContentItem({
+        type: "paragraph",
+        text: "",
+        items: [],
+        imageUrl: "",
+      });
+    }
+  }, [newContentItem, setFormData]);
+
   // Auto-save function
-  const autoSaveContent = (): void => {
+  const autoSaveContent = useCallback((): void => {
     if (hasUnsavedContent) {
       addContentItem();
     }
-  };
+  }, [hasUnsavedContent, addContentItem]);
 
   // Expose auto-save function to parent component
   useImperativeHandle(
@@ -71,7 +102,7 @@ const BlogPostContentBuilder = forwardRef<
     () => ({
       autoSaveContent,
     }),
-    [hasUnsavedContent]
+    [autoSaveContent]
   );
 
   const handleImageUpload = async (
@@ -163,36 +194,6 @@ const BlogPostContentBuilder = forwardRef<
 
   const triggerFileInput = (): void => {
     fileInputRef.current?.click();
-  };
-
-  const addContentItem = (): void => {
-    if (
-      newContentItem.text.trim() ||
-      newContentItem.items.length > 0 ||
-      newContentItem.imageUrl
-    ) {
-      const contentBlock: ContentBlock = {
-        type: newContentItem.type,
-        text: newContentItem.text,
-        items: newContentItem.items,
-        ...(newContentItem.imageUrl && {
-          imageUrl: newContentItem.imageUrl,
-        }),
-      };
-
-      setFormData((prev) => ({
-        ...prev,
-        content: [...(prev.content || []), contentBlock],
-      }));
-
-      // Reset form
-      setNewContentItem({
-        type: "paragraph",
-        text: "",
-        items: [],
-        imageUrl: "",
-      });
-    }
   };
 
   const removeContentItem = (index: number): void => {
@@ -290,8 +291,8 @@ const BlogPostContentBuilder = forwardRef<
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
             <p className="text-sm text-yellow-800">
-              You have unsaved content. Click "Add Block" to save it, or it will
-              be auto-saved when you proceed.
+              You have unsaved content. Click &ldquo;Add Block&rdquo; to save
+              it, or it will be auto-saved when you proceed.
             </p>
           </div>
         </div>
