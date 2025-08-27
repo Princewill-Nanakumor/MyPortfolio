@@ -1,0 +1,415 @@
+"use client";
+import React, { useState, useRef } from "react";
+import Image from "next/image";
+import {
+  HiPlus,
+  HiTrash,
+  HiUpload,
+  HiX,
+  HiCheck,
+  HiLink,
+} from "react-icons/hi";
+import { NewContentItem } from "./../../types/Blog";
+
+interface ContentBlockEditorProps {
+  content: NewContentItem;
+  setContent: React.Dispatch<React.SetStateAction<NewContentItem>>;
+  onSave: () => void;
+  onCancel?: () => void;
+  isEditing: boolean;
+}
+
+const ContentBlockEditor = ({
+  content,
+  setContent,
+  onSave,
+  onCancel,
+  isEditing,
+}: ContentBlockEditorProps) => {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [showLinkInput, setShowLinkInput] = useState<boolean>(false);
+  const [linkUrl, setLinkUrl] = useState<string>("");
+  const [linkText, setLinkText] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Function to insert link into text
+  const insertLink = (): void => {
+    if (linkUrl && linkText) {
+      const linkMarkdown = `[${linkText}](${linkUrl})`;
+      const currentText = content.text;
+      const cursorPosition =
+        (document.activeElement as HTMLTextAreaElement)?.selectionStart ||
+        currentText.length;
+
+      const newText =
+        currentText.slice(0, cursorPosition) +
+        linkMarkdown +
+        currentText.slice(cursorPosition);
+
+      setContent((prev) => ({ ...prev, text: newText }));
+
+      setLinkUrl("");
+      setLinkText("");
+      setShowLinkInput(false);
+    }
+  };
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size should be less than 5MB");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // Simulate upload progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 100);
+
+      // Upload to your API endpoint
+      const response = await fetch("/api/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      clearInterval(progressInterval);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Upload failed");
+      }
+
+      const data = await response.json();
+      console.log("Upload response:", data);
+
+      if (data.success && data.imageUrl) {
+        setContent((prev) => ({
+          ...prev,
+          imageUrl: data.imageUrl,
+        }));
+
+        setUploadProgress(100);
+
+        // Reset progress after a moment
+        setTimeout(() => {
+          setUploadProgress(0);
+          setIsUploading(false);
+        }, 1000);
+      } else {
+        throw new Error("Invalid response format");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert(
+        `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const removeImage = (): void => {
+    setContent((prev) => ({
+      ...prev,
+      imageUrl: "",
+    }));
+  };
+
+  const triggerFileInput = (): void => {
+    fileInputRef.current?.click();
+  };
+
+  const addListItem = (): void => {
+    const itemText = prompt("Enter list item:");
+    if (itemText) {
+      setContent((prev) => ({
+        ...prev,
+        items: [...prev.items, itemText],
+      }));
+    }
+  };
+
+  const removeListItem = (itemIndex: number): void => {
+    setContent((prev) => ({
+      ...prev,
+      items: prev.items.filter((_, i) => i !== itemIndex),
+    }));
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Content Type Selector */}
+      <select
+        value={content.type}
+        onChange={(e) =>
+          setContent((prev) => ({
+            ...prev,
+            type: e.target.value as
+              | "paragraph"
+              | "heading"
+              | "code"
+              | "list"
+              | "image",
+            text: "",
+            items: [],
+            imageUrl: "",
+          }))
+        }
+        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+      >
+        <option value="paragraph">Paragraph</option>
+        <option value="heading">Heading</option>
+        <option value="code">Code Block</option>
+        <option value="list">List</option>
+        <option value="image">Image</option>
+      </select>
+
+      {/* Link Input Modal */}
+      {showLinkInput && (
+        <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+          <div className="space-y-3">
+            <input
+              type="text"
+              value={linkText}
+              onChange={(e) => setLinkText(e.target.value)}
+              placeholder="Link text"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            />
+            <input
+              type="url"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              placeholder="URL (https://example.com)"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={insertLink}
+                className="px-3 py-1 text-sm text-white rounded bg-secondary-indigo hover:bg-secondary-indigo/80"
+              >
+                Insert Link
+              </button>
+              <button
+                onClick={() => {
+                  setShowLinkInput(false);
+                  setLinkUrl("");
+                  setLinkText("");
+                }}
+                className="px-3 py-1 text-sm text-gray-600 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Content Input Based on Type */}
+      {content.type === "image" ? (
+        <div className="space-y-4">
+          {/* Image Upload */}
+          <div className="relative">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+
+            {!content.imageUrl ? (
+              <button
+                type="button"
+                onClick={triggerFileInput}
+                disabled={isUploading}
+                className="w-full px-4 py-3 transition-colors border-2 border-gray-300 border-dashed rounded-lg hover:border-secondary-indigo hover:bg-secondary-indigo/5 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  {isUploading ? (
+                    <>
+                      <div className="w-8 h-8 border-2 rounded-full border-secondary-indigo border-t-transparent animate-spin"></div>
+                      <span className="text-sm text-secondary-indigo">
+                        Uploading... {uploadProgress}%
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <HiUpload className="w-6 h-6 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Click to upload image
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        PNG, JPG, GIF up to 5MB
+                      </span>
+                    </>
+                  )}
+                </div>
+              </button>
+            ) : (
+              <div className="relative group">
+                <div className="relative w-full h-48 overflow-hidden border border-gray-200 rounded-lg">
+                  <Image
+                    src={content.imageUrl}
+                    alt="Preview"
+                    width={400}
+                    height={192}
+                    className="object-cover w-full h-full"
+                    priority={false}
+                    unoptimized={true}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      className="p-2 text-white transition-colors bg-red-500 rounded-full hover:bg-red-600"
+                      title="Remove image"
+                    >
+                      <HiX className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Image Caption */}
+          <input
+            type="text"
+            value={content.text}
+            onChange={(e) =>
+              setContent((prev) => ({
+                ...prev,
+                text: e.target.value,
+              }))
+            }
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            placeholder="Image caption (optional)"
+          />
+        </div>
+      ) : content.type === "list" ? (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={addListItem}
+              className="px-3 py-1 text-sm border rounded text-secondary-indigo border-secondary-indigo hover:bg-secondary-indigo/10"
+            >
+              Add List Item
+            </button>
+          </div>
+          {content.items.map((item, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <input
+                type="text"
+                value={item}
+                onChange={(e) => {
+                  const newItems = [...content.items];
+                  newItems[index] = e.target.value;
+                  setContent((prev) => ({
+                    ...prev,
+                    items: newItems,
+                  }));
+                }}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+                placeholder="List item text"
+              />
+              <button
+                onClick={() => removeListItem(index)}
+                className="p-1 text-red-400 hover:text-red-600"
+              >
+                <HiTrash className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {/* Text Input with Link Button */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowLinkInput(!showLinkInput)}
+              className="p-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+              title="Add link"
+            >
+              <HiLink className="w-4 h-4" />
+            </button>
+          </div>
+          <textarea
+            value={content.text}
+            onChange={(e) =>
+              setContent((prev) => ({ ...prev, text: e.target.value }))
+            }
+            rows={4}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            placeholder={
+              content.type === "heading"
+                ? "Enter heading text..."
+                : content.type === "code"
+                  ? "Enter code..."
+                  : "Enter paragraph text... (URLs will automatically become links)"
+            }
+          />
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      {isEditing ? (
+        <div className="flex gap-2">
+          <button
+            onClick={onSave}
+            className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700"
+          >
+            <HiCheck className="w-4 h-4" />
+            Save Changes
+          </button>
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onSave}
+          disabled={
+            !content.text.trim() &&
+            content.items.length === 0 &&
+            !content.imageUrl
+          }
+          className="flex items-center gap-2 px-4 py-2 text-white rounded-lg bg-secondary-indigo hover:bg-secondary-indigo/80 disabled:opacity-50"
+        >
+          <HiPlus className="w-4 h-4" />
+          Add Block
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default ContentBlockEditor;

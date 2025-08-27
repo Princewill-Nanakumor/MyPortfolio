@@ -22,6 +22,14 @@ export interface BlogPost {
   updatedAt?: string;
 }
 
+// .ts
+export interface NewContentItem {
+  type: "paragraph" | "heading" | "code" | "list" | "image";
+  text: string;
+  items: string[];
+  imageUrl?: string;
+}
+
 export interface ContentBlock {
   type: "heading" | "paragraph" | "code" | "list" | "image"; // Add "image" here
   text?: string;
