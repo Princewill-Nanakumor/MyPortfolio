@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { designStyles, layoutOptions } from "./DesignConfig";
 
 interface DesignSwitcherProps {
@@ -14,6 +15,32 @@ const DesignSwitcher = ({
   currentLayout,
   setCurrentLayout,
 }: DesignSwitcherProps) => {
+  // Load saved preferences from localStorage on component mount
+  useEffect(() => {
+    const savedDesign = localStorage.getItem("blogDesign");
+    const savedLayout = localStorage.getItem("blogLayout");
+
+    if (savedDesign && designStyles[savedDesign]) {
+      setCurrentDesign(savedDesign);
+    }
+
+    if (savedLayout && layoutOptions[savedLayout]) {
+      setCurrentLayout(savedLayout);
+    }
+  }, [setCurrentDesign, setCurrentLayout]);
+
+  // Save design preference to localStorage
+  const handleDesignChange = (design: string) => {
+    setCurrentDesign(design);
+    localStorage.setItem("blogDesign", design);
+  };
+
+  // Save layout preference to localStorage
+  const handleLayoutChange = (layout: string) => {
+    setCurrentLayout(layout);
+    localStorage.setItem("blogLayout", layout);
+  };
+
   return (
     <div className="fixed z-50 flex-wrap hidden gap-2 p-3 border border-gray-200 rounded-full shadow-lg lg:flex bottom-4 right-4 bg-white/80 backdrop-blur-md">
       {/* Design Theme Buttons */}
@@ -21,7 +48,7 @@ const DesignSwitcher = ({
         {Object.entries(designStyles).map(([key, style]) => (
           <button
             key={key}
-            onClick={() => setCurrentDesign(key)}
+            onClick={() => handleDesignChange(key)}
             className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white sm:w-12 sm:h-12 ${
               currentDesign === key
                 ? "bg-blue-600 text-white shadow-lg scale-110"
@@ -39,7 +66,7 @@ const DesignSwitcher = ({
       <div className="relative">
         <select
           value={currentLayout}
-          onChange={(e) => setCurrentLayout(e.target.value)}
+          onChange={(e) => handleLayoutChange(e.target.value)}
           className="w-32 px-3 py-2 pr-8 text-xs font-medium text-gray-700 bg-gray-100 rounded-full appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-40 sm:text-sm"
         >
           {Object.entries(layoutOptions).map(([key, layout]) => (
