@@ -29,43 +29,37 @@ const AdminPage = () => {
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
 
   // Lockout states
-  const [failedAttempts, setFailedAttempts] = useState<number>(0);
   const [isLocked, setIsLocked] = useState<boolean>(false);
-  const [lockoutUntil, setLockoutUntil] = useState<number>(0);
+  const [lockoutTime, setLockoutTime] = useState<number>(0);
   const [timeRemaining, setTimeRemaining] = useState<string>("");
 
   const { showSuccess, showError, showInfo } = useToast();
 
   // Check authentication and lockout status on mount
   useEffect(() => {
-    const authStatus = localStorage.getItem("adminAuthenticated");
-    const storedFailedAttempts = localStorage.getItem("adminFailedAttempts");
-    const storedLockoutUntil = localStorage.getItem("adminLockoutUntil");
+    checkAuthStatus();
+    checkLockoutStatus();
+  }, []);
 
-    if (authStatus === "true") {
-      setIsAuthenticated(true);
-    }
-
-    if (storedFailedAttempts) {
-      setFailedAttempts(parseInt(storedFailedAttempts));
-    }
-
-    if (storedLockoutUntil) {
-      const lockoutTime = parseInt(storedLockoutUntil);
+  // Check lockout status from localStorage
+  const checkLockoutStatus = () => {
+    const storedLockoutTime = localStorage.getItem("adminLockoutUntil");
+    if (storedLockoutTime) {
+      const lockoutTime = parseInt(storedLockoutTime);
       const now = Date.now();
 
       if (now < lockoutTime) {
+        // Still locked
         setIsLocked(true);
-        setLockoutUntil(lockoutTime);
+        setLockoutTime(lockoutTime);
       } else {
-        // Lockout expired, reset
+        // Lockout expired, clear it
         localStorage.removeItem("adminLockoutUntil");
-        localStorage.removeItem("adminFailedAttempts");
-        setFailedAttempts(0);
         setIsLocked(false);
+        setLockoutTime(0);
       }
     }
-  }, []);
+  };
 
   // Timer for lockout countdown
   useEffect(() => {
@@ -73,14 +67,13 @@ const AdminPage = () => {
 
     const timer = setInterval(() => {
       const now = Date.now();
-      const remaining = lockoutUntil - now;
+      const remaining = lockoutTime - now;
 
       if (remaining <= 0) {
         setIsLocked(false);
-        setLockoutUntil(0);
-        setFailedAttempts(0);
+        setLockoutTime(0);
+        setTimeRemaining("");
         localStorage.removeItem("adminLockoutUntil");
-        localStorage.removeItem("adminFailedAttempts");
         clearInterval(timer);
       } else {
         const minutes = Math.floor(remaining / 60000);
@@ -90,7 +83,24 @@ const AdminPage = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isLocked, lockoutUntil]);
+  }, [isLocked, lockoutTime]);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch("/api/admin/verify", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      setIsAuthenticated(false);
+    }
+  };
 
   // Memoize loadPosts function to prevent infinite re-renders
   const loadPosts = useCallback(async (): Promise<void> => {
@@ -255,7 +265,7 @@ const AdminPage = () => {
     setEditingPost(null);
   }, []);
 
-  // Authentication handlers
+  // Secure authentication handlers
   const handleLogin = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
@@ -268,47 +278,38 @@ const AdminPage = () => {
     setAuthError("");
 
     try {
-      // Get password from environment variable
-      const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASS;
+      const response = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ password }),
+      });
 
-      if (!correctPassword) {
-        setAuthError(
-          "Admin password not configured. Please contact administrator."
-        );
-        showError("Configuration Error", "Admin password not configured");
-        return;
-      }
+      const data = await response.json();
 
-      if (password === correctPassword) {
-        // Successful login - reset failed attempts
+      if (response.ok) {
+        // Successful login
         setIsAuthenticated(true);
-        setFailedAttempts(0);
-        localStorage.setItem("adminAuthenticated", "true");
-        localStorage.removeItem("adminFailedAttempts");
+        setPassword("");
+        setIsLocked(false);
+        setLockoutTime(0);
+        setTimeRemaining("");
         localStorage.removeItem("adminLockoutUntil");
         showSuccess("Access Granted", "Welcome to the admin panel!");
       } else {
-        // Failed login - increment attempts
-        const newFailedAttempts = failedAttempts + 1;
-        setFailedAttempts(newFailedAttempts);
-        localStorage.setItem(
-          "adminFailedAttempts",
-          newFailedAttempts.toString()
-        );
+        // Failed login
+        setAuthError(data.error || "Authentication failed");
+        showError("Access Denied", data.error || "Authentication failed");
 
-        if (newFailedAttempts >= 3) {
-          // Lock account for 1 hour
-          const lockoutTime = Date.now() + 60 * 60 * 1000; // 1 hour
+        // Check if account is locked
+        if (response.status === 429) {
           setIsLocked(true);
-          setLockoutUntil(lockoutTime);
-          localStorage.setItem("adminLockoutUntil", lockoutTime.toString());
-
-          setAuthError("Too many failed attempts. Account locked");
-          showError("Account Locked", "Too many failed attempts.");
-        } else {
-          const remainingAttempts = 3 - newFailedAttempts;
-          setAuthError(`Incorrect password.`);
-          showError("Access Denied", `Incorrect password.`);
+          const lockoutDuration = 60 * 60 * 1000; // 1 hour
+          const lockoutUntil = Date.now() + lockoutDuration;
+          setLockoutTime(lockoutUntil);
+          localStorage.setItem("adminLockoutUntil", lockoutUntil.toString());
         }
       }
     } catch (err) {
@@ -319,12 +320,24 @@ const AdminPage = () => {
     }
   };
 
-  const handleLogout = (): void => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("adminAuthenticated");
-    setPassword("");
-    setAuthError("");
-    showInfo("Logged Out", "You have been logged out of the admin panel");
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await fetch("/api/admin/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setIsAuthenticated(false);
+      setPassword("");
+      setAuthError("");
+      setIsLocked(false);
+      setLockoutTime(0);
+      setTimeRemaining("");
+      localStorage.removeItem("adminLockoutUntil");
+      showInfo("Logged Out", "You have been logged out of the admin panel");
+    }
   };
 
   // Show authentication modal if not authenticated
@@ -363,12 +376,6 @@ const AdminPage = () => {
                       </h2>
                       <p className="mb-4 text-sm text-gray-600">
                         Too many failed login attempts. Please try again later.
-                      </p>
-                      <div className="font-mono text-2xl text-red-600">
-                        {timeRemaining}
-                      </div>
-                      <p className="mt-2 text-xs text-gray-500">
-                        Time remaining until unlock
                       </p>
                     </div>
                   </div>
