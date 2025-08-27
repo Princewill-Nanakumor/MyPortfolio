@@ -113,6 +113,7 @@ const BlogSection: React.FC = () => {
                         width={400}
                         height={192}
                         className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                        unoptimized={true}
                         onError={() => {
                           console.error("Failed to load image:", post.image);
                         }}

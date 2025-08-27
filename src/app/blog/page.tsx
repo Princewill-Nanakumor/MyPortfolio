@@ -175,8 +175,18 @@ const BlogPage = () => {
                         width={400}
                         height={192}
                         className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                        onError={() => {
+                        unoptimized={true}
+                        onError={(e) => {
                           console.error("Failed to load image:", post.image);
+                          console.error("Error details:", e);
+                          // Log additional info for production debugging
+                          if (typeof window !== 'undefined') {
+                            console.log("Current URL:", window.location.href);
+                            console.log("Environment:", process.env.NODE_ENV);
+                          }
+                        }}
+                        onLoad={() => {
+                          console.log("Successfully loaded image:", post.image);
                         }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t to-transparent from-black/20"></div>

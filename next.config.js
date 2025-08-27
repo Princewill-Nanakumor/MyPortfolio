@@ -11,6 +11,8 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+    unoptimized: false, // Keep Next.js optimization for other images
+    domains: [], // Remove domains array if it exists
   },
   // Add this to suppress the warning
   webpack: (config, { isServer }) => {
