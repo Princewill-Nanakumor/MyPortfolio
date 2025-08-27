@@ -15,6 +15,9 @@ import {
   HiArrowDown,
   HiUpload,
   HiX,
+  HiPencil,
+  HiCheck,
+  HiLink,
 } from "react-icons/hi";
 import { BlogPost, ContentBlock } from "@/types/Blog";
 
@@ -48,6 +51,16 @@ const BlogPostContentBuilder = forwardRef<
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [hasUnsavedContent, setHasUnsavedContent] = useState<boolean>(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingContent, setEditingContent] = useState<NewContentItem>({
+    type: "paragraph",
+    text: "",
+    items: [],
+    imageUrl: "",
+  });
+  const [showLinkInput, setShowLinkInput] = useState<boolean>(false);
+  const [linkUrl, setLinkUrl] = useState<string>("");
+  const [linkText, setLinkText] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Check if there's unsaved content
@@ -105,6 +118,119 @@ const BlogPostContentBuilder = forwardRef<
     [autoSaveContent]
   );
 
+  // Function to convert URLs to links in text
+  const convertUrlsToLinks = (text: string): JSX.Element => {
+    if (!text) return <></>;
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return (
+      <>
+        {parts.map((part, index) => {
+          if (urlRegex.test(part)) {
+            return (
+              <a
+                key={index}
+                href={part}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline hover:text-blue-800"
+              >
+                {part}
+              </a>
+            );
+          }
+          return <span key={index}>{part}</span>;
+        })}
+      </>
+    );
+  };
+
+  // Function to insert link into text
+  const insertLink = (): void => {
+    if (linkUrl && linkText) {
+      const linkMarkdown = `[${linkText}](${linkUrl})`;
+      const currentText =
+        editingIndex !== null ? editingContent.text : newContentItem.text;
+      const cursorPosition =
+        (document.activeElement as HTMLTextAreaElement)?.selectionStart ||
+        currentText.length;
+
+      const newText =
+        currentText.slice(0, cursorPosition) +
+        linkMarkdown +
+        currentText.slice(cursorPosition);
+
+      if (editingIndex !== null) {
+        setEditingContent((prev) => ({ ...prev, text: newText }));
+      } else {
+        setNewContentItem((prev) => ({ ...prev, text: newText }));
+      }
+
+      setLinkUrl("");
+      setLinkText("");
+      setShowLinkInput(false);
+    }
+  };
+
+  // Start editing a content block
+  const startEditing = (index: number): void => {
+    const content = formData.content?.[index];
+    if (content) {
+      setEditingIndex(index);
+      setEditingContent({
+        type: content.type,
+        text: content.text || "",
+        items: content.items || [],
+        imageUrl: content.imageUrl || "",
+      });
+    }
+  };
+
+  // Save edited content
+  const saveEdit = (): void => {
+    if (editingIndex !== null) {
+      const contentBlock: ContentBlock = {
+        type: editingContent.type,
+        text: editingContent.text,
+        items: editingContent.items,
+        ...(editingContent.imageUrl && {
+          imageUrl: editingContent.imageUrl,
+        }),
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        content: (prev.content || []).map((item, index) =>
+          index === editingIndex ? contentBlock : item
+        ),
+      }));
+
+      setEditingIndex(null);
+      setEditingContent({
+        type: "paragraph",
+        text: "",
+        items: [],
+        imageUrl: "",
+      });
+    }
+  };
+
+  // Cancel editing
+  const cancelEdit = (): void => {
+    setEditingIndex(null);
+    setEditingContent({
+      type: "paragraph",
+      text: "",
+      items: [],
+      imageUrl: "",
+    });
+    setShowLinkInput(false);
+    setLinkUrl("");
+    setLinkText("");
+  };
+
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -160,10 +286,17 @@ const BlogPostContentBuilder = forwardRef<
 
       if (data.success && data.imageUrl) {
         // Update the new content item with the image URL
-        setNewContentItem((prev) => ({
-          ...prev,
-          imageUrl: data.imageUrl,
-        }));
+        if (editingIndex !== null) {
+          setEditingContent((prev) => ({
+            ...prev,
+            imageUrl: data.imageUrl,
+          }));
+        } else {
+          setNewContentItem((prev) => ({
+            ...prev,
+            imageUrl: data.imageUrl,
+          }));
+        }
 
         setUploadProgress(100);
 
@@ -186,10 +319,17 @@ const BlogPostContentBuilder = forwardRef<
   };
 
   const removeImage = (): void => {
-    setNewContentItem((prev) => ({
-      ...prev,
-      imageUrl: "",
-    }));
+    if (editingIndex !== null) {
+      setEditingContent((prev) => ({
+        ...prev,
+        imageUrl: "",
+      }));
+    } else {
+      setNewContentItem((prev) => ({
+        ...prev,
+        imageUrl: "",
+      }));
+    }
   };
 
   const triggerFileInput = (): void => {
@@ -220,9 +360,14 @@ const BlogPostContentBuilder = forwardRef<
   };
 
   const addListItem = (): void => {
-    if (newContentItem.type === "list") {
-      const itemText = prompt("Enter list item:");
-      if (itemText) {
+    const itemText = prompt("Enter list item:");
+    if (itemText) {
+      if (editingIndex !== null) {
+        setEditingContent((prev) => ({
+          ...prev,
+          items: [...prev.items, itemText],
+        }));
+      } else {
         setNewContentItem((prev) => ({
           ...prev,
           items: [...prev.items, itemText],
@@ -232,10 +377,17 @@ const BlogPostContentBuilder = forwardRef<
   };
 
   const removeListItem = (itemIndex: number): void => {
-    setNewContentItem((prev) => ({
-      ...prev,
-      items: prev.items.filter((_, i) => i !== itemIndex),
-    }));
+    if (editingIndex !== null) {
+      setEditingContent((prev) => ({
+        ...prev,
+        items: prev.items.filter((_, i) => i !== itemIndex),
+      }));
+    } else {
+      setNewContentItem((prev) => ({
+        ...prev,
+        items: prev.items.filter((_, i) => i !== itemIndex),
+      }));
+    }
   };
 
   const renderContentPreview = (item: ContentBlock): JSX.Element | null => {
@@ -253,7 +405,7 @@ const BlogPostContentBuilder = forwardRef<
           <ul className="space-y-1 list-disc list-inside">
             {item.items?.map((listItem, i) => (
               <li key={i} className="text-sm">
-                {listItem}
+                {convertUrlsToLinks(listItem)}
               </li>
             ))}
           </ul>
@@ -270,13 +422,271 @@ const BlogPostContentBuilder = forwardRef<
               unoptimized={true}
             />
             {item.text && (
-              <p className="mt-2 text-sm italic text-gray-600">{item.text}</p>
+              <p className="mt-2 text-sm italic text-gray-600">
+                {convertUrlsToLinks(item.text)}
+              </p>
             )}
           </div>
         ) : null;
       default:
-        return <p className="text-sm">{item.text}</p>;
+        return <p className="text-sm">{convertUrlsToLinks(item.text || "")}</p>;
     }
+  };
+  const renderContentInput = (
+    content: NewContentItem,
+    isEditing: boolean = false
+  ) => {
+    const currentContent = isEditing ? content : newContentItem;
+    const setCurrentContent = isEditing ? setEditingContent : setNewContentItem;
+
+    return (
+      <div className="space-y-4">
+        {/* Content Type Selector */}
+        <select
+          value={currentContent.type}
+          onChange={(e) =>
+            setCurrentContent((prev) => ({
+              ...prev,
+              type: e.target.value as
+                | "paragraph"
+                | "heading"
+                | "code"
+                | "list"
+                | "image",
+              text: "",
+              items: [],
+              imageUrl: "",
+            }))
+          }
+          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+        >
+          <option value="paragraph">Paragraph</option>
+          <option value="heading">Heading</option>
+          <option value="code">Code Block</option>
+          <option value="list">List</option>
+          <option value="image">Image</option>
+        </select>
+
+        {/* Link Input Modal */}
+        {showLinkInput && (
+          <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={linkText}
+                onChange={(e) => setLinkText(e.target.value)}
+                placeholder="Link text"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              />
+              <input
+                type="url"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="URL (https://example.com)"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={insertLink}
+                  className="px-3 py-1 text-sm text-white rounded bg-secondary-indigo hover:bg-secondary-indigo/80"
+                >
+                  Insert Link
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLinkInput(false);
+                    setLinkUrl("");
+                    setLinkText("");
+                  }}
+                  className="px-3 py-1 text-sm text-gray-600 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Content Input Based on Type */}
+        {currentContent.type === "image" ? (
+          <div className="space-y-4">
+            {/* Image Upload */}
+            <div className="relative">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+
+              {!currentContent.imageUrl ? (
+                <button
+                  type="button"
+                  onClick={triggerFileInput}
+                  disabled={isUploading}
+                  className="w-full px-4 py-3 transition-colors border-2 border-gray-300 border-dashed rounded-lg hover:border-secondary-indigo hover:bg-secondary-indigo/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <div className="flex flex-col items-center space-y-2">
+                    {isUploading ? (
+                      <>
+                        <div className="w-8 h-8 border-2 rounded-full border-secondary-indigo border-t-transparent animate-spin"></div>
+                        <span className="text-sm text-secondary-indigo">
+                          Uploading... {uploadProgress}%
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <HiUpload className="w-6 h-6 text-gray-400" />
+                        <span className="text-sm text-gray-600">
+                          Click to upload image
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          PNG, JPG, GIF up to 5MB
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </button>
+              ) : (
+                <div className="relative group">
+                  <div className="relative w-full h-48 overflow-hidden border border-gray-200 rounded-lg">
+                    <Image
+                      src={currentContent.imageUrl}
+                      alt="Preview"
+                      width={400}
+                      height={192}
+                      className="object-cover w-full h-full"
+                      priority={false}
+                      unoptimized={true}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="p-2 text-white transition-colors bg-red-500 rounded-full hover:bg-red-600"
+                        title="Remove image"
+                      >
+                        <HiX className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Image Caption */}
+            <input
+              type="text"
+              value={currentContent.text}
+              onChange={(e) =>
+                setCurrentContent((prev) => ({
+                  ...prev,
+                  text: e.target.value,
+                }))
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              placeholder="Image caption (optional)"
+            />
+          </div>
+        ) : currentContent.type === "list" ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={addListItem}
+                className="px-3 py-1 text-sm border rounded text-secondary-indigo border-secondary-indigo hover:bg-secondary-indigo/10"
+              >
+                Add List Item
+              </button>
+            </div>
+            {currentContent.items.map((item, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) => {
+                    const newItems = [...currentContent.items];
+                    newItems[index] = e.target.value;
+                    setCurrentContent((prev) => ({
+                      ...prev,
+                      items: newItems,
+                    }));
+                  }}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+                  placeholder="List item text"
+                />
+                <button
+                  onClick={() => removeListItem(index)}
+                  className="p-1 text-red-400 hover:text-red-600"
+                >
+                  <HiTrash className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {/* Text Input with Link Button */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowLinkInput(!showLinkInput)}
+                className="p-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+                title="Add link"
+              >
+                <HiLink className="w-4 h-4" />
+              </button>
+            </div>
+            <textarea
+              value={currentContent.text}
+              onChange={(e) =>
+                setCurrentContent((prev) => ({ ...prev, text: e.target.value }))
+              }
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              placeholder={
+                currentContent.type === "heading"
+                  ? "Enter heading text..."
+                  : currentContent.type === "code"
+                    ? "Enter code..."
+                    : "Enter paragraph text... (URLs will automatically become links)"
+              }
+            />
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        {isEditing ? (
+          <div className="flex gap-2">
+            <button
+              onClick={saveEdit}
+              className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700"
+            >
+              <HiCheck className="w-4 h-4" />
+              Save Changes
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={addContentItem}
+            disabled={
+              !newContentItem.text.trim() &&
+              newContentItem.items.length === 0 &&
+              !newContentItem.imageUrl
+            }
+            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg bg-secondary-indigo hover:bg-secondary-indigo/80 disabled:opacity-50"
+          >
+            <HiPlus className="w-4 h-4" />
+            Add Block
+          </button>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -317,6 +727,13 @@ const BlogPostContentBuilder = forwardRef<
                 </div>
                 <div className="flex items-center gap-2">
                   <button
+                    onClick={() => startEditing(index)}
+                    className="p-1 text-blue-400 hover:text-blue-600"
+                    title="Edit block"
+                  >
+                    <HiPencil className="w-4 h-4" />
+                  </button>
+                  <button
                     onClick={() => moveContentItem(index, "up")}
                     disabled={index === 0}
                     className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-50"
@@ -338,7 +755,12 @@ const BlogPostContentBuilder = forwardRef<
                   </button>
                 </div>
               </div>
-              <div className="text-sm">{renderContentPreview(item)}</div>
+
+              {editingIndex === index ? (
+                renderContentInput(editingContent, true)
+              ) : (
+                <div className="text-sm">{renderContentPreview(item)}</div>
+              )}
             </div>
           ))}
         </div>
@@ -346,181 +768,7 @@ const BlogPostContentBuilder = forwardRef<
 
       {/* Add New Content */}
       <div className="p-4 border-2 border-gray-300 border-dashed rounded-xl">
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <select
-              value={newContentItem.type}
-              onChange={(e) =>
-                setNewContentItem((prev) => ({
-                  ...prev,
-                  type: e.target.value as
-                    | "paragraph"
-                    | "heading"
-                    | "code"
-                    | "list"
-                    | "image",
-                  text: "",
-                  items: [],
-                  imageUrl: "",
-                }))
-              }
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
-            >
-              <option value="paragraph">Paragraph</option>
-              <option value="heading">Heading</option>
-              <option value="code">Code Block</option>
-              <option value="list">List</option>
-              <option value="image">Image</option>
-            </select>
-            <button
-              onClick={addContentItem}
-              disabled={
-                !newContentItem.text.trim() &&
-                newContentItem.items.length === 0 &&
-                !newContentItem.imageUrl
-              }
-              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg bg-secondary-indigo hover:bg-secondary-indigo/80 disabled:opacity-50"
-            >
-              <HiPlus className="w-4 h-4" />
-              Add Block
-            </button>
-          </div>
-
-          {/* Content Input Based on Type */}
-          {newContentItem.type === "image" ? (
-            <div className="space-y-4">
-              {/* Image Upload */}
-              <div className="relative">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-
-                {!newContentItem.imageUrl ? (
-                  <button
-                    type="button"
-                    onClick={triggerFileInput}
-                    disabled={isUploading}
-                    className="w-full px-4 py-3 transition-colors border-2 border-gray-300 border-dashed rounded-lg hover:border-secondary-indigo hover:bg-secondary-indigo/5 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <div className="flex flex-col items-center space-y-2">
-                      {isUploading ? (
-                        <>
-                          <div className="w-8 h-8 border-2 rounded-full border-secondary-indigo border-t-transparent animate-spin"></div>
-                          <span className="text-sm text-secondary-indigo">
-                            Uploading... {uploadProgress}%
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <HiUpload className="w-6 h-6 text-gray-400" />
-                          <span className="text-sm text-gray-600">
-                            Click to upload image
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            PNG, JPG, GIF up to 5MB
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  </button>
-                ) : (
-                  <div className="relative group">
-                    <div className="relative w-full h-48 overflow-hidden border border-gray-200 rounded-lg">
-                      <Image
-                        src={newContentItem.imageUrl}
-                        alt="Preview"
-                        width={400}
-                        height={192}
-                        className="object-cover w-full h-full"
-                        priority={false}
-                        unoptimized={true}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
-                        <button
-                          type="button"
-                          onClick={removeImage}
-                          className="p-2 text-white transition-colors bg-red-500 rounded-full hover:bg-red-600"
-                          title="Remove image"
-                        >
-                          <HiX className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Image Caption */}
-              <input
-                type="text"
-                value={newContentItem.text}
-                onChange={(e) =>
-                  setNewContentItem((prev) => ({
-                    ...prev,
-                    text: e.target.value,
-                  }))
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
-                placeholder="Image caption (optional)"
-              />
-            </div>
-          ) : newContentItem.type === "list" ? (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={addListItem}
-                  className="px-3 py-1 text-sm border rounded text-secondary-indigo border-secondary-indigo hover:bg-secondary-indigo/10"
-                >
-                  Add List Item
-                </button>
-              </div>
-              {newContentItem.items.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => {
-                      const newItems = [...newContentItem.items];
-                      newItems[index] = e.target.value;
-                      setNewContentItem((prev) => ({
-                        ...prev,
-                        items: newItems,
-                      }));
-                    }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
-                    placeholder="List item text"
-                  />
-                  <button
-                    onClick={() => removeListItem(index)}
-                    className="p-1 text-red-400 hover:text-red-600"
-                  >
-                    <HiTrash className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <textarea
-              value={newContentItem.text}
-              onChange={(e) =>
-                setNewContentItem((prev) => ({ ...prev, text: e.target.value }))
-              }
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
-              placeholder={
-                newContentItem.type === "heading"
-                  ? "Enter heading text..."
-                  : newContentItem.type === "code"
-                    ? "Enter code..."
-                    : "Enter paragraph text..."
-              }
-            />
-          )}
-        </div>
+        {renderContentInput(newContentItem, false)}
       </div>
     </div>
   );

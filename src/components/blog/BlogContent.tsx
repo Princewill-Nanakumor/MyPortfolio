@@ -23,6 +23,35 @@ const BlogContent = ({
 }: BlogContentProps) => {
   const s = designStyle.colors;
 
+  // Function to convert URLs to links in text
+  const convertUrlsToLinks = (text: string): JSX.Element => {
+    if (!text) return <></>;
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return (
+      <>
+        {parts.map((part, index) => {
+          if (urlRegex.test(part)) {
+            return (
+              <a
+                key={index}
+                href={part}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline hover:text-blue-800"
+              >
+                {part}
+              </a>
+            );
+          }
+          return <span key={index}>{part}</span>;
+        })}
+      </>
+    );
+  };
+
   const handleShare = async () => {
     try {
       if (navigator.share) {
@@ -84,7 +113,7 @@ const BlogContent = ({
             transition={{ delay: index * 0.1 }}
             className={`mb-4 text-sm leading-relaxed ${s.textSecondary} sm:text-base sm:mb-6 lg:text-lg lg:mb-8 xl:text-xl`}
           >
-            {contentBlock.text}
+            {convertUrlsToLinks(contentBlock.text || "")}
           </motion.p>
         );
       case "code":
@@ -115,7 +144,7 @@ const BlogContent = ({
                 key={itemIndex}
                 className={`text-sm ${s.textSecondary} sm:text-base lg:text-lg xl:text-xl`}
               >
-                {item}
+                {convertUrlsToLinks(item)}
               </li>
             ))}
           </motion.ul>
@@ -141,7 +170,7 @@ const BlogContent = ({
             </div>
             {contentBlock.text && (
               <p className="mt-2 text-xs italic text-center text-gray-600 sm:text-sm lg:text-base">
-                {contentBlock.text}
+                {convertUrlsToLinks(contentBlock.text)}
               </p>
             )}
           </motion.div>
@@ -160,7 +189,7 @@ const BlogContent = ({
         <p
           className={`text-sm ${s.textSecondary} sm:text-base lg:text-lg xl:text-xl`}
         >
-          {post.excerpt}
+          {convertUrlsToLinks(post.excerpt || "")}
         </p>
       </div>
 
