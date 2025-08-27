@@ -1,7 +1,13 @@
 // src/app/api/upload-image/route.ts
 import { NextResponse, NextRequest } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 interface UploadSuccess {
   success: true;
@@ -45,26 +51,20 @@ export async function POST(
       );
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadsDir, { recursive: true });
-
-    // Generate unique filename
+    // Convert file to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const timestamp = Date.now();
-    const filename = `${timestamp}-${file.name}`;
-    const filepath = path.join(uploadsDir, filename);
+    const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    // Save file
-    await writeFile(filepath, buffer);
-
-    // Return the public URL
-    const imageUrl = `/uploads/${filename}`;
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(base64String, {
+      folder: "portfolio-uploads",
+      resource_type: "auto",
+    });
 
     return NextResponse.json<UploadSuccess>({
       success: true,
-      imageUrl,
+      imageUrl: result.secure_url,
       message: "Image uploaded successfully",
     });
   } catch (error: unknown) {
