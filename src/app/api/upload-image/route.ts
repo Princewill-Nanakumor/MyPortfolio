@@ -4,7 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 // Configure Cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
@@ -56,10 +56,11 @@ export async function POST(
     const buffer = Buffer.from(bytes);
     const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    // Upload to Cloudinary
+    // Upload to Cloudinary with upload preset
     const result = await cloudinary.uploader.upload(base64String, {
       folder: "portfolio-uploads",
       resource_type: "auto",
+      upload_preset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
     });
 
     return NextResponse.json<UploadSuccess>({
