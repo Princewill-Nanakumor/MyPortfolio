@@ -8,9 +8,9 @@ const loginAttempts = new Map<
   { count: number; lastAttempt: number; lockedUntil?: number }
 >();
 
-const MAX_ATTEMPTS = 3;
-const LOCKOUT_DURATION = 60 * 60 * 1000;
-const WINDOW_SIZE = 60 * 60 * 1000;
+const MAX_ATTEMPTS = 4;
+const LOCKOUT_DURATION = 60 * 60 * 1000; // 1 hour
+const WINDOW_SIZE = 60 * 60 * 1000; // 1 hour
 
 // Helper function to get client identifier
 function getClientId(request: NextRequest): string {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       const remainingTime = Math.ceil((attempts.lockedUntil - now) / 1000 / 60);
       return NextResponse.json(
         {
-          error: `Account temporarily locked. Try again`,
+          error: `Account temporarily locked. Try again in ${remainingTime} minutes.`,
         },
         { status: 429 }
       );
@@ -71,7 +71,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (password === correctPassword) {
+    // Use plain text comparison (for now)
+    const isValid = password === correctPassword;
+
+    if (isValid) {
       // Reset failed attempts on successful login
       loginAttempts.delete(clientId);
 
@@ -84,8 +87,8 @@ export async function POST(request: NextRequest) {
       const response = NextResponse.json({ success: true });
       response.cookies.set("adminToken", token, {
         httpOnly: true,
-        secure: false, // Set to true in production
-        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production", // true in production
+        sameSite: "strict",
         maxAge: 24 * 60 * 60,
         path: "/",
       });
@@ -102,7 +105,7 @@ export async function POST(request: NextRequest) {
         loginAttempts.set(clientId, attempts);
 
         return NextResponse.json(
-          { error: `Too many failed attempts. Account locked` },
+          { error: `Too many failed attempts. Account locked for 1 hour.` },
           { status: 429 }
         );
       }
@@ -110,7 +113,10 @@ export async function POST(request: NextRequest) {
       loginAttempts.set(clientId, attempts);
 
       const remainingAttempts = MAX_ATTEMPTS - attempts.count;
-      return NextResponse.json({ error: `Invalid password.` }, { status: 401 });
+      return NextResponse.json(
+        { error: `Invalid password. ${remainingAttempts} attempts remaining.` },
+        { status: 401 }
+      );
     }
   } catch (error) {
     return NextResponse.json(
