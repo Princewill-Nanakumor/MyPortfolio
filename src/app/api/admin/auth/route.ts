@@ -2,15 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-// Rate limiting store (in production, use Redis or database)
 const loginAttempts = new Map<
   string,
   { count: number; lastAttempt: number; lockedUntil?: number }
 >();
 
 const MAX_ATTEMPTS = 4;
-const LOCKOUT_DURATION = 60 * 60 * 1000; // 1 hour
-const WINDOW_SIZE = 60 * 60 * 1000; // 1 hour
+const LOCKOUT_DURATION = 60 * 60 * 1000;
+const WINDOW_SIZE = 60 * 60 * 1000;
 
 // Helper function to get client identifier
 function getClientId(request: NextRequest): string {
@@ -40,7 +39,6 @@ export async function POST(request: NextRequest) {
       lastAttempt: 0,
     };
 
-    // Reset attempts if window has passed
     if (now - attempts.lastAttempt > WINDOW_SIZE) {
       attempts.count = 0;
       attempts.lockedUntil = undefined;
@@ -51,7 +49,7 @@ export async function POST(request: NextRequest) {
       const remainingTime = Math.ceil((attempts.lockedUntil - now) / 1000 / 60);
       return NextResponse.json(
         {
-          error: `Account temporarily locked. Try again in ${remainingTime} minutes.`,
+          error: `Account temporarily locked`,
         },
         { status: 429 }
       );
@@ -87,7 +85,7 @@ export async function POST(request: NextRequest) {
       const response = NextResponse.json({ success: true });
       response.cookies.set("adminToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // true in production
+        secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 24 * 60 * 60,
         path: "/",
@@ -95,17 +93,15 @@ export async function POST(request: NextRequest) {
 
       return response;
     } else {
-      // Increment failed attempts
       attempts.count += 1;
       attempts.lastAttempt = now;
 
-      // Lock account if max attempts reached
       if (attempts.count >= MAX_ATTEMPTS) {
         attempts.lockedUntil = now + LOCKOUT_DURATION;
         loginAttempts.set(clientId, attempts);
 
         return NextResponse.json(
-          { error: `Too many failed attempts. Account locked for 1 hour.` },
+          { error: `Too many failed attempts. Account locked` },
           { status: 429 }
         );
       }
@@ -113,10 +109,7 @@ export async function POST(request: NextRequest) {
       loginAttempts.set(clientId, attempts);
 
       const remainingAttempts = MAX_ATTEMPTS - attempts.count;
-      return NextResponse.json(
-        { error: `Invalid password. ${remainingAttempts} attempts remaining.` },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: `Invalid password` }, { status: 401 });
     }
   } catch (error) {
     return NextResponse.json(
