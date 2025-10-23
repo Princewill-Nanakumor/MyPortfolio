@@ -32,7 +32,7 @@ const projects: Project[] = [
   //   name: "my crud application",
   //   description: "Learning how crud application works.",
   //   technology: "React, Nodemailer, nextjs, tailwind, react-toast",
-  //   github: "https://github.com/NanakumorPrincewill/Nextjs_Crud_Application",
+  //   github: "https://github.com/Princewill-Nanakumor/Nextjs_Crud_Application",
   //   link: "https://app.netlify.com/projects/nexjs-crud-app/overview",
   //   year: "2022",
   // },

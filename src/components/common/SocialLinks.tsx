@@ -49,7 +49,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
       </Link>
 
       <Link
-        href="https://github.com/NanakumorPrincewill"
+        href="https://github.com/Princewill-Nanakumor"
         target="_blank"
         rel="noreferrer"
         className="group"
