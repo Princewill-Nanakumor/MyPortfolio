@@ -380,7 +380,7 @@ const About: React.FC = () => {
               <div className="absolute p-2 bg-white border border-gray-100 sm:p-3 -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 rounded-xl shadow-large">
                 <div className="text-center">
                   <div className="text-lg font-bold sm:text-xl text-secondary-indigo">
-                    2+
+                    3+
                   </div>
                   <div className="text-xs font-medium text-text-secondary">
                     Years Experience
