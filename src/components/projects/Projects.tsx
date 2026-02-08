@@ -17,6 +17,17 @@ interface Project {
 
 const projects: Project[] = [
   {
+    image: "/Screenshot_2026-02-08_at_8.22.17_PM_optimized_5000.png",
+    name: "kYIV ELECTRICITY SURVEY APP",
+    description:
+      "A multi-step web survey that collects real-time electricity availability data across Kyiv, Ukraine. It combines a guided, carousel-style form with a Telegram bot integration so survey responses are delivered instantly to organizers. The project shows how a civic tool can be built with modern web technologies and low-code external integrations.",
+    technology: "React, typescript, nextjs, tailwind, telegram_Bot_Api, zod",
+    github:
+      "https://github.com/Princewill-Nanakumor/MultipleStepForm_TelegramBot",
+    link: "https://electricysurverybot.netlify.app/",
+    year: "2026",
+  },
+  {
     image: "/crm.png",
     name: "CRM",
     description:
@@ -27,15 +38,7 @@ const projects: Project[] = [
     link: "https://zodashield.com",
     year: "2025",
   },
-  // {
-  //   image: "/crudapp.png",
-  //   name: "my crud application",
-  //   description: "Learning how crud application works.",
-  //   technology: "React, Nodemailer, nextjs, tailwind, react-toast",
-  //   github: "https://github.com/Princewill-Nanakumor/Nextjs_Crud_Application",
-  //   link: "https://app.netlify.com/projects/nexjs-crud-app/overview",
-  //   year: "2022",
-  // },
+
   {
     image: "/myportfolio.png",
     name: "My portfolio",
