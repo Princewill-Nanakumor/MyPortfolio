@@ -18,7 +18,7 @@ interface Project {
 const projects: Project[] = [
   {
     image: "/Screenshot_2026-02-08_at_8.22.17_PM_optimized_5000.png",
-    name: "kYIV ELECTRICITY SURVEY APP",
+    name: "KYIV ELECTRICITY SURVEY APP",
     description:
       "A multi-step web survey that collects real-time electricity availability data across Kyiv, Ukraine. It combines a guided, carousel-style form with a Telegram bot integration so survey responses are delivered instantly to organizers. The project shows how a civic tool can be built with modern web technologies and low-code external integrations.",
     technology: "React, typescript, nextjs, tailwind, telegram_Bot_Api, zod",
