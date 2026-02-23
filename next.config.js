@@ -14,12 +14,12 @@ const nextConfig = {
     unoptimized: false, // Keep Next.js optimization for other images
     domains: [], // Remove domains array if it exists
   },
-  // Add this to suppress the warning
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = config.externals || [];
-      config.externals.push("punycode");
-    }
+  // Use userland punycode instead of Node's deprecated built-in
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      punycode: require.resolve("punycode"),
+    };
     return config;
   },
 };

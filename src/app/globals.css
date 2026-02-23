@@ -226,3 +226,83 @@ body {
   background-color: var(--secondary-indigo);
   color: white;
 }
+
+/* Custom Cursor - hide default when active, except pointer on interactive elements */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
+/* Pointer on links, buttons, selects, inputs, and everything inside them */
+.custom-cursor-active a,
+.custom-cursor-active a *,
+.custom-cursor-active button,
+.custom-cursor-active button *,
+.custom-cursor-active select,
+.custom-cursor-active select *,
+.custom-cursor-active [role="button"],
+.custom-cursor-active [role="button"] *,
+.custom-cursor-active input[type="submit"],
+.custom-cursor-active input[type="button"],
+.custom-cursor-active input[type="reset"],
+.custom-cursor-active [data-cursor],
+.custom-cursor-active [data-cursor] *,
+.custom-cursor-active [data-cursor="pointer"],
+.custom-cursor-active [data-cursor="pointer"] *,
+.custom-cursor-active [data-cursor="expand"],
+.custom-cursor-active [data-cursor="expand"] * {
+  cursor: pointer !important;
+}
+
+.custom-cursor-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary-indigo), var(--accent-emerald));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 12px rgba(79, 70, 229, 0.4);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.2s ease;
+  will-change: transform;
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  border-radius: 50%;
+  border: 2px solid rgba(79, 70, 229, 0.5);
+  background: transparent;
+  pointer-events: none;
+  z-index: 2147483646;
+  transition: opacity 0.2s ease, width 0.25s ease-out, height 0.25s ease-out,
+    margin 0.25s ease-out, border-color 0.2s ease, border-width 0.2s ease;
+  will-change: transform;
+}
+
+.custom-cursor-ring--hover {
+  width: 56px;
+  height: 56px;
+  margin-left: -28px;
+  margin-top: -28px;
+  border-width: 2px;
+  border-color: rgba(79, 70, 229, 0.6);
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.2),
+    0 0 40px rgba(16, 185, 129, 0.1);
+}

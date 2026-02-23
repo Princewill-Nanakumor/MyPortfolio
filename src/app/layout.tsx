@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import { ToastProvider } from "@/context/ToastContext";
+import CustomCursor from "@/components/common/CustomCursor";
 import { ReactNode } from "react";
 
 // Primary Font: Inter - Modern, clean, highly readable
@@ -174,6 +175,7 @@ export default function RootLayout({
         className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ToastProvider>
+          <CustomCursor />
           <Navbar />
           {children}
         </ToastProvider>
