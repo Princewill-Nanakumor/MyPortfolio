@@ -233,7 +233,7 @@ body {
   cursor: none !important;
 }
 
-/* Pointer on links, buttons, selects, inputs, and everything inside them */
+/* Pointer on links, buttons, selects, and clickable inputs */
 .custom-cursor-active a,
 .custom-cursor-active a *,
 .custom-cursor-active button,
@@ -252,6 +252,14 @@ body {
 .custom-cursor-active [data-cursor="expand"],
 .custom-cursor-active [data-cursor="expand"] * {
   cursor: pointer !important;
+}
+
+/* Text cursor (I-beam) on text inputs and textareas */
+.custom-cursor-active input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]),
+.custom-cursor-active input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]) *,
+.custom-cursor-active textarea,
+.custom-cursor-active textarea * {
+  cursor: text !important;
 }
 
 .custom-cursor-wrapper {
