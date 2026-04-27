@@ -15,6 +15,8 @@ import { BlogPost } from "@/types/Blog";
 interface BlogPostFormProps {
   post?: BlogPost | null;
   onSave: (formData: Partial<BlogPost>) => Promise<void>;
+  onAutoSaveDraft?: (formData: Partial<BlogPost>) => Promise<BlogPost | null>;
+  onDraftChange?: (formData: Partial<BlogPost>) => void;
   onCancel: () => void;
 }
 
@@ -27,6 +29,8 @@ interface Step {
 const BlogPostForm: React.FC<BlogPostFormProps> = ({
   post,
   onSave,
+  onAutoSaveDraft,
+  onDraftChange,
   onCancel,
 }) => {
   const [formData, setFormData] = useState<Partial<BlogPost>>({
@@ -44,6 +48,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [debugInfo, setDebugInfo] = useState<string>("");
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Add ref for content builder
   const contentBuilderRef = useRef<BlogPostContentBuilderRef>(null);
@@ -60,7 +65,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
     if (post) {
       setFormData({
         ...post,
-        published: true,
+        published: post.published ?? true,
       });
     } else {
       setFormData((prev) => ({
@@ -69,6 +74,93 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       }));
     }
   }, [post]);
+
+  useEffect(() => {
+    onDraftChange?.(formData);
+  }, [formData, post, onDraftChange]);
+
+  const hasDraftableContent = (data: Partial<BlogPost>): boolean => {
+    return Boolean(
+      data.title?.trim() ||
+        data.excerpt?.trim() ||
+        data.image?.trim() ||
+        data.category?.trim() ||
+        data.readTime?.trim() ||
+        (data.tags || []).length > 0 ||
+        (data.content || []).length > 0
+    );
+  };
+
+  const shouldAutoSaveDraft = Boolean(onAutoSaveDraft && (!post || !post.published));
+
+  const flushDraftBeforeClose = async (): Promise<void> => {
+    if (!shouldAutoSaveDraft || !onAutoSaveDraft) {
+      return;
+    }
+
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+      autoSaveTimerRef.current = null;
+    }
+
+    if (!hasDraftableContent(formData)) {
+      return;
+    }
+
+    try {
+      const savedDraft = await onAutoSaveDraft({
+        ...formData,
+        published: false,
+      });
+
+      if (savedDraft?._id && !formData._id) {
+        setFormData((prev) => ({
+          ...prev,
+          _id: savedDraft._id,
+        }));
+      }
+    } catch (error) {
+      console.error("Draft flush before close failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!shouldAutoSaveDraft || !onAutoSaveDraft || isSubmitting) {
+      return;
+    }
+
+    if (!hasDraftableContent(formData)) {
+      return;
+    }
+
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    autoSaveTimerRef.current = setTimeout(async () => {
+      try {
+        const savedDraft = await onAutoSaveDraft({
+          ...formData,
+          published: false,
+        });
+
+        if (savedDraft?._id && !formData._id) {
+          setFormData((prev) => ({
+            ...prev,
+            _id: savedDraft._id,
+          }));
+        }
+      } catch (error) {
+        console.error("Draft autosave failed:", error);
+      }
+    }, 1200);
+
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [formData, onAutoSaveDraft, shouldAutoSaveDraft, isSubmitting]);
 
   const generateSlug = (title: string): string => {
     const slug = title
@@ -113,7 +205,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
 
       const finalFormData = {
         ...formData,
-        published: true,
+        published: formData.published ?? true,
       };
 
       await onSave(finalFormData);
@@ -261,7 +353,10 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
               </p>
             </div>
             <button
-              onClick={onCancel}
+              onClick={async () => {
+                await flushDraftBeforeClose();
+                onCancel();
+              }}
               className="flex-shrink-0 p-2 ml-2 text-gray-400 transition-colors hover:text-gray-600 rounded-xl"
             >
               <HiX className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -415,7 +510,10 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
               {/* Cancel button - always visible */}
               <button
                 type="button"
-                onClick={onCancel}
+                onClick={async () => {
+                  await flushDraftBeforeClose();
+                  onCancel();
+                }}
                 disabled={isSubmitting}
                 className="px-4 py-2 text-sm text-gray-600 transition-colors border border-gray-300 sm:px-6 rounded-xl hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >

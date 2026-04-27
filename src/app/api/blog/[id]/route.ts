@@ -33,6 +33,33 @@ interface BlogPostBody {
 
 type ApiResponse<T> = ApiSuccess<T> | ApiError;
 
+const buildDraftDefaults = (
+  body: Partial<BlogPostBody>
+): {
+  title: string;
+  excerpt: string;
+  content: unknown[];
+  image: string;
+  category: string;
+  slug: string;
+} => {
+  const title = body.title?.trim() || "";
+  const timestamp = Date.now();
+  const baseSlug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+  return {
+    title,
+    excerpt: body.excerpt?.trim() || "Draft excerpt",
+    content: Array.isArray(body.content) ? body.content : [],
+    image: body.image?.trim() || "",
+    category: body.category?.trim() || "Draft",
+    slug: body.slug?.trim() || `${baseSlug || "untitled-draft"}-${timestamp}`,
+  };
+};
+
 // GET - Fetch single blog post
 export async function GET(
   _request: NextRequest,
@@ -96,7 +123,9 @@ export async function PUT(
     const { id } = await context.params;
     const body = (await request.json()) as Partial<BlogPostBody>;
 
-    if (!body.title || !body.excerpt || !body.content) {
+    const isPublishing = body.published === true;
+
+    if (isPublishing && (!body.title || !body.excerpt || !body.content)) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -105,6 +134,16 @@ export async function PUT(
         },
         { status: 400 }
       );
+    }
+
+    if (!isPublishing) {
+      const defaults = buildDraftDefaults(body);
+      body.title = defaults.title;
+      body.excerpt = defaults.excerpt;
+      body.content = defaults.content;
+      body.image = defaults.image;
+      body.category = defaults.category;
+      body.slug = defaults.slug;
     }
 
     body.updatedAt = new Date();

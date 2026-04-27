@@ -38,8 +38,12 @@ const ContentBlockPreview = ({ item }: ContentBlockPreviewProps) => {
   };
 
   switch (item.type) {
-    case "heading":
-      return <h3 className="text-lg font-bold">{item.text}</h3>;
+    case "h1":
+      return <h1 className="text-3xl font-bold">{item.text}</h1>;
+    case "h2":
+      return <h2 className="text-2xl font-bold">{item.text}</h2>;
+    case "h3":
+      return <h3 className="text-xl font-bold">{item.text}</h3>;
     case "code":
       return (
         <pre className="p-3 overflow-x-auto text-xs text-green-400 bg-gray-800 rounded">

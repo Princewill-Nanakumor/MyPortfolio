@@ -38,7 +38,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("Image size should be less than 5MB");
+      alert("Image is more than 5 MB. Please upload an image under 5 MB.");
       return;
     }
 
@@ -233,7 +233,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
                 </div>
 
                 {/* Image URL Display */}
-                <div className="p-2 mt-2 text-xs text-gray-600 border rounded bg-gray-50">
+                <div className="p-2 mt-2 text-xs text-gray-600 border rounded bg-gray-50 break-all">
                   <span className="font-medium">Image URL:</span>{" "}
                   {formData.image}
                 </div>
@@ -298,9 +298,6 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
           className="w-full px-4 py-3 transition-colors border border-gray-200 resize-none rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
           placeholder="Brief description of the post"
         />
-        <div className="mt-1 text-xs text-gray-500">
-          {(formData.excerpt || "").length}/200 characters
-        </div>
       </div>
     </div>
   );

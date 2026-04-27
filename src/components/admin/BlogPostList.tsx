@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { HiPencil, HiTrash, HiEye, HiCalendar, HiClock } from "react-icons/hi";
+import { ImageIcon } from "lucide-react";
 import { BlogPost } from "@/types/Blog";
 
 interface BlogPostListProps {
@@ -20,6 +21,10 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
   onDelete,
   onTogglePublish,
 }) => {
+  const [brokenImagePostIds, setBrokenImagePostIds] = React.useState<Set<string>>(
+    new Set()
+  );
+
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -54,6 +59,9 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
         const postId = post._id || post.id?.toString() || `post-${index}`;
         const postDate =
           post.createdAt || post.date || new Date().toISOString();
+        const displayTitle =
+          post.title && post.title.trim().length > 0 ? post.title : "Untitled Draft";
+        const isTitlePlaceholder = !post.title || post.title.trim().length === 0;
 
         return (
           <motion.article
@@ -67,18 +75,27 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
               {/* Image */}
               <div className="lg:w-1/3">
                 <div className="relative h-48 overflow-hidden lg:h-full rounded-t-3xl lg:rounded-l-3xl lg:rounded-tr-none">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                    unoptimized={true}
-                    onError={(e) => {
-                      console.error("Failed to load image:", post.image);
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = "none";
-                    }}
-                  />
+                  {brokenImagePostIds.has(postId) || !post.image ? (
+                    <div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-gray-100">
+                      <ImageIcon className="w-8 h-8 text-gray-400" />
+                      <span className="text-sm text-gray-500">No preview image</span>
+                    </div>
+                  ) : (
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                      unoptimized={true}
+                      onError={() => {
+                        setBrokenImagePostIds((prev) => {
+                          const next = new Set(prev);
+                          next.add(postId);
+                          return next;
+                        });
+                      }}
+                    />
+                  )}
                 </div>
               </div>
 
@@ -88,9 +105,11 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
                   {/* Header */}
                   <div className="flex flex-wrap items-start justify-between mb-4">
                     <div className="flex flex-wrap gap-2 mb-2">
-                      <span className="px-3 py-1 text-xs font-medium rounded-full text-secondary-indigo bg-secondary-indigo/10">
-                        {post.category}
-                      </span>
+                      {post.category && post.category !== "Draft" && (
+                        <span className="px-3 py-1 text-xs font-medium rounded-full text-secondary-indigo bg-secondary-indigo/10">
+                          {post.category}
+                        </span>
+                      )}
                       <span
                         className={`px-3 py-1 text-xs font-medium rounded-full ${
                           post.published
@@ -137,8 +156,14 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
 
                   {/* Title and Excerpt */}
                   <div className="flex-1">
-                    <h3 className="mb-3 heading-4 text-text-primary line-clamp-2">
-                      {post.title}
+                    <h3
+                      className={`mb-3 heading-4 line-clamp-2 ${
+                        isTitlePlaceholder
+                          ? "text-text-secondary italic"
+                          : "text-text-primary"
+                      }`}
+                    >
+                      {displayTitle}
                     </h3>
                     <p className="mb-4 body-medium text-text-secondary line-clamp-3">
                       {post.excerpt}

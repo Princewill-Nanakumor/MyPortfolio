@@ -37,6 +37,15 @@ const ContentBlockList = ({ content, setFormData }: ContentBlockListProps) => {
   // Save edited content
   const saveEdit = (): void => {
     if (editingIndex !== null) {
+      const hasOtherH1 = content.some(
+        (block, index) => block.type === "h1" && index !== editingIndex
+      );
+
+      if (editingContent.type === "h1" && hasOtherH1) {
+        alert("Only one H1 is allowed per post.");
+        return;
+      }
+
       const contentBlock: ContentBlock = {
         type: editingContent.type,
         text: editingContent.text,
@@ -152,6 +161,10 @@ const ContentBlockList = ({ content, setFormData }: ContentBlockListProps) => {
               onSave={saveEdit}
               onCancel={cancelEdit}
               isEditing={true}
+              hasExistingH1={content.some(
+                (block, blockIndex) =>
+                  block.type === "h1" && blockIndex !== index
+              )}
             />
           ) : (
             <ContentBlockPreview item={item} />

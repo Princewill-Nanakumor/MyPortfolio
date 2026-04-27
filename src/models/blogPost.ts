@@ -2,7 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IContentBlock {
-  type: "paragraph" | "heading" | "code" | "list" | "image";
+  type: "paragraph" | "h1" | "h2" | "h3" | "code" | "list" | "image";
   text?: string;
   items?: string[];
   imageUrl?: string;
@@ -16,6 +16,8 @@ export interface IBlogPost extends Document {
   image: string;
   readTime: string;
   category:
+    | ""
+    | "Draft"
     | "Next.js"
     | "React"
     | "CSS"
@@ -36,7 +38,7 @@ export interface IBlogPost extends Document {
 const ContentBlockSchema = new Schema<IContentBlock>({
   type: {
     type: String,
-    enum: ["paragraph", "heading", "code", "list", "image"],
+    enum: ["paragraph", "h1", "h2", "h3", "code", "list", "image"],
     required: true,
   },
   text: {
@@ -58,7 +60,8 @@ const BlogPostSchema = new Schema<IBlogPost>(
   {
     title: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
       trim: true,
     },
     slug: {
@@ -75,7 +78,8 @@ const BlogPostSchema = new Schema<IBlogPost>(
     content: [ContentBlockSchema],
     image: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
     readTime: {
       type: String,
@@ -83,8 +87,10 @@ const BlogPostSchema = new Schema<IBlogPost>(
     },
     category: {
       type: String,
-      required: true,
+      required: false,
       enum: [
+        "",
+        "Draft",
         "Next.js",
         "React",
         "CSS",
@@ -96,6 +102,7 @@ const BlogPostSchema = new Schema<IBlogPost>(
         "DevOps",
         "Tutorial",
       ],
+      default: "",
     },
     tags: [
       {

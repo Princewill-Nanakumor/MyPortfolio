@@ -32,6 +32,36 @@ interface BlogPostBody {
 
 type ApiResponse<T> = ApiSuccess<T> | ApiError;
 
+const buildDraftDefaults = (
+  body: BlogPostBody
+): {
+  title: string;
+  excerpt: string;
+  content: unknown[];
+  image: string;
+  category: string;
+  slug: string;
+} => {
+  const title = body.title?.trim() || "";
+  const timestamp = Date.now();
+
+  const slug =
+    body.slug?.trim() ||
+    `${(title || "untitled-draft")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "")}-${timestamp}`;
+
+  return {
+    title,
+    excerpt: body.excerpt?.trim() || "Draft excerpt",
+    content: Array.isArray(body.content) ? body.content : [],
+    image: body.image?.trim() || "",
+    category: body.category?.trim() || "Draft",
+    slug,
+  };
+};
+
 // GET - Fetch all blog posts
 export async function GET(
   request: NextRequest
@@ -91,7 +121,9 @@ export async function POST(
   try {
     const body = (await request.json()) as BlogPostBody;
 
-    if (!body.title || !body.excerpt || !body.content) {
+    const isPublishing = body.published === true;
+
+    if (isPublishing && (!body.title || !body.excerpt || !body.content)) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -102,7 +134,15 @@ export async function POST(
       );
     }
 
-    if (!body.slug && body.title) {
+    if (!isPublishing) {
+      const defaults = buildDraftDefaults(body);
+      body.title = defaults.title;
+      body.excerpt = defaults.excerpt;
+      body.content = defaults.content;
+      body.image = defaults.image;
+      body.category = defaults.category;
+      body.slug = defaults.slug;
+    } else if (!body.slug && body.title) {
       body.slug = body.title
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
@@ -123,6 +163,24 @@ export async function POST(
 
     const existingPost = await blogPost.findOne({ slug: body.slug });
     if (existingPost) {
+      if (!isPublishing) {
+        const updatedDraft = await blogPost.findByIdAndUpdate(
+          existingPost._id,
+          {
+            ...body,
+            published: false,
+            updatedAt: new Date(),
+          },
+          { new: true, runValidators: true }
+        );
+
+        return NextResponse.json<ApiSuccess<any>>({
+          success: true,
+          data: updatedDraft,
+          message: "Draft updated successfully",
+        });
+      }
+
       return NextResponse.json<ApiError>(
         {
           success: false,

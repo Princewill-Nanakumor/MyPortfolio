@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HiClock } from "react-icons/hi";
+import { ImageIcon } from "lucide-react";
 import { BlogPost, ContentBlock } from "@/types/Blog";
 
 interface BlogPostPreviewProps {
@@ -9,15 +10,41 @@ interface BlogPostPreviewProps {
 }
 
 const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
+  const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
+  const [failedContentImages, setFailedContentImages] = useState<Set<number>>(
+    new Set()
+  );
+
+  useEffect(() => {
+    setFeaturedImageFailed(false);
+  }, [formData.image]);
+
+  useEffect(() => {
+    setFailedContentImages(new Set());
+  }, [formData.content]);
+
   const renderContentPreview = (
-    contentBlock: ContentBlock
+    contentBlock: ContentBlock,
+    index: number
   ): JSX.Element | null => {
     switch (contentBlock.type) {
-      case "heading":
+      case "h1":
+        return (
+          <h1 className="mb-4 text-3xl font-bold text-text-primary">
+            {contentBlock.text}
+          </h1>
+        );
+      case "h2":
         return (
           <h2 className="mb-4 text-2xl font-bold text-text-primary">
             {contentBlock.text}
           </h2>
+        );
+      case "h3":
+        return (
+          <h3 className="mb-4 text-xl font-bold text-text-primary">
+            {contentBlock.text}
+          </h3>
         );
       case "paragraph":
         return (
@@ -44,7 +71,7 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
           </ul>
         );
       case "image":
-        return contentBlock.imageUrl ? (
+        return contentBlock.imageUrl && !failedContentImages.has(index) ? (
           <div className="mb-6">
             <div className="relative overflow-hidden rounded-xl">
               <Image
@@ -54,6 +81,13 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
                 height={600}
                 className="w-full h-auto"
                 unoptimized={true}
+                onError={() => {
+                  setFailedContentImages((prev) => {
+                    const next = new Set(prev);
+                    next.add(index);
+                    return next;
+                  });
+                }}
               />
             </div>
             {contentBlock.text && (
@@ -63,8 +97,11 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
             )}
           </div>
         ) : (
-          <div className="p-4 mb-6 text-center text-red-500 border border-red-200 rounded-xl">
-            <p>Image URL missing</p>
+          <div className="p-4 mb-6 border border-gray-200 rounded-xl bg-gray-50">
+            <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
+              <ImageIcon className="w-8 h-8" />
+              <p>Image preview unavailable</p>
+            </div>
           </div>
         );
       default:
@@ -79,9 +116,11 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
           Preview Your Post
         </h3>
         <div className="flex items-center gap-2 text-sm text-gray-500">
-          <span className="px-2 py-1 text-xs rounded bg-secondary-indigo/10 text-secondary-indigo">
-            {formData.category}
-          </span>
+          {formData.category && formData.category !== "Draft" && (
+            <span className="px-2 py-1 text-xs rounded bg-secondary-indigo/10 text-secondary-indigo">
+              {formData.category}
+            </span>
+          )}
           {formData.readTime && (
             <span className="flex items-center gap-1">
               <HiClock className="w-4 h-4" />
@@ -94,7 +133,7 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
       {/* Post Preview */}
       <div className="p-6 space-y-6 bg-white border border-gray-200 rounded-2xl shadow-soft">
         {/* Featured Image */}
-        {formData.image ? (
+        {formData.image && !featuredImageFailed ? (
           <div className="relative w-full h-64 overflow-hidden rounded-xl">
             <Image
               src={formData.image}
@@ -104,11 +143,13 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
               className="object-cover w-full h-full"
               priority={false}
               unoptimized={true}
+              onError={() => setFeaturedImageFailed(true)}
             />
           </div>
         ) : (
-          <div className="flex items-center justify-center w-full h-64 bg-gray-100 rounded-xl">
-            <p className="text-gray-500">No featured image</p>
+          <div className="flex flex-col items-center justify-center w-full h-64 gap-2 bg-gray-100 rounded-xl">
+            <ImageIcon className="w-10 h-10 text-gray-400" />
+            <p className="text-gray-500">Featured image preview unavailable</p>
           </div>
         )}
 
@@ -146,7 +187,7 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
           {(formData.content || []).length > 0 ? (
             <div className="space-y-4">
               {formData.content?.map((contentBlock, index) => (
-                <div key={index}>{renderContentPreview(contentBlock)}</div>
+                <div key={index}>{renderContentPreview(contentBlock, index)}</div>
               ))}
             </div>
           ) : (

@@ -44,6 +44,15 @@ const BlogPostContentBuilder = forwardRef<
   }, [newContentItem]);
 
   const addContentItem = useCallback((): void => {
+    const hasExistingH1 = (formData.content || []).some(
+      (block) => block.type === "h1"
+    );
+
+    if (newContentItem.type === "h1" && hasExistingH1) {
+      alert("Only one H1 is allowed per post.");
+      return;
+    }
+
     if (
       newContentItem.text.trim() ||
       newContentItem.items.length > 0 ||
@@ -71,7 +80,7 @@ const BlogPostContentBuilder = forwardRef<
         imageUrl: "",
       });
     }
-  }, [newContentItem, setFormData]);
+  }, [newContentItem, setFormData, formData.content]);
 
   // Auto-save function
   const autoSaveContent = useCallback((): void => {
@@ -121,6 +130,9 @@ const BlogPostContentBuilder = forwardRef<
           setContent={setNewContentItem}
           onSave={addContentItem}
           isEditing={false}
+          hasExistingH1={(formData.content || []).some(
+            (block) => block.type === "h1"
+          )}
         />
       </div>
     </div>

@@ -17,6 +17,7 @@ interface ContentBlockEditorProps {
   onSave: () => void;
   onCancel?: () => void;
   isEditing: boolean;
+  hasExistingH1?: boolean;
 }
 
 const ContentBlockEditor = ({
@@ -25,7 +26,10 @@ const ContentBlockEditor = ({
   onSave,
   onCancel,
   isEditing,
+  hasExistingH1 = false,
 }: ContentBlockEditorProps) => {
+  const isH1SelectionDisabled = hasExistingH1 && content.type !== "h1";
+
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [showLinkInput, setShowLinkInput] = useState<boolean>(false);
@@ -168,23 +172,38 @@ const ContentBlockEditor = ({
       <select
         value={content.type}
         onChange={(e) =>
-          setContent((prev) => ({
-            ...prev,
-            type: e.target.value as
+          (() => {
+            const nextType = e.target.value as
               | "paragraph"
-              | "heading"
+              | "h1"
+              | "h2"
+              | "h3"
               | "code"
               | "list"
-              | "image",
-            text: "",
-            items: [],
-            imageUrl: "",
-          }))
+              | "image";
+
+            if (nextType === "h1" && isH1SelectionDisabled) {
+              alert("Only one H1 is allowed per post.");
+              return;
+            }
+
+            setContent((prev) => ({
+              ...prev,
+              type: nextType,
+              text: "",
+              items: [],
+              imageUrl: "",
+            }));
+          })()
         }
         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
       >
         <option value="paragraph">Paragraph</option>
-        <option value="heading">Heading</option>
+        <option value="h1" disabled={isH1SelectionDisabled}>
+          Heading 1 (H1)
+        </option>
+        <option value="h2">Heading 2 (H2)</option>
+        <option value="h3">Heading 3 (H3)</option>
         <option value="code">Code Block</option>
         <option value="list">List</option>
         <option value="image">Image</option>
@@ -367,7 +386,9 @@ const ContentBlockEditor = ({
             rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
             placeholder={
-              content.type === "heading"
+              content.type === "h1" ||
+              content.type === "h2" ||
+              content.type === "h3"
                 ? "Enter heading text..."
                 : content.type === "code"
                   ? "Enter code..."

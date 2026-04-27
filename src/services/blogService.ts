@@ -8,6 +8,27 @@ class BlogService {
     this.baseUrl = "/api/blog";
   }
 
+  private async parseErrorResponse(
+    response: Response
+  ): Promise<{ message: string; details?: unknown }> {
+    try {
+      const rawText = await response.text();
+      const errorData = rawText ? JSON.parse(rawText) : {};
+      return {
+        message:
+          errorData?.message ||
+          errorData?.error ||
+          (rawText && typeof rawText === "string" ? rawText : undefined) ||
+          `HTTP error! status: ${response.status}`,
+        details: errorData,
+      };
+    } catch {
+      return {
+        message: `HTTP error! status: ${response.status}`,
+      };
+    }
+  }
+
   async getAllPosts(filters: BlogFilters = {}): Promise<BlogPost[]> {
     try {
       const queryParams = new URLSearchParams();
@@ -42,7 +63,7 @@ class BlogService {
       const response = await fetch(url);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
@@ -73,7 +94,7 @@ class BlogService {
       const response = await fetch(`${this.baseUrl}/${idOrSlug}`);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
@@ -111,7 +132,7 @@ class BlogService {
         body: JSON.stringify({
           ...postData,
           likes: 0, // Initialize likes to 0 for new posts
-          published: true, // Always publish new posts
+          published: postData.published ?? true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         }),
@@ -120,8 +141,7 @@ class BlogService {
       console.log("➡️ Response status:", response.status);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("❌ API error:", errorData);
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
@@ -136,7 +156,6 @@ class BlogService {
 
       return data.data;
     } catch (error) {
-      console.error("❌ Error in blogService.createPost:", error);
       throw new Error(
         `Failed to create blog post: ${error instanceof Error ? error.message : "Unknown error"}`
       );
@@ -154,7 +173,7 @@ class BlogService {
         },
         body: JSON.stringify({
           ...postData,
-          published: true, // Always publish updated posts
+          published: postData.published ?? true,
           updatedAt: new Date().toISOString(),
         }),
       });
@@ -162,8 +181,7 @@ class BlogService {
       console.log("➡️ Response status:", response.status);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("❌ API error:", errorData);
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
@@ -178,7 +196,6 @@ class BlogService {
 
       return data.data;
     } catch (error) {
-      console.error("❌ Error in blogService.updatePost:", error);
       throw new Error(
         `Failed to update blog post: ${error instanceof Error ? error.message : "Unknown error"}`
       );
@@ -192,7 +209,7 @@ class BlogService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
@@ -227,7 +244,7 @@ class BlogService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
@@ -259,7 +276,7 @@ class BlogService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await this.parseErrorResponse(response);
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );

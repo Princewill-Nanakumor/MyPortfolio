@@ -24,14 +24,14 @@ export interface BlogPost {
 
 // .ts
 export interface NewContentItem {
-  type: "paragraph" | "heading" | "code" | "list" | "image";
+  type: "paragraph" | "h1" | "h2" | "h3" | "code" | "list" | "image";
   text: string;
   items: string[];
   imageUrl?: string;
 }
 
 export interface ContentBlock {
-  type: "heading" | "paragraph" | "code" | "list" | "image"; // Add "image" here
+  type: "h1" | "h2" | "h3" | "paragraph" | "code" | "list" | "image"; // Add "image" here
   text?: string;
   items?: string[];
   imageUrl?: string; // Add this for image blocks

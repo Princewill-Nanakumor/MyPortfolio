@@ -92,7 +92,19 @@ const BlogContent = ({
 
   const renderContentBlock = (contentBlock: ContentBlock, index: number) => {
     switch (contentBlock.type) {
-      case "heading":
+      case "h1":
+        return (
+          <motion.h1
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className={`mb-4 text-2xl font-bold ${s.textPrimary} sm:text-3xl sm:mb-6 lg:text-4xl lg:mb-8 xl:text-5xl`}
+          >
+            {contentBlock.text}
+          </motion.h1>
+        );
+      case "h2":
         return (
           <motion.h2
             key={index}
@@ -103,6 +115,18 @@ const BlogContent = ({
           >
             {contentBlock.text}
           </motion.h2>
+        );
+      case "h3":
+        return (
+          <motion.h3
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className={`mb-4 text-lg font-bold ${s.textPrimary} sm:text-xl sm:mb-6 lg:text-2xl lg:mb-8 xl:text-3xl`}
+          >
+            {contentBlock.text}
+          </motion.h3>
         );
       case "paragraph":
         return (
