@@ -199,11 +199,47 @@ export const useAdminPageController = () => {
     async (newPost: Partial<BlogPost>): Promise<void> => {
       try {
         setError(null);
-        const publishedPost = newPost._id
-          ? await blogService.updatePost(newPost._id, { ...newPost, published: true })
+        const matchedDraft = !newPost._id
+          ? posts.find(
+              (post) =>
+                !post.published &&
+                ((newPost.slug && post.slug === newPost.slug) ||
+                  (newPost.title &&
+                    post.title &&
+                    post.title.trim() === newPost.title.trim()))
+            )
+          : null;
+
+        const draftToPublishId = newPost._id || matchedDraft?._id;
+
+        const publishedPost = draftToPublishId
+          ? await blogService.updatePost(draftToPublishId, {
+              ...newPost,
+              published: true,
+            })
           : await blogService.createPost({ ...newPost, published: true });
 
-        setPosts((prevPosts) => upsertPost(prevPosts, publishedPost));
+        setPosts((prevPosts) => {
+          const withPublished = upsertPost(prevPosts, publishedPost);
+
+          return withPublished.filter((post) => {
+            if (post._id === publishedPost._id) return true;
+            if (post.published) return true;
+
+            const sameSlug =
+              Boolean(post.slug) &&
+              Boolean(publishedPost.slug) &&
+              post.slug === publishedPost.slug;
+            const sameTitle =
+              Boolean(post.title) &&
+              Boolean(publishedPost.title) &&
+              post.title.trim() === publishedPost.title.trim();
+
+            return !(sameSlug || sameTitle);
+          });
+        });
+
+        latestDraftIdRef.current = publishedPost._id || null;
         setIsFormOpen(false);
         showSuccess("Post Created", `${publishedPost.title} has been created successfully!`);
       } catch {

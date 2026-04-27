@@ -179,7 +179,7 @@ export async function PUT(
 
     const updatedPost = await blogPost.findByIdAndUpdate(id, body, {
       new: true,
-      runValidators: true,
+      runValidators: isPublishing,
     });
 
     if (!updatedPost) {

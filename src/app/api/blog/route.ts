@@ -142,6 +142,54 @@ export async function POST(
       body.image = defaults.image;
       body.category = defaults.category;
       body.slug = defaults.slug;
+
+      const isConnected = await connectDB();
+      if (!isConnected) {
+        return NextResponse.json<ApiError>(
+          {
+            success: false,
+            error: "Database connection failed",
+            message: "Unable to connect to MongoDB database",
+          },
+          { status: 503 }
+        );
+      }
+
+      const draftPayload = {
+        title: body.title,
+        slug: body.slug,
+        excerpt: body.excerpt,
+        content: body.content,
+        image: body.image,
+        readTime: body.readTime || "",
+        category: body.category,
+        tags: body.tags || [],
+        published: false,
+        likes: 0,
+        updatedAt: new Date(),
+      };
+
+      const draftPost = await blogPost.findOneAndUpdate(
+        { slug: body.slug },
+        {
+          $set: draftPayload,
+          $setOnInsert: { createdAt: new Date() },
+        },
+        {
+          upsert: true,
+          new: true,
+          runValidators: false,
+        }
+      );
+
+      return NextResponse.json<ApiSuccess<any>>(
+        {
+          success: true,
+          data: draftPost,
+          message: "Draft saved successfully",
+        },
+        { status: 201 }
+      );
     } else if (!body.slug && body.title) {
       body.slug = body.title
         .toLowerCase()

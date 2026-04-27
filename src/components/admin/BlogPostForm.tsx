@@ -91,6 +91,19 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
     );
   };
 
+  const buildSynchronizedFormData = (): Partial<BlogPost> => {
+    const pendingBlock = contentBuilderRef.current?.getPendingContentBlock() || null;
+    if (!pendingBlock) {
+      return formData;
+    }
+
+    const existingContent = formData.content || [];
+    return {
+      ...formData,
+      content: [...existingContent, pendingBlock],
+    };
+  };
+
   const shouldAutoSaveDraft = Boolean(onAutoSaveDraft && (!post || !post.published));
 
   const flushDraftBeforeClose = async (): Promise<void> => {
@@ -103,17 +116,18 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       autoSaveTimerRef.current = null;
     }
 
-    if (!hasDraftableContent(formData)) {
+    const synchronizedFormData = buildSynchronizedFormData();
+    if (!hasDraftableContent(synchronizedFormData)) {
       return;
     }
 
     try {
       const savedDraft = await onAutoSaveDraft({
-        ...formData,
+        ...synchronizedFormData,
         published: false,
       });
 
-      if (savedDraft?._id && !formData._id) {
+      if (savedDraft?._id && !synchronizedFormData._id) {
         setFormData((prev) => ({
           ...prev,
           _id: savedDraft._id,
@@ -129,7 +143,8 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       return;
     }
 
-    if (!hasDraftableContent(formData)) {
+    const synchronizedFormData = buildSynchronizedFormData();
+    if (!hasDraftableContent(synchronizedFormData)) {
       return;
     }
 
@@ -140,11 +155,11 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
     autoSaveTimerRef.current = setTimeout(async () => {
       try {
         const savedDraft = await onAutoSaveDraft({
-          ...formData,
+          ...synchronizedFormData,
           published: false,
         });
 
-        if (savedDraft?._id && !formData._id) {
+        if (savedDraft?._id && !synchronizedFormData._id) {
           setFormData((prev) => ({
             ...prev,
             _id: savedDraft._id,
@@ -203,8 +218,9 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       setIsSubmitting(true);
       setDebugInfo("Submitting form...");
 
+      const synchronizedFormData = buildSynchronizedFormData();
       const finalFormData = {
-        ...formData,
+        ...synchronizedFormData,
         published: formData.published ?? true,
       };
 

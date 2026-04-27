@@ -72,8 +72,8 @@ const BlogPostSchema = new Schema<IBlogPost>(
     },
     excerpt: {
       type: String,
-      required: true,
-      maxLength: 500,
+      required: false,
+      default: "",
     },
     content: [ContentBlockSchema],
     image: {

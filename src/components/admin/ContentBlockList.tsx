@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { ContentBlock } from "@/types/Blog";
 import { HiPencil, HiArrowUp, HiArrowDown, HiTrash } from "react-icons/hi";
 import ContentBlockEditor from "./ContentBlockEditor";
@@ -11,7 +11,12 @@ interface ContentBlockListProps {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const ContentBlockList = ({ content, setFormData }: ContentBlockListProps) => {
+export interface ContentBlockListRef {
+  flushEditingChanges: () => void;
+}
+
+const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
+  ({ content, setFormData }, ref) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingContent, setEditingContent] = useState<NewContentItem>({
     type: "paragraph",
@@ -72,6 +77,14 @@ const ContentBlockList = ({ content, setFormData }: ContentBlockListProps) => {
       });
     }
   };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      flushEditingChanges: saveEdit,
+    }),
+    [saveEdit]
+  );
 
   // Cancel editing
   const cancelEdit = (): void => {
@@ -173,6 +186,8 @@ const ContentBlockList = ({ content, setFormData }: ContentBlockListProps) => {
       ))}
     </div>
   );
-};
+});
+
+ContentBlockList.displayName = "ContentBlockList";
 
 export default ContentBlockList;

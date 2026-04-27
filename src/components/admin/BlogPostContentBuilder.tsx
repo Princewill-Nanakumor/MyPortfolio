@@ -9,12 +9,13 @@ import React, {
 } from "react";
 import { BlogPost, ContentBlock } from "@/types/Blog";
 import ContentBlockEditor from "./ContentBlockEditor";
-import ContentBlockList from "./ContentBlockList";
+import ContentBlockList, { ContentBlockListRef } from "./ContentBlockList";
 import { NewContentItem } from "./../../types/Blog";
 
 // Define the ref interface
 export interface BlogPostContentBuilderRef {
   autoSaveContent: () => void;
+  getPendingContentBlock: () => ContentBlock | null;
 }
 
 interface BlogPostContentBuilderProps {
@@ -33,6 +34,7 @@ const BlogPostContentBuilder = forwardRef<
     imageUrl: "",
   });
   const [hasUnsavedContent, setHasUnsavedContent] = useState<boolean>(false);
+  const contentBlockListRef = useRef<ContentBlockListRef>(null);
 
   // Check if there's unsaved content
   useEffect(() => {
@@ -84,18 +86,39 @@ const BlogPostContentBuilder = forwardRef<
 
   // Auto-save function
   const autoSaveContent = useCallback((): void => {
+    contentBlockListRef.current?.flushEditingChanges();
     if (hasUnsavedContent) {
       addContentItem();
     }
   }, [hasUnsavedContent, addContentItem]);
+
+  const getPendingContentBlock = useCallback((): ContentBlock | null => {
+    if (
+      !newContentItem.text.trim() &&
+      newContentItem.items.length === 0 &&
+      !newContentItem.imageUrl
+    ) {
+      return null;
+    }
+
+    return {
+      type: newContentItem.type,
+      text: newContentItem.text,
+      items: newContentItem.items,
+      ...(newContentItem.imageUrl && {
+        imageUrl: newContentItem.imageUrl,
+      }),
+    };
+  }, [newContentItem]);
 
   // Expose auto-save function to parent component
   useImperativeHandle(
     ref,
     () => ({
       autoSaveContent,
+      getPendingContentBlock,
     }),
-    [autoSaveContent]
+    [autoSaveContent, getPendingContentBlock]
   );
 
   return (
@@ -119,6 +142,7 @@ const BlogPostContentBuilder = forwardRef<
 
       {/* Existing Content */}
       <ContentBlockList
+        ref={contentBlockListRef}
         content={formData.content || []}
         setFormData={setFormData}
       />
