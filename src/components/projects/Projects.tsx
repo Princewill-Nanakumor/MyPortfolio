@@ -29,21 +29,23 @@ const projects: Project[] = [
   },
   {
     image: "/crm.png",
-    name: "CRM",
+    name: "Motherland CRM Solutions",
     description:
-      "A modern CRM platform designed for seamless Excel/CSV lead management, powerful analytics, and team collaboration. Built as a full-stack web application with advanced importing, role-based access, and a sleek, responsive interface.",
+      "This is a full-stack, multi-tenant SaaS CRM built for sales teams managing high volumes of leads. The platform replaces spreadsheet-based workflows with a real-time collaborative system where admins can import leads, assign them to agents, track activity, manage subscriptions, and monitor team performance from a centralized dashboard",
     technology:
-      "Next.js, MongoDB, Tailwind CSS, TypeScript, NextAuth.js, React Query, Zustand",
-    github: "https://github.com/Princewill-Nanakumor/Zodashield",
-    link: "https://zodashield.com",
+      "“Next.js 15, React 19, TypeScript, MongoDB, Mongoose, Tailwind CSS v4, NextAuth.js, TanStack React Query, Zustand, Ably, Framer Motion, TanStack Table, dnd-kit, React Hook Form, Zod, Resend, Netlify",
+    github: "https://github.com/Princewill-Nanakumor/MotherlandCrmSolutions",
+    link: "https://motherlandcrmsolutions.com/",
     year: "2025",
   },
 
   {
     image: "/myportfolio.png",
     name: "My portfolio",
-    description: "Built my porfolio",
-    technology: "React, Nodemailer, nextjs, tailwind, react-toast",
+    description:
+      "My Portfolio Website is a modern, responsive web app built to showcase my projects, technical skills, and development journey. It features smooth animations, clean UI sections, and interactive project cards with live demo and source code links, creating a professional experience for recruiters and clients. The site is designed for performance, maintainability, and clear storytelling of my work as a full-stack developer.",
+    technology:
+      "Next.js, React, TypeScript, Tailwind CSS,lucide-react, Chakra UI, Framer Motion, Aos, React-simple-typewriter, Nodemailer, React Hot Toast, Zod, MongoDB, Mongoose, Cloudinary, Nodemailer,vercel ",
     github: "https://github.com/Princewill-Nanakumor/MyPortfolio",
     link: "http://www.princewillnanakumor.com/",
     year: "2023",

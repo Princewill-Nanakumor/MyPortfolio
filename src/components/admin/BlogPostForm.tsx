@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiX, HiChevronLeft, HiChevronRight, HiCheck } from "react-icons/hi";
 import BlogPostBasicInfo from "./BlogPostBasicInfo";
@@ -91,7 +91,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
     );
   };
 
-  const buildSynchronizedFormData = (): Partial<BlogPost> => {
+  const buildSynchronizedFormData = useCallback((): Partial<BlogPost> => {
     const pendingBlock = contentBuilderRef.current?.getPendingContentBlock() || null;
     if (!pendingBlock) {
       return formData;
@@ -102,7 +102,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       ...formData,
       content: [...existingContent, pendingBlock],
     };
-  };
+  }, [formData]);
 
   const shouldAutoSaveDraft = Boolean(onAutoSaveDraft && (!post || !post.published));
 
@@ -175,7 +175,13 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
         clearTimeout(autoSaveTimerRef.current);
       }
     };
-  }, [formData, onAutoSaveDraft, shouldAutoSaveDraft, isSubmitting]);
+  }, [
+    formData,
+    onAutoSaveDraft,
+    shouldAutoSaveDraft,
+    isSubmitting,
+    buildSynchronizedFormData,
+  ]);
 
   const generateSlug = (title: string): string => {
     const slug = title

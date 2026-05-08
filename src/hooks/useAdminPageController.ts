@@ -262,7 +262,7 @@ export const useAdminPageController = () => {
         }
       }
     },
-    [showError, showInfo, showSuccess]
+    [posts, showError, showInfo, showSuccess]
   );
 
   const handleAutoSaveDraft = useCallback(

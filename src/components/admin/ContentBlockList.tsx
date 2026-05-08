@@ -1,5 +1,10 @@
 "use client";
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useCallback,
+} from "react";
 import { ContentBlock } from "@/types/Blog";
 import { HiPencil, HiArrowUp, HiArrowDown, HiTrash } from "react-icons/hi";
 import ContentBlockEditor from "./ContentBlockEditor";
@@ -40,7 +45,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
   };
 
   // Save edited content
-  const saveEdit = (): void => {
+  const saveEdit = useCallback((): void => {
     if (editingIndex !== null) {
       const hasOtherH1 = content.some(
         (block, index) => block.type === "h1" && index !== editingIndex
@@ -76,7 +81,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
         imageUrl: "",
       });
     }
-  };
+  }, [content, editingContent, editingIndex, setFormData]);
 
   useImperativeHandle(
     ref,
