@@ -33,7 +33,7 @@ const projects: Project[] = [
     description:
       "This is a full-stack, multi-tenant SaaS CRM built for sales teams managing high volumes of leads. The platform replaces spreadsheet-based workflows with a real-time collaborative system where admins can import leads, assign them to agents, track activity, manage subscriptions, and monitor team performance from a centralized dashboard",
     technology:
-      "“Next.js 15, React 19, TypeScript, MongoDB, Mongoose, Tailwind CSS v4, NextAuth.js, TanStack React Query, Zustand, Ably, Framer Motion, TanStack Table, dnd-kit, React Hook Form, Zod, Resend, Netlify",
+      "“Next.js 15, React 19, TypeScript, MongoDB, Mongoose, Tailwind CSS v4, NextAuth, TanStack React Query, Zustand, Ably, Framer Motion, TanStack Table, dnd-kit, React Hook Form, Zod, Resend, Netlify",
     github: "https://github.com/Princewill-Nanakumor/MotherlandCrmSolutions",
     link: "https://motherlandcrmsolutions.com/",
     year: "2025",
