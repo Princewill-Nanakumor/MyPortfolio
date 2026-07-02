@@ -18,6 +18,17 @@ interface Project {
 
 const projects: Project[] = [
   {
+    image: "/counter-strike-2-pc-mac-game-steam-cover.jpg",
+    name: "Counter Strike 2 Demo Analyzer",
+    description:
+      "A Node.js and TypeScript application that parses Counter-Strike 2 demo files, analyzes player deaths using spatial calculations, ranks high-impact moments based on player awareness, and generates structured JSON output for replay rendering, AI-assisted coaching and analytics pipelines.",
+    technology:
+      "Node.js, Typescript, , @laihoe/demoparser2, Counter-Strike 2 Demo Parser",
+    github: "https://github.com/Princewill-Nanakumor/-cs2-demo-analyzer",
+    link: "#",
+    year: "2026",
+  },
+  {
     image: "/Screenshot_2026-02-08_at_8.22.17_PM_optimized_5000.png",
     name: "KYIV ELECTRICITY SURVEY APP",
     description:
@@ -60,10 +71,10 @@ const ProjectsSection: React.FC = () => {
       className="min-h-[80vh] w-full flex items-center bg-bg-primary scroll-mt-20 relative overflow-hidden"
     >
       <div className="absolute inset-0">
-        <div className="absolute w-64 h-64 -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-gradient-to-r from-secondary-indigo/5 to-accent-emerald/5 blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 sm:w-80 sm:h-80 md:w-96 md:h-96 from-secondary-indigo/5 to-accent-emerald/5"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl px-6 mx-auto sm:px-8 lg:px-12">
+      <div className="relative z-10 px-6 mx-auto w-full max-w-6xl sm:px-8 lg:px-12">
         <div className="py-12 sm:py-16">
           <motion.div
             className="mb-8 text-center sm:mb-16"
@@ -75,14 +86,14 @@ const ProjectsSection: React.FC = () => {
             <h2 className="mb-4 heading-2 text-text-primary">
               Featured Projects
             </h2>
-            <div className="flex items-center justify-center space-x-2 sm:space-x-4">
-              <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-transparent to-secondary-indigo"></div>
+            <div className="flex justify-center items-center space-x-2 sm:space-x-4">
+              <div className="w-8 h-px bg-gradient-to-r from-transparent sm:w-16 to-secondary-indigo"></div>
               <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
-              <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-secondary-indigo to-transparent"></div>
+              <div className="w-8 h-px bg-gradient-to-r to-transparent sm:w-16 from-secondary-indigo"></div>
             </div>
           </motion.div>
 
-          <div className="max-w-4xl mx-auto space-y-8 sm:space-y-12">
+          <div className="mx-auto space-y-8 max-w-4xl sm:space-y-12">
             {projects.map((project, index) => (
               <motion.div
                 key={project.name}
@@ -96,8 +107,8 @@ const ProjectsSection: React.FC = () => {
               >
                 <div className="w-full lg:w-1/2">
                   <div className="relative group">
-                    <div className="absolute inset-0 transition-all duration-500 bg-gradient-to-br from-secondary-indigo/10 to-accent-emerald/10 rounded-2xl blur-xl group-hover:blur-2xl"></div>
-                    <div className="relative overflow-hidden rounded-2xl shadow-large">
+                    <div className="absolute inset-0 bg-gradient-to-br rounded-2xl blur-xl transition-all duration-500 from-secondary-indigo/10 to-accent-emerald/10 group-hover:blur-2xl"></div>
+                    <div className="overflow-hidden relative rounded-2xl shadow-large">
                       <Image
                         src={project.image}
                         alt={project.name}
@@ -105,12 +116,12 @@ const ProjectsSection: React.FC = () => {
                         height={300}
                         className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/20 to-transparent group-hover:opacity-100"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t to-transparent opacity-0 transition-opacity duration-300 from-black/20 group-hover:opacity-100"></div>
                     </div>
                   </div>
                 </div>
 
-                <div className="w-full space-y-4 lg:w-1/2">
+                <div className="space-y-4 w-full lg:w-1/2">
                   <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
                     <span className="px-3 py-1 text-xs font-bold text-white rounded-full sm:px-4 sm:py-2 sm:text-sm bg-secondary-indigo w-fit">
                       {project.year}
@@ -130,7 +141,7 @@ const ProjectsSection: React.FC = () => {
                     <Link
                       href={project.github}
                       target="_blank"
-                      className="flex items-center justify-center space-x-2 btn-primary"
+                      className="flex justify-center items-center space-x-2 btn-primary"
                     >
                       <BsGithub className="text-lg" />
                       <span>View Code</span>
@@ -139,7 +150,7 @@ const ProjectsSection: React.FC = () => {
                       <Link
                         href={project.link}
                         target="_blank"
-                        className="flex items-center justify-center space-x-2 btn-secondary"
+                        className="flex justify-center items-center space-x-2 btn-secondary"
                       >
                         <BsArrowUpRightSquare className="text-lg" />
                         <span>{project.linkLabel || "Live Demo"}</span>
