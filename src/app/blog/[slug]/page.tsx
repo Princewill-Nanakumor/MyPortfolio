@@ -49,7 +49,9 @@ const BlogPost = ({ params }: BlogPostProps) => {
   useEffect(() => {
     const resolveParams = async () => {
       const resolved = await params;
-      setResolvedParams(resolved);
+      setResolvedParams({
+        slug: decodeURIComponent(resolved.slug).trim(),
+      });
     };
     resolveParams();
   }, [params]);

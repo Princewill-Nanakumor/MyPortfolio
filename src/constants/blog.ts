@@ -32,11 +32,19 @@ export const BACKEND_WORK_TAGS = [
   "event-parsing",
   "binary-parsing",
   "data-pipeline",
+  "data-analysis",
   "telemetry",
   "scoring-algorithms",
+  "algorithms",
   "json-output",
   "demoparser",
+  "demo-parser",
   "automation",
+  "counter-strike-2",
+  "game-development",
+  "ai",
+  "open-source",
+  "github",
 ] as const;
 
 /** Tags for web dev posts */

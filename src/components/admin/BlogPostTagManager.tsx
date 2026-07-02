@@ -132,7 +132,8 @@ const BlogPostTagManager: React.FC<BlogPostTagManagerProps> = ({
         <div className="space-y-3">
           {renderTagSuggestions(
             "Backend & CLI (parsing, pipelines, tooling):",
-            BACKEND_WORK_TAGS
+            BACKEND_WORK_TAGS,
+            BACKEND_WORK_TAGS.length
           )}
           {renderTagSuggestions("Web dev:", WEB_DEV_TAGS)}
           {renderTagSuggestions("Hobbies (drone, etc.):", HOBBY_BLOG_TAGS)}

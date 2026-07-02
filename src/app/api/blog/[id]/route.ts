@@ -2,7 +2,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectDB from "@/db/mongodb";
 import blogPost from "@/models/blogPost";
-import mongoose from "mongoose";
+import {
+  decodePostIdentifier,
+  escapeRegex,
+  isMongoObjectId,
+} from "@/utils/blogQueries";
 
 interface ApiSuccess<T> {
   success: true;
@@ -66,7 +70,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<any>>> {
   try {
-    const { id } = await context.params;
+    const id = decodePostIdentifier((await context.params).id);
     const isConnected = await connectDB();
 
     if (!isConnected) {
@@ -80,10 +84,25 @@ export async function GET(
       );
     }
 
-    const isObjectId = mongoose.Types.ObjectId.isValid(id);
-    const query = isObjectId ? { _id: id } : { slug: id };
+    let post = null;
 
-    const post = await blogPost.findOne(query).lean();
+    if (isMongoObjectId(id)) {
+      post = await blogPost.findById(id).lean();
+    }
+
+    if (!post) {
+      post = await blogPost.findOne({ slug: id }).lean();
+    }
+
+    if (!post) {
+      post = await blogPost
+        .findOne({
+          slug: {
+            $regex: new RegExp(`^${escapeRegex(id)}$`, "i"),
+          },
+        })
+        .lean();
+    }
 
     if (!post) {
       return NextResponse.json<ApiError>(
@@ -125,27 +144,6 @@ export async function PUT(
 
     const isPublishing = body.published === true;
 
-    if (isPublishing && (!body.title || !body.excerpt || !body.content)) {
-      return NextResponse.json<ApiError>(
-        {
-          success: false,
-          error: "Missing required fields",
-          message: "Title, excerpt, and content are required",
-        },
-        { status: 400 }
-      );
-    }
-
-    if (!isPublishing) {
-      const defaults = buildDraftDefaults(body);
-      body.title = defaults.title;
-      body.excerpt = defaults.excerpt;
-      body.content = defaults.content;
-      body.image = defaults.image;
-      body.category = defaults.category;
-      body.slug = defaults.slug;
-    }
-
     body.updatedAt = new Date();
 
     const isConnected = await connectDB();
@@ -158,6 +156,56 @@ export async function PUT(
         },
         { status: 503 }
       );
+    }
+
+    const existingPost = await blogPost.findById(id).lean();
+
+    if (!existingPost) {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error: "Blog post not found",
+          message: "The blog post to update could not be found",
+        },
+        { status: 404 }
+      );
+    }
+
+    if (!isPublishing) {
+      const defaults = buildDraftDefaults(body);
+      body.title = body.title?.trim() || existingPost.title || defaults.title;
+      body.excerpt =
+        body.excerpt?.trim() || existingPost.excerpt || defaults.excerpt;
+      body.content =
+        Array.isArray(body.content) && body.content.length > 0
+          ? body.content
+          : existingPost.content || defaults.content;
+      body.image = body.image?.trim() || existingPost.image || defaults.image;
+      body.category =
+        body.category?.trim() || existingPost.category || defaults.category;
+      body.slug = body.slug?.trim() || existingPost.slug || defaults.slug;
+    }
+
+    if (isPublishing) {
+      const title = body.title?.trim() || existingPost.title;
+      const excerpt = body.excerpt?.trim() || existingPost.excerpt;
+      const content = body.content ?? existingPost.content;
+
+      if (!title || !excerpt || !content) {
+        return NextResponse.json<ApiError>(
+          {
+            success: false,
+            error: "Missing required fields",
+            message: "Title, excerpt, and content are required",
+          },
+          { status: 400 }
+        );
+      }
+
+      body.title = title;
+      body.excerpt = excerpt;
+      body.content = content;
+      body.slug = body.slug?.trim() || existingPost.slug;
     }
 
     if (body.slug) {

@@ -8,7 +8,7 @@ import SocialLinks from "@/components/common/SocialLinks";
 
 const Hero: React.FC = () => {
   const [typeEffect] = useTypewriter({
-    words: ["<Princewill/>", "<React/>", "<Typescript/>"],
+    words: ["Nanakumor Princewill", "React Developer", "TypeScript Developer"],
     loop: true, // Changed from {} to true for infinite loop
     typeSpeed: 100,
     deleteSpeed: 150,
@@ -51,6 +51,9 @@ const Hero: React.FC = () => {
               transition={{ type: "spring", stiffness: 100, delay: 0.4 }}
             >
               <h1 className="heading-hero">
+                <span className="sr-only">
+                  Nanakumor Princewill, Princewill Nanakumor, Prince Nanakumor
+                </span>
                 {/* Mobile: Split into two lines */}
                 <span className="block md:hidden">Hi, I&lsquo;m</span>
                 <span className="relative block md:hidden">

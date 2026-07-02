@@ -204,7 +204,10 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       const updated = {
         ...prev,
         [name]: newValue,
-        ...(name === "title" && { slug: generateSlug(value) }),
+        ...(name === "title" &&
+          !prev._id && {
+            slug: generateSlug(value),
+          }),
       };
       return updated;
     });

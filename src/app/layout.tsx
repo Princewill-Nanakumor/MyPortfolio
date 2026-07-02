@@ -29,10 +29,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "Princewill Nanakumor | Nextjs Web Developer",
+  title: {
+    default: "Nanakumor Princewill | Next.js Web Developer",
+    template: "%s | Nanakumor Princewill",
+  },
   description:
     "Building sleek, responsive, and high-performance web applications with React, Next.js, Tailwind CSS and TypeScript ",
   keywords: [
+    "Nanakumor Princewill",
+    "Nanakumor Prince",
+    "Prince Nanakumor",
+    "Princewill Nanakumor",
+    "nanakumor princewill",
+    "nanakumor prince",
+    "prince nanakumor",
+    "princewill nanakumor",
     "Nanakumor Princewill Wosowei",
     "Nanakumor Princewill",
     "nanakumor princewill",
@@ -58,23 +69,23 @@ export const metadata = {
     "Portfolio",
     "Developer Portfolio",
   ].join(", "),
-  authors: [{ name: "Princewill" }],
-  creator: "Princewill ",
-  publisher: "Princewill",
+  authors: [{ name: "Nanakumor Princewill" }],
+  creator: "Nanakumor Princewill",
+  publisher: "Nanakumor Princewill",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("http://princewillnanakumor.com/"),
+  metadataBase: new URL("https://princewillnanakumor.com/"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Princewill Nanakumor | Nextjs Web Developer",
+    title: "Nanakumor Princewill | Next.js Web Developer",
     description:
       "Building sleek, responsive, and high-performance web applications with React, Next.js, Tailwind CSS and TypeScript",
-    url: "http://princewillnanakumor.com/",
+    url: "https://princewillnanakumor.com/",
     siteName: "Princewill Portfolio",
     images: [
       {
@@ -89,7 +100,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Princewill | Web Developer",
+    title: "Nanakumor Princewill | Next.js Developer",
     description:
       "Building sleek, responsive, and high-performance web applications with React, Next.js, Tailwind CSS and TypeScript",
     images: ["/myPhoto.jpg"],
@@ -139,11 +150,16 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
-              name: "Princewill",
+              name: "Nanakumor Princewill",
+              alternateName: [
+                "Nanakumor Prince",
+                "Prince Nanakumor",
+                "Princewill Nanakumor",
+              ],
               jobTitle: "Frontend Developer",
               description:
                 "Crafting modern web experiences with clean code and innovative design",
-              url: "http://princewillnanakumor.com/",
+              url: "https://princewillnanakumor.com/",
               sameAs: [
                 "https://github.com/Princewill-Nanakumor",
                 "https://linkedin.com/in/princewill-nanakumor-0a68b824a/",

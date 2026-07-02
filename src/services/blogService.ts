@@ -91,7 +91,10 @@ class BlogService {
 
   async getPost(idOrSlug: string): Promise<BlogPost> {
     try {
-      const response = await fetch(`${this.baseUrl}/${idOrSlug}`);
+      const identifier = idOrSlug.trim();
+      const response = await fetch(
+        `${this.baseUrl}/${encodeURIComponent(identifier)}`
+      );
 
       if (!response.ok) {
         const errorData = await this.parseErrorResponse(response);
