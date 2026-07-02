@@ -23,7 +23,7 @@ export function getVideoInfo(url: string): VideoInfo | null {
     if (match?.[1]) {
       return {
         type: "youtube",
-        embedUrl: `https://www.youtube.com/embed/${match[1]}`,
+        embedUrl: getYouTubeEmbedUrl(match[1]),
         originalUrl: trimmed,
       };
     }
@@ -39,14 +39,9 @@ export function getVideoInfo(url: string): VideoInfo | null {
   }
 
   if (/^https?:\/\/.+/i.test(trimmed)) {
-    const playbackUrl = trimmed.includes("res.cloudinary.com") &&
-      trimmed.includes("/video/upload/")
-      ? trimmed.replace("/video/upload/", "/video/upload/f_mp4/")
-      : trimmed;
-
     return {
       type: "direct",
-      embedUrl: playbackUrl,
+      embedUrl: getDirectPlaybackUrl(trimmed),
       originalUrl: trimmed,
     };
   }
@@ -56,4 +51,33 @@ export function getVideoInfo(url: string): VideoInfo | null {
 
 export function isValidVideoUrl(url: string): boolean {
   return getVideoInfo(url) !== null;
+}
+
+function getDirectPlaybackUrl(url: string): string {
+  if (
+    !url.includes("res.cloudinary.com") ||
+    !url.includes("/video/upload/")
+  ) {
+    return url;
+  }
+
+  if (url.includes("/video/upload/f_mp4/")) {
+    return url;
+  }
+
+  return url.replace("/video/upload/", "/video/upload/f_mp4/");
+}
+
+export function getYouTubeEmbedUrl(videoId: string, origin?: string): string {
+  const params = new URLSearchParams({
+    rel: "0",
+    modestbranding: "1",
+    playsinline: "1",
+  });
+
+  if (origin) {
+    params.set("origin", origin);
+  }
+
+  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }

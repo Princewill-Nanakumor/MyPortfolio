@@ -1,5 +1,6 @@
 // src/models/BlogPost.ts
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { BLOG_CATEGORIES } from "@/constants/blog";
 
 export interface IContentBlock {
   type: "paragraph" | "h1" | "h2" | "h3" | "code" | "list" | "image" | "video";
@@ -25,10 +26,14 @@ export interface IBlogPost extends Document {
     | "JavaScript"
     | "TypeScript"
     | "Backend"
+    | "CLI Tools"
+    | "Data Engineering"
     | "Git"
     | "AI/ML"
     | "DevOps"
-    | "Tutorial";
+    | "Tutorial"
+    | "Hobbies"
+    | "Drone";
   tags: string[];
   published: boolean;
   likes: number;
@@ -93,20 +98,7 @@ const BlogPostSchema = new Schema<IBlogPost>(
     category: {
       type: String,
       required: false,
-      enum: [
-        "",
-        "Draft",
-        "Next.js",
-        "React",
-        "CSS",
-        "JavaScript",
-        "TypeScript",
-        "Backend",
-        "Git",
-        "AI/ML",
-        "DevOps",
-        "Tutorial",
-      ],
+      enum: [...BLOG_CATEGORIES],
       default: "",
     },
     tags: [

@@ -182,12 +182,9 @@ const BlogContent = ({
         );
       case "image":
         return contentBlock.imageUrl ? (
-          <motion.div
+          <div
             key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="mb-6 sm:mb-8 lg:mb-10"
+            className="mb-6 break-inside-avoid sm:mb-8 lg:mb-10"
           >
             <div className="relative overflow-hidden rounded-xl lg:rounded-2xl">
               <Image
@@ -204,22 +201,19 @@ const BlogContent = ({
                 {convertUrlsToLinks(contentBlock.text)}
               </p>
             )}
-          </motion.div>
+          </div>
         ) : null;
       case "video":
         return contentBlock.videoUrl ? (
-          <motion.div
+          <div
             key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="mb-6 sm:mb-8 lg:mb-10"
+            className="mb-6 break-inside-avoid sm:mb-8 lg:mb-10"
           >
             <VideoEmbed
               videoUrl={contentBlock.videoUrl}
               caption={contentBlock.text}
             />
-          </motion.div>
+          </div>
         ) : null;
       default:
         return null;

@@ -11,7 +11,8 @@ interface Project {
   description: string;
   technology: string;
   github: string;
-  link: string;
+  link?: string;
+  linkLabel?: string;
   year: string;
 }
 
@@ -134,14 +135,16 @@ const ProjectsSection: React.FC = () => {
                       <BsGithub className="text-lg" />
                       <span>View Code</span>
                     </Link>
-                    <Link
-                      href={project.link}
-                      target="_blank"
-                      className="flex items-center justify-center space-x-2 btn-secondary"
-                    >
-                      <BsArrowUpRightSquare className="text-lg" />
-                      <span>Live Demo</span>
-                    </Link>
+                    {project.link && (
+                      <Link
+                        href={project.link}
+                        target="_blank"
+                        className="flex items-center justify-center space-x-2 btn-secondary"
+                      >
+                        <BsArrowUpRightSquare className="text-lg" />
+                        <span>{project.linkLabel || "Live Demo"}</span>
+                      </Link>
+                    )}
                   </div>
                 </div>
               </motion.div>

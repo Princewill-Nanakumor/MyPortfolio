@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { HiUpload, HiX } from "react-icons/hi";
 import { BlogPost } from "@/types/Blog";
+import { BLOG_CATEGORY_OPTIONS } from "@/constants/blog";
 
 interface BlogPostBasicInfoProps {
   formData: Partial<BlogPost>;
@@ -255,16 +256,11 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
               className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
             >
               <option value="">Select category</option>
-              <option value="Next.js">Next.js</option>
-              <option value="React">React</option>
-              <option value="CSS">CSS</option>
-              <option value="JavaScript">JavaScript</option>
-              <option value="TypeScript">TypeScript</option>
-              <option value="Backend">Backend</option>
-              <option value="Git">Git</option>
-              <option value="AI/ML">AI/ML</option>
-              <option value="DevOps">DevOps</option>
-              <option value="Tutorial">Tutorial</option>
+              {BLOG_CATEGORY_OPTIONS.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -3,6 +3,11 @@
 import React, { useState } from "react";
 import { HiX, HiPlus } from "react-icons/hi";
 import { BlogPost } from "@/types/Blog";
+import {
+  BACKEND_WORK_TAGS,
+  HOBBY_BLOG_TAGS,
+  WEB_DEV_TAGS,
+} from "@/constants/blog";
 
 interface BlogPostTagManagerProps {
   formData: Partial<BlogPost>;
@@ -39,26 +44,6 @@ const BlogPostTagManager: React.FC<BlogPostTagManagerProps> = ({
     }
   };
 
-  // Predefined popular tags
-  const popularTags: string[] = [
-    "react",
-    "nextjs",
-    "javascript",
-    "typescript",
-    "css",
-    "tailwind",
-    "nodejs",
-    "api",
-    "tutorial",
-    "beginner",
-    "advanced",
-    "tips",
-    "web-development",
-    "frontend",
-    "backend",
-    "fullstack",
-  ];
-
   const addPopularTag = (tag: string): void => {
     if (!(formData.tags || []).includes(tag)) {
       setFormData((prev) => ({
@@ -68,13 +53,37 @@ const BlogPostTagManager: React.FC<BlogPostTagManagerProps> = ({
     }
   };
 
+  const renderTagSuggestions = (
+    label: string,
+    tags: readonly string[],
+    limit = 8
+  ) => (
+    <div>
+      <p className="mb-2 text-xs text-gray-500">{label}</p>
+      <div className="flex flex-wrap gap-1">
+        {tags
+          .filter((tag) => !(formData.tags || []).includes(tag))
+          .slice(0, limit)
+          .map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => addPopularTag(tag)}
+              className="px-2 py-1 text-xs text-gray-600 transition-colors bg-gray-100 rounded hover:bg-gray-200"
+            >
+              + {tag}
+            </button>
+          ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-4">
       <label className="block text-sm font-medium text-text-primary">
         Tags
       </label>
 
-      {/* Current Tags */}
       <div className="flex flex-wrap gap-2 mb-4">
         {(formData.tags || []).map((tag, index) => (
           <span
@@ -98,7 +107,6 @@ const BlogPostTagManager: React.FC<BlogPostTagManagerProps> = ({
         )}
       </div>
 
-      {/* Add New Tag */}
       <div className="space-y-3">
         <div className="flex gap-2">
           <input
@@ -121,29 +129,21 @@ const BlogPostTagManager: React.FC<BlogPostTagManagerProps> = ({
           </button>
         </div>
 
-        {/* Popular Tags */}
-        <div>
-          <p className="mb-2 text-xs text-gray-500">Popular tags:</p>
-          <div className="flex flex-wrap gap-1">
-            {popularTags
-              .filter((tag) => !(formData.tags || []).includes(tag))
-              .slice(0, 8)
-              .map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => addPopularTag(tag)}
-                  className="px-2 py-1 text-xs text-gray-600 transition-colors bg-gray-100 rounded hover:bg-gray-200"
-                >
-                  + {tag}
-                </button>
-              ))}
-          </div>
+        <div className="space-y-3">
+          {renderTagSuggestions(
+            "Backend & CLI (parsing, pipelines, tooling):",
+            BACKEND_WORK_TAGS
+          )}
+          {renderTagSuggestions("Web dev:", WEB_DEV_TAGS)}
+          {renderTagSuggestions("Hobbies (drone, etc.):", HOBBY_BLOG_TAGS)}
         </div>
       </div>
 
       <div className="text-xs text-gray-500">
-        Tags help readers find your content. Add 3-5 relevant tags.
+        Use <span className="font-medium">Backend</span> or{" "}
+        <span className="font-medium">CLI Tools</span> categories for parsing and
+        pipeline work. Use <span className="font-medium">Drone</span> for hobby
+        videos.
       </div>
     </div>
   );
