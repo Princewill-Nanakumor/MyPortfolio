@@ -17,6 +17,7 @@ interface AdminDashboardContentProps {
   onLogout: () => Promise<void>;
   onEdit: (post: BlogPost) => void;
   onDelete: (postId: string) => Promise<void>;
+  onTogglePublish: (postId: string, published: boolean) => Promise<void>;
 }
 
 const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
@@ -30,6 +31,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   onLogout,
   onEdit,
   onDelete,
+  onTogglePublish,
 }) => {
   return (
     <>
@@ -57,6 +59,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
         filterStatus={filterStatus}
         onEdit={onEdit}
         onDelete={onDelete}
+        onTogglePublish={onTogglePublish}
         setIsFormOpen={setIsFormOpen}
       />
     </>

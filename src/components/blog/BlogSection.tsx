@@ -20,8 +20,7 @@ const BlogSection: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const fetchedPosts = await blogService.getPublishedPosts();
-      const recentPosts = fetchedPosts.slice(0, 3);
+      const recentPosts = await blogService.getRecentPosts(3);
       setPosts(recentPosts);
     } catch (error) {
       console.error("Error loading recent posts:", error);
@@ -108,7 +107,7 @@ const BlogSection: React.FC = () => {
                     {/* Post Image */}
                     <div className="relative h-40 overflow-hidden sm:h-48">
                       <Image
-                        src={post.image}
+                        src={post.image || "/myPhoto.jpg"}
                         alt={post.title}
                         width={400}
                         height={192}

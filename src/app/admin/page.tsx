@@ -35,6 +35,7 @@ const AdminPage = () => {
     handleAddPost,
     handleEditPost,
     handleAutoSaveDraft,
+    handleTogglePublish,
   } = useAdminPageController();
 
   // Show authentication modal if not authenticated
@@ -76,6 +77,7 @@ const AdminPage = () => {
         onLogout={handleLogout}
         onEdit={openEditForm}
         onDelete={handleDeletePost}
+        onTogglePublish={handleTogglePublish}
       />
 
       <AdminPostFormModal

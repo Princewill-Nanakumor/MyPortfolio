@@ -11,6 +11,7 @@ interface AdminContentProps {
   filterStatus: "all" | "published" | "draft";
   onEdit: (post: BlogPost) => void;
   onDelete: (postId: string) => void;
+  onTogglePublish: (postId: string, published: boolean) => void;
   setIsFormOpen: (open: boolean) => void;
 }
 
@@ -19,6 +20,7 @@ const AdminContent: React.FC<AdminContentProps> = ({
   filterStatus,
   onEdit,
   onDelete,
+  onTogglePublish,
   setIsFormOpen,
 }) => {
   return (
@@ -32,6 +34,7 @@ const AdminContent: React.FC<AdminContentProps> = ({
           posts={filteredPosts}
           onEdit={onEdit}
           onDelete={onDelete}
+          onTogglePublish={onTogglePublish}
         />
       ) : (
         <div className="py-12 text-center">

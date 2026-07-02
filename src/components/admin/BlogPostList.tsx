@@ -110,15 +110,22 @@ const BlogPostList: React.FC<BlogPostListProps> = ({
                           {post.category}
                         </span>
                       )}
-                      <span
-                        className={`px-3 py-1 text-xs font-medium rounded-full ${
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onTogglePublish?.(postId, !post.published)
+                        }
+                        className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
                           post.published
-                            ? "text-green-600 bg-green-100"
-                            : "text-orange-600 bg-orange-100"
+                            ? "text-orange-700 bg-orange-100 hover:bg-orange-200"
+                            : "text-green-700 bg-green-100 hover:bg-green-200"
                         }`}
+                        title={
+                          post.published ? "Unpublish post" : "Publish post"
+                        }
                       >
-                        {post.published ? "Published" : "Draft"}
-                      </span>
+                        {post.published ? "Unpublish" : "Publish"}
+                      </button>
                       {post.tags?.slice(0, 2).map((tag, tagIndex) => (
                         <span
                           key={`${postId}-tag-${tagIndex}`}

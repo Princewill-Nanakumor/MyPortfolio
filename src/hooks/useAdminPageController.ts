@@ -325,7 +325,10 @@ export const useAdminPageController = () => {
           return;
         }
 
-        const updated = await blogService.updatePost(editingPost._id, updatedPost);
+        const updated = await blogService.updatePost(editingPost._id, {
+          ...updatedPost,
+          published: updatedPost.published ?? true,
+        });
         setPosts((prevPosts) =>
           prevPosts.map((post) => (post._id === updated._id ? updated : post))
         );
@@ -339,6 +342,30 @@ export const useAdminPageController = () => {
       }
     },
     [editingPost?._id, showError, showSuccess]
+  );
+
+  const handleTogglePublish = useCallback(
+    async (postId: string, published: boolean): Promise<void> => {
+      const post = posts.find((item) => item._id === postId);
+      const postTitle = post?.title || "Post";
+
+      try {
+        setError(null);
+        const updated = await blogService.togglePublish(postId, published);
+        setPosts((prevPosts) =>
+          prevPosts.map((item) => (item._id === updated._id ? updated : item))
+        );
+        showSuccess(
+          published ? "Post Published" : "Post Unpublished",
+          `${postTitle} is now ${published ? "published" : "a draft"}.`
+        );
+      } catch {
+        const errorMessage = `Failed to ${published ? "publish" : "unpublish"} post`;
+        setError(errorMessage);
+        showError("Publish Error", errorMessage);
+      }
+    },
+    [posts, showError, showSuccess]
   );
 
   const handleDeletePost = useCallback(
@@ -478,6 +505,6 @@ export const useAdminPageController = () => {
     handleAddPost,
     handleEditPost,
     handleAutoSaveDraft,
+    handleTogglePublish,
   };
 };
-

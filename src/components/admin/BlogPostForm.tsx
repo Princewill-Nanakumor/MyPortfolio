@@ -230,7 +230,7 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
       const synchronizedFormData = buildSynchronizedFormData();
       const finalFormData = {
         ...synchronizedFormData,
-        published: formData.published ?? true,
+        published: true,
       };
 
       await onSave(finalFormData);

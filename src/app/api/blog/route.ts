@@ -70,6 +70,8 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const published = searchParams.get("published");
+    const limitParam = searchParams.get("limit");
+    const skipParam = searchParams.get("skip");
 
     const isConnected = await connectDB();
     if (!isConnected) {
@@ -93,7 +95,20 @@ export async function GET(
       query.published = published === "true";
     }
 
-    const posts = await blogPost.find(query).sort({ createdAt: -1 }).lean();
+    const limit = limitParam ? Math.max(1, parseInt(limitParam, 10)) : undefined;
+    const skip = skipParam ? Math.max(0, parseInt(skipParam, 10)) : undefined;
+
+    let postsQuery = blogPost.find(query).sort({ updatedAt: -1, createdAt: -1 });
+
+    if (typeof skip === "number" && !Number.isNaN(skip)) {
+      postsQuery = postsQuery.skip(skip);
+    }
+
+    if (typeof limit === "number" && !Number.isNaN(limit)) {
+      postsQuery = postsQuery.limit(limit);
+    }
+
+    const posts = await postsQuery.lean();
 
     return NextResponse.json<ApiSuccess<any[]>>({
       success: true,
