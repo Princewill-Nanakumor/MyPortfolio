@@ -25,7 +25,6 @@ const projects: Project[] = [
     technology:
       "Node.js, Typescript, , @laihoe/demoparser2, Counter-Strike 2 Demo Parser",
     github: "https://github.com/Princewill-Nanakumor/-cs2-demo-analyzer",
-    link: "#",
     year: "2026",
   },
   {
