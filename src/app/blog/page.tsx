@@ -316,7 +316,11 @@ const BlogPage = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <button
-              onClick={loadPosts}
+              onClick={() => {
+                void loadPosts().catch((error) => {
+                  console.error("Failed to reload posts:", error);
+                });
+              }}
               className="inline-flex items-center px-4 py-2 text-sm transition-colors border rounded-xl text-secondary-indigo border-secondary-indigo hover:bg-secondary-indigo/10 sm:px-6 sm:py-3 sm:text-base"
             >
               <svg

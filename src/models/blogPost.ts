@@ -2,10 +2,11 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IContentBlock {
-  type: "paragraph" | "h1" | "h2" | "h3" | "code" | "list" | "image";
+  type: "paragraph" | "h1" | "h2" | "h3" | "code" | "list" | "image" | "video";
   text?: string;
   items?: string[];
   imageUrl?: string;
+  videoUrl?: string;
 }
 
 export interface IBlogPost extends Document {
@@ -38,7 +39,7 @@ export interface IBlogPost extends Document {
 const ContentBlockSchema = new Schema<IContentBlock>({
   type: {
     type: String,
-    enum: ["paragraph", "h1", "h2", "h3", "code", "list", "image"],
+    enum: ["paragraph", "h1", "h2", "h3", "code", "list", "image", "video"],
     required: true,
   },
   text: {
@@ -51,6 +52,10 @@ const ContentBlockSchema = new Schema<IContentBlock>({
     },
   ],
   imageUrl: {
+    type: String,
+    default: "",
+  },
+  videoUrl: {
     type: String,
     default: "",
   },

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { HiClock } from "react-icons/hi";
 import { ImageIcon } from "lucide-react";
 import { BlogPost, ContentBlock } from "@/types/Blog";
+import VideoEmbed from "@/components/blog/VideoEmbed";
 
 interface BlogPostPreviewProps {
   formData: Partial<BlogPost>;
@@ -104,6 +105,15 @@ const BlogPostPreview: React.FC<BlogPostPreviewProps> = ({ formData }) => {
             </div>
           </div>
         );
+      case "video":
+        return contentBlock.videoUrl ? (
+          <div className="mb-6">
+            <VideoEmbed
+              videoUrl={contentBlock.videoUrl}
+              caption={contentBlock.text}
+            />
+          </div>
+        ) : null;
       default:
         return null;
     }

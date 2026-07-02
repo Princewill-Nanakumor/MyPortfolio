@@ -2,6 +2,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {},
+  async rewrites() {
+    return [
+      {
+        source: "/apple-touch-icon.png",
+        destination: "/apple-icon",
+      },
+      {
+        source: "/favicon.ico",
+        destination: "/icon",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

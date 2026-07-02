@@ -28,6 +28,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
     text: "",
     items: [],
     imageUrl: "",
+    videoUrl: "",
   });
 
   // Start editing a content block
@@ -40,6 +41,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
         text: contentBlock.text || "",
         items: contentBlock.items || [],
         imageUrl: contentBlock.imageUrl || "",
+        videoUrl: contentBlock.videoUrl || "",
       });
     }
   };
@@ -63,6 +65,9 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
         ...(editingContent.imageUrl && {
           imageUrl: editingContent.imageUrl,
         }),
+        ...(editingContent.videoUrl && {
+          videoUrl: editingContent.videoUrl,
+        }),
       };
 
       setFormData((prev: any) => ({
@@ -79,6 +84,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
         text: "",
         items: [],
         imageUrl: "",
+        videoUrl: "",
       });
     }
   }, [content, editingContent, editingIndex, setFormData]);
@@ -99,6 +105,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
       text: "",
       items: [],
       imageUrl: "",
+      videoUrl: "",
     });
   };
 

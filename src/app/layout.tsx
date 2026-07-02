@@ -111,6 +111,10 @@ export const metadata = {
     // yandex: "your-yandex-verification-code",
     // yahoo: "your-yahoo-verification-code",
   },
+  icons: {
+    icon: "/icon",
+    apple: "/apple-icon",
+  },
 };
 
 interface RootLayoutProps {
@@ -127,16 +131,6 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
-
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="16x16" href="//favicon.ico" />
 
         {/* Structured Data for better search results */}
         <script

@@ -13,8 +13,8 @@ interface BlogPostLayoutProps {
   currentLayout: string;
   isLiked: boolean;
   likeCount: number;
-  onLike: () => Promise<void>;
-  onShare: () => Promise<void>;
+  onLike: () => void;
+  onShare: () => void;
 }
 
 const BlogPostLayout = ({

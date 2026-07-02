@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { ContentBlock } from "@/types/Blog";
+import VideoEmbed from "@/components/blog/VideoEmbed";
 
 interface ContentBlockPreviewProps {
   item: ContentBlock;
@@ -77,6 +78,10 @@ const ContentBlockPreview = ({ item }: ContentBlockPreviewProps) => {
             </p>
           )}
         </div>
+      ) : null;
+    case "video":
+      return item.videoUrl ? (
+        <VideoEmbed videoUrl={item.videoUrl} caption={item.text} />
       ) : null;
     default:
       return <p className="text-sm">{convertUrlsToLinks(item.text || "")}</p>;

@@ -375,9 +375,14 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
               </p>
             </div>
             <button
-              onClick={async () => {
-                await flushDraftBeforeClose();
-                onCancel();
+              onClick={() => {
+                void flushDraftBeforeClose()
+                  .catch((error) => {
+                    console.error("Draft flush before close failed:", error);
+                  })
+                  .finally(() => {
+                    onCancel();
+                  });
               }}
               className="flex-shrink-0 p-2 ml-2 text-gray-400 transition-colors hover:text-gray-600 rounded-xl"
             >
@@ -532,9 +537,14 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
               {/* Cancel button - always visible */}
               <button
                 type="button"
-                onClick={async () => {
-                  await flushDraftBeforeClose();
-                  onCancel();
+                onClick={() => {
+                  void flushDraftBeforeClose()
+                    .catch((error) => {
+                      console.error("Draft flush before close failed:", error);
+                    })
+                    .finally(() => {
+                      onCancel();
+                    });
                 }}
                 disabled={isSubmitting}
                 className="px-4 py-2 text-sm text-gray-600 transition-colors border border-gray-300 sm:px-6 rounded-xl hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"

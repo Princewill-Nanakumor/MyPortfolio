@@ -32,6 +32,7 @@ const BlogPostContentBuilder = forwardRef<
     text: "",
     items: [],
     imageUrl: "",
+    videoUrl: "",
   });
   const [hasUnsavedContent, setHasUnsavedContent] = useState<boolean>(false);
   const contentBlockListRef = useRef<ContentBlockListRef>(null);
@@ -41,7 +42,8 @@ const BlogPostContentBuilder = forwardRef<
     const hasContent =
       newContentItem.text.trim() ||
       newContentItem.items.length > 0 ||
-      newContentItem.imageUrl;
+      newContentItem.imageUrl ||
+      newContentItem.videoUrl;
     setHasUnsavedContent(!!hasContent);
   }, [newContentItem]);
 
@@ -58,7 +60,8 @@ const BlogPostContentBuilder = forwardRef<
     if (
       newContentItem.text.trim() ||
       newContentItem.items.length > 0 ||
-      newContentItem.imageUrl
+      newContentItem.imageUrl ||
+      newContentItem.videoUrl
     ) {
       const contentBlock: ContentBlock = {
         type: newContentItem.type,
@@ -66,6 +69,9 @@ const BlogPostContentBuilder = forwardRef<
         items: newContentItem.items,
         ...(newContentItem.imageUrl && {
           imageUrl: newContentItem.imageUrl,
+        }),
+        ...(newContentItem.videoUrl && {
+          videoUrl: newContentItem.videoUrl,
         }),
       };
 
@@ -80,6 +86,7 @@ const BlogPostContentBuilder = forwardRef<
         text: "",
         items: [],
         imageUrl: "",
+        videoUrl: "",
       });
     }
   }, [newContentItem, setFormData, formData.content]);
@@ -96,7 +103,8 @@ const BlogPostContentBuilder = forwardRef<
     if (
       !newContentItem.text.trim() &&
       newContentItem.items.length === 0 &&
-      !newContentItem.imageUrl
+      !newContentItem.imageUrl &&
+      !newContentItem.videoUrl
     ) {
       return null;
     }
@@ -107,6 +115,9 @@ const BlogPostContentBuilder = forwardRef<
       items: newContentItem.items,
       ...(newContentItem.imageUrl && {
         imageUrl: newContentItem.imageUrl,
+      }),
+      ...(newContentItem.videoUrl && {
+        videoUrl: newContentItem.videoUrl,
       }),
     };
   }, [newContentItem]);

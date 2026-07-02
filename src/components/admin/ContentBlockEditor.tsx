@@ -10,6 +10,8 @@ import {
   HiLink,
 } from "react-icons/hi";
 import { NewContentItem } from "./../../types/Blog";
+import { isValidVideoUrl } from "@/utils/videoUtils";
+import { uploadVideoToCloudinary } from "@/utils/cloudinaryUpload";
 
 interface ContentBlockEditorProps {
   content: NewContentItem;
@@ -36,6 +38,9 @@ const ContentBlockEditor = ({
   const [linkUrl, setLinkUrl] = useState<string>("");
   const [linkText, setLinkText] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingVideo, setIsUploadingVideo] = useState<boolean>(false);
+  const [videoUploadProgress, setVideoUploadProgress] = useState<number>(0);
 
   // Function to insert link into text
   const insertLink = (): void => {
@@ -59,9 +64,10 @@ const ContentBlockEditor = ({
     }
   };
 
-  const handleImageUpload = async (
+  const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
+  ): void => {
+    void (async () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -80,16 +86,18 @@ const ContentBlockEditor = ({
     setIsUploading(true);
     setUploadProgress(0);
 
+    let progressInterval: ReturnType<typeof setInterval> | null = null;
+
     try {
       // Create FormData for file upload
       const formData = new FormData();
       formData.append("image", file);
 
       // Simulate upload progress
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
-            clearInterval(progressInterval);
+            if (progressInterval) clearInterval(progressInterval);
             return 90;
           }
           return prev + 10;
@@ -102,10 +110,10 @@ const ContentBlockEditor = ({
         body: formData,
       });
 
-      clearInterval(progressInterval);
+      if (progressInterval) clearInterval(progressInterval);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Upload failed");
       }
 
@@ -135,7 +143,11 @@ const ContentBlockEditor = ({
       );
       setIsUploading(false);
       setUploadProgress(0);
+    } finally {
+      if (progressInterval) clearInterval(progressInterval);
+      event.target.value = "";
     }
+    })();
   };
 
   const removeImage = (): void => {
@@ -143,6 +155,73 @@ const ContentBlockEditor = ({
       ...prev,
       imageUrl: "",
     }));
+  };
+
+  const handleVideoUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    void (async () => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("video/")) {
+      alert("Please select a valid video file");
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+      alert("Video size should be less than 50MB");
+      return;
+    }
+
+    setIsUploadingVideo(true);
+    setVideoUploadProgress(0);
+
+    try {
+      const videoUrl = await uploadVideoToCloudinary(file, (progress) => {
+        setVideoUploadProgress(progress);
+      });
+
+      setContent((prev) => ({
+        ...prev,
+        videoUrl,
+      }));
+      setVideoUploadProgress(100);
+
+      setTimeout(() => {
+        setVideoUploadProgress(0);
+        setIsUploadingVideo(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Video upload error:", error);
+      alert(
+        `Failed to upload video: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+      setIsUploadingVideo(false);
+      setVideoUploadProgress(0);
+    } finally {
+      event.target.value = "";
+    }
+    })();
+  };
+
+  const handleVideoUrlChange = (url: string): void => {
+    const trimmed = url.trim();
+    setContent((prev) => ({
+      ...prev,
+      videoUrl: isValidVideoUrl(trimmed) ? trimmed : url,
+    }));
+  };
+
+  const removeVideo = (): void => {
+    setContent((prev) => ({
+      ...prev,
+      videoUrl: "",
+    }));
+  };
+
+  const triggerVideoInput = (): void => {
+    videoInputRef.current?.click();
   };
 
   const triggerFileInput = (): void => {
@@ -180,7 +259,8 @@ const ContentBlockEditor = ({
               | "h3"
               | "code"
               | "list"
-              | "image";
+              | "image"
+              | "video";
 
             if (nextType === "h1" && isH1SelectionDisabled) {
               alert("Only one H1 is allowed per post.");
@@ -193,6 +273,7 @@ const ContentBlockEditor = ({
               text: "",
               items: [],
               imageUrl: "",
+              videoUrl: "",
             }));
           })()
         }
@@ -207,6 +288,7 @@ const ContentBlockEditor = ({
         <option value="code">Code Block</option>
         <option value="list">List</option>
         <option value="image">Image</option>
+        <option value="video">Video</option>
       </select>
 
       {/* Link Input Modal */}
@@ -250,7 +332,94 @@ const ContentBlockEditor = ({
       )}
 
       {/* Content Input Based on Type */}
-      {content.type === "image" ? (
+      {content.type === "video" ? (
+        <div className="space-y-4">
+          <input
+            type="url"
+            value={content.videoUrl || ""}
+            onChange={(e) => handleVideoUrlChange(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            placeholder="Paste YouTube, Vimeo, or direct video URL"
+          />
+          {content.videoUrl && !isValidVideoUrl(content.videoUrl) && (
+            <p className="text-xs text-amber-600">
+              Enter a valid YouTube, Vimeo, or direct video URL
+            </p>
+          )}
+          <p className="text-xs text-gray-500">
+            Supports YouTube, Vimeo, or direct MP4/WebM links
+          </p>
+
+          <div className="relative">
+            <input
+              ref={videoInputRef}
+              type="file"
+              accept="video/mp4,video/webm,video/quicktime,video/x-msvideo"
+              onChange={handleVideoUpload}
+              className="hidden"
+            />
+
+            {!content.videoUrl ? (
+              <button
+                type="button"
+                onClick={triggerVideoInput}
+                disabled={isUploadingVideo}
+                className="w-full px-4 py-3 transition-colors border-2 border-gray-300 border-dashed rounded-lg hover:border-secondary-indigo hover:bg-secondary-indigo/5 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  {isUploadingVideo ? (
+                    <>
+                      <div className="w-8 h-8 border-2 rounded-full border-secondary-indigo border-t-transparent animate-spin"></div>
+                      <span className="text-sm text-secondary-indigo">
+                        Uploading... {videoUploadProgress}%
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <HiUpload className="w-6 h-6 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Or upload a video file
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        MP4, WebM, MOV up to 50MB
+                      </span>
+                    </>
+                  )}
+                </div>
+              </button>
+            ) : (
+              <div className="relative p-3 border border-green-200 rounded-lg bg-green-50">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm text-green-800 truncate">
+                    Video added successfully
+                  </p>
+                  <button
+                    type="button"
+                    onClick={removeVideo}
+                    className="p-1 text-red-500 transition-colors rounded hover:bg-red-50"
+                    title="Remove video"
+                  >
+                    <HiX className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <input
+            type="text"
+            value={content.text}
+            onChange={(e) =>
+              setContent((prev) => ({
+                ...prev,
+                text: e.target.value,
+              }))
+            }
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            placeholder="Video caption (optional)"
+          />
+        </div>
+      ) : content.type === "image" ? (
         <div className="space-y-4">
           {/* Image Upload */}
           <div className="relative">
@@ -419,9 +588,11 @@ const ContentBlockEditor = ({
         <button
           onClick={onSave}
           disabled={
-            !content.text.trim() &&
-            content.items.length === 0 &&
-            !content.imageUrl
+            content.type === "video"
+              ? !isValidVideoUrl(content.videoUrl || "")
+              : !content.text.trim() &&
+                content.items.length === 0 &&
+                !content.imageUrl
           }
           className="flex items-center gap-2 px-4 py-2 text-white rounded-lg bg-secondary-indigo hover:bg-secondary-indigo/80 disabled:opacity-50"
         >

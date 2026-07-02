@@ -129,6 +129,9 @@ const BlogPost = ({ params }: BlogPostProps) => {
           url: window.location.href,
         });
       } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
         console.log("Error sharing:", error);
       }
     } else {
@@ -149,6 +152,18 @@ const BlogPost = ({ params }: BlogPostProps) => {
       }
     }
   }, [post]);
+
+  const handleLikeClick = (): void => {
+    void handleLike().catch((error) => {
+      console.error("Like failed:", error);
+    });
+  };
+
+  const handleShareClick = (): void => {
+    void handleShare().catch((error) => {
+      console.error("Share failed:", error);
+    });
+  };
 
   // Loading state
   if (loading) {
@@ -192,7 +207,11 @@ const BlogPost = ({ params }: BlogPostProps) => {
           </p>
           <div className="space-y-3">
             <button
-              onClick={loadPost}
+              onClick={() => {
+                void loadPost().catch((error) => {
+                  console.error("Failed to reload post:", error);
+                });
+              }}
               className="w-full px-4 py-2 text-sm text-white transition-colors bg-secondary-indigo rounded-xl hover:bg-secondary-indigo/80 sm:text-base lg:text-lg"
             >
               Try Again
@@ -248,8 +267,8 @@ const BlogPost = ({ params }: BlogPostProps) => {
         currentLayout={currentLayout}
         isLiked={isLiked}
         likeCount={likeCount}
-        onLike={handleLike}
-        onShare={handleShare}
+        onLike={handleLikeClick}
+        onShare={handleShareClick}
       />
 
       {/* Scroll to Top Button */}

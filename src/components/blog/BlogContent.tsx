@@ -7,6 +7,7 @@ import {
   ContentBlock,
 } from "../../../src/types/Blog";
 import { DesignStyle, LayoutOption } from "./DesignConfig";
+import VideoEmbed from "./VideoEmbed";
 
 interface BlogContentProps {
   post: BlogPostType;
@@ -88,6 +89,12 @@ const BlogContent = ({
         console.log("Link copied to clipboard!");
       }
     }
+  };
+
+  const handleShareClick = (): void => {
+    void handleShare().catch((error) => {
+      console.error("Share failed:", error);
+    });
   };
 
   const renderContentBlock = (contentBlock: ContentBlock, index: number) => {
@@ -199,6 +206,21 @@ const BlogContent = ({
             )}
           </motion.div>
         ) : null;
+      case "video":
+        return contentBlock.videoUrl ? (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="mb-6 sm:mb-8 lg:mb-10"
+          >
+            <VideoEmbed
+              videoUrl={contentBlock.videoUrl}
+              caption={contentBlock.text}
+            />
+          </motion.div>
+        ) : null;
       default:
         return null;
     }
@@ -239,7 +261,7 @@ const BlogContent = ({
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-start sm:gap-4 lg:gap-6">
             <button
-              onClick={handleShare}
+              onClick={handleShareClick}
               className="inline-flex items-center justify-center px-4 py-2 text-sm text-white transition-colors bg-secondary-indigo rounded-xl hover:bg-secondary-indigo/80 sm:px-6 sm:py-3 sm:text-base lg:px-8 lg:py-4 lg:text-lg"
             >
               <HiShare className="w-3 h-3 mr-2 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
