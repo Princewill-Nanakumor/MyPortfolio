@@ -1,3 +1,4 @@
+"use client";
 // src/components/projects/Projects.tsx
 import React from "react";
 import Image from "next/image";
@@ -63,12 +64,42 @@ const projects: Project[] = [
   },
 ];
 
+const SITE_URL = "https://princewillnanakumor.com";
+
+const projectsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Featured Projects by Nanakumor Princewill",
+  itemListElement: projects.map((project, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "SoftwareSourceCode",
+      name: project.name,
+      description: project.description,
+      codeRepository: project.github,
+      programmingLanguage: project.technology,
+      dateCreated: project.year,
+      ...(project.link ? { url: project.link } : {}),
+      author: {
+        "@type": "Person",
+        name: "Nanakumor Princewill",
+        url: SITE_URL,
+      },
+    },
+  })),
+};
+
 const ProjectsSection: React.FC = () => {
   return (
     <section
       id="projects"
       className="min-h-[80vh] w-full flex items-center bg-bg-primary scroll-mt-20 relative overflow-hidden"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsJsonLd) }}
+      />
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 sm:w-80 sm:h-80 md:w-96 md:h-96 from-secondary-indigo/5 to-accent-emerald/5"></div>
       </div>

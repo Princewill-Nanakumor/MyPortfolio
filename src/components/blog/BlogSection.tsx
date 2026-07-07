@@ -1,36 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { HiArrowRight, HiCalendar, HiClock } from "react-icons/hi";
-import { blogService } from "@/services/blogService";
 import { BlogPost } from "@/types/Blog";
 
-const BlogSection: React.FC = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+interface BlogSectionProps {
+  posts: BlogPost[];
+}
 
-  useEffect(() => {
-    loadRecentPosts();
-  }, []);
-
-  const loadRecentPosts = async (): Promise<void> => {
-    try {
-      setLoading(true);
-      setError(null);
-      const recentPosts = await blogService.getRecentPosts(3);
-      setPosts(recentPosts);
-    } catch (error) {
-      console.error("Error loading recent posts:", error);
-      setError("Failed to load recent posts");
-      setPosts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -39,28 +19,6 @@ const BlogSection: React.FC = () => {
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
-  if (loading) {
-    return (
-      <section
-        id="blog"
-        className="min-h-[60vh] flex items-center bg-bg-secondary scroll-mt-20 sm:min-h-[80vh]"
-      >
-        <div className="w-full max-w-6xl px-4 mx-auto sm:px-6 lg:px-12">
-          <div className="py-8 sm:py-12 lg:py-16">
-            <div className="flex items-center justify-center py-8 sm:py-12">
-              <div className="text-center">
-                <div className="w-8 h-8 mx-auto mb-3 border-2 rounded-full border-secondary-indigo border-t-transparent animate-spin sm:w-12 sm:h-12 sm:mb-4"></div>
-                <p className="text-sm text-text-secondary sm:text-base">
-                  Loading recent posts...
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section
@@ -204,10 +162,10 @@ const BlogSection: React.FC = () => {
                 </svg>
               </div>
               <h3 className="mb-2 text-base font-semibold text-text-primary sm:text-lg lg:text-xl">
-                {error ? "Failed to load posts" : "No blog posts yet"}
+                No blog posts yet
               </h3>
               <p className="text-sm text-text-secondary sm:text-base lg:text-lg">
-                {error || "Check back soon for new content"}
+                Check back soon for new content
               </p>
             </div>
           )}

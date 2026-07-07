@@ -1,3 +1,4 @@
+"use client";
 // src/components/about/About.tsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";

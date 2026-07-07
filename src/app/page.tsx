@@ -1,36 +1,28 @@
 // src/app/page.tsx
-"use client";
 import React from "react";
 import Hero from "@/components/hero/Hero";
 import About from "@/components/about/About";
 import Skills from "@/components/skills/Skills";
 import ProjectsSection from "@/components/projects/Projects";
 import Contact from "@/components/contact/Contact";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { useEffect } from "react";
 import BlogSection from "@/components/blog/BlogSection";
+import AOSInit from "@/components/common/AOSInit";
+import { getPublishedPosts } from "@/lib/blogData";
 
-export default function Home(): React.JSX.Element {
-  useEffect(() => {
-    AOS.init({
-      easing: "ease-out-cubic",
-      duration: 800,
-      delay: 100,
-      mirror: true,
-      anchorPlacement: "top-bottom",
-      offset: 120,
-    });
-    AOS.refresh();
-  }, []);
+export const dynamic = "force-dynamic";
+
+export default async function Home(): Promise<React.JSX.Element> {
+  const posts = await getPublishedPosts();
+  const recentPosts = posts.slice(0, 3);
 
   return (
     <main className="bg-bg-primary">
+      <AOSInit />
       <Hero />
       <About />
       <Skills />
       <ProjectsSection />
-      <BlogSection />
+      <BlogSection posts={recentPosts} />
       <Contact />
     </main>
   );
