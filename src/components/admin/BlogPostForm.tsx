@@ -184,11 +184,21 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
   ]);
 
   const generateSlug = (title: string): string => {
-    const slug = title
+    return title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
-    return slug;
+  };
+
+  const shouldSyncSlugFromTitle = (
+    currentSlug: string | undefined,
+    currentTitle: string | undefined
+  ): boolean => {
+    const slug = (currentSlug || "").trim();
+    if (!slug) return true;
+    if (slug.startsWith("draft-")) return true;
+    // Keep syncing while the slug still matches the previous title
+    return slug === generateSlug(currentTitle || "");
   };
 
   const handleInputChange = (
@@ -201,14 +211,19 @@ const BlogPostForm: React.FC<BlogPostFormProps> = ({
     const newValue = type === "checkbox" ? checked : value;
 
     setFormData((prev) => {
-      const updated = {
+      const updated: Partial<BlogPost> = {
         ...prev,
         [name]: newValue,
-        ...(name === "title" &&
-          !prev._id && {
-            slug: generateSlug(value),
-          }),
       };
+
+      if (
+        name === "title" &&
+        typeof newValue === "string" &&
+        shouldSyncSlugFromTitle(prev.slug, prev.title)
+      ) {
+        updated.slug = generateSlug(newValue);
+      }
+
       return updated;
     });
   };

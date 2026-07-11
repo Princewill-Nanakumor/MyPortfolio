@@ -125,14 +125,7 @@ const ContentBlockEditor = ({
           ...prev,
           imageUrl: data.imageUrl,
         }));
-
         setUploadProgress(100);
-
-        // Reset progress after a moment
-        setTimeout(() => {
-          setUploadProgress(0);
-          setIsUploading(false);
-        }, 1000);
       } else {
         throw new Error("Invalid response format");
       }
@@ -141,11 +134,14 @@ const ContentBlockEditor = ({
       alert(
         `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"}`
       );
-      setIsUploading(false);
-      setUploadProgress(0);
     } finally {
       if (progressInterval) clearInterval(progressInterval);
       event.target.value = "";
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setIsUploading(false);
+      setUploadProgress(0);
     }
     })();
   };
@@ -155,6 +151,11 @@ const ContentBlockEditor = ({
       ...prev,
       imageUrl: "",
     }));
+    setIsUploading(false);
+    setUploadProgress(0);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleVideoUpload = (

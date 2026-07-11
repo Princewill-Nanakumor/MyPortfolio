@@ -9,6 +9,7 @@ export const BLOG_CATEGORIES = [
   "Backend",
   "CLI Tools",
   "Data Engineering",
+  "Cloud Engineering",
   "Git",
   "AI/ML",
   "DevOps",

@@ -34,49 +34,58 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
     // Validate file type
     if (!file.type.startsWith("image/")) {
       alert("Please select a valid image file");
+      event.target.value = "";
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image is more than 5 MB. Please upload an image under 5 MB.");
+      event.target.value = "";
       return;
     }
 
     setIsUploading(true);
     setUploadProgress(0);
 
-    try {
-      // Create FormData for file upload
-      const formData = new FormData();
-      formData.append("image", file);
+    let progressInterval: ReturnType<typeof setInterval> | null = null;
 
-      // Simulate upload progress
-      const progressInterval = setInterval(() => {
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("image", file);
+
+      progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
-            clearInterval(progressInterval);
+            if (progressInterval) clearInterval(progressInterval);
             return 90;
           }
           return prev + 10;
         });
       }, 100);
 
-      // Upload to your API endpoint
       const response = await fetch("/api/upload-image", {
         method: "POST",
-        body: formData,
+        body: uploadFormData,
       });
 
-      clearInterval(progressInterval);
-
-      if (!response.ok) {
-        throw new Error("Upload failed");
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
       }
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
-      // Create a synthetic event for the image URL update
+      if (!response.ok) {
+        throw new Error(
+          data?.error || data?.message || `Upload failed (${response.status})`
+        );
+      }
+
+      if (!data?.imageUrl) {
+        throw new Error("Upload succeeded but no image URL was returned");
+      }
+
       const syntheticEvent = {
         target: {
           name: "image",
@@ -85,24 +94,27 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
       } as React.ChangeEvent<HTMLInputElement>;
 
       handleInputChange(syntheticEvent);
-
       setUploadProgress(100);
-
-      // Reset progress after a moment
-      setTimeout(() => {
-        setUploadProgress(0);
-        setIsUploading(false);
-      }, 1000);
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Failed to upload image. Please try again.");
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Failed to upload image. Please try again."
+      );
+    } finally {
+      if (progressInterval) clearInterval(progressInterval);
+      // Always clear so the same or a new file can be selected again
+      event.target.value = "";
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       setIsUploading(false);
       setUploadProgress(0);
     }
   };
 
   const removeImage = (): void => {
-    // Create a synthetic event for removing the image
     const syntheticEvent = {
       target: {
         name: "image",
@@ -111,6 +123,8 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
     } as React.ChangeEvent<HTMLInputElement>;
 
     handleInputChange(syntheticEvent);
+    setIsUploading(false);
+    setUploadProgress(0);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";

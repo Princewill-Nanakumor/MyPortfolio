@@ -28,6 +28,7 @@ export interface IBlogPost extends Document {
     | "Backend"
     | "CLI Tools"
     | "Data Engineering"
+    | "Cloud Engineering"
     | "Git"
     | "AI/ML"
     | "DevOps"
