@@ -22,6 +22,12 @@ const skills: Skill[] = [
   { image: "/react.png", description: "React", category: "Framework" },
   { image: "/nextjs.png", description: "NextJS", category: "Framework" },
   { image: "/mongo.png", description: "MongoDB", category: "Database" },
+  { image: "/prisma-ormimg.jpg", description: "Prisma", category: "Database" },
+  {
+    image: "/postgressimg.jpeg",
+    description: "PostgreSQL",
+    category: "Database",
+  },
   { image: "/github1.png", description: "Github", category: "Tools" },
   { image: "/git.png", description: "Git", category: "Tools" },
   { image: "/cursor-logo.png", description: "Cursor Ai", category: "Tools" },
