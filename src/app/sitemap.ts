@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import connectDB from "@/db/mongodb";
 import blogPost from "@/models/blogPost";
+import { projects } from "@/data/projects";
+import { SITE_URL } from "@/lib/seo";
 
-const SITE_URL = "https://princewillnanakumor.com";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -20,17 +21,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/success`,
+      url: `${SITE_URL}/projects`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.4,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
   ];
+
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${SITE_URL}/projects/${project.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
 
   try {
     const isConnected = await connectDB();
     if (!isConnected) {
-      return staticRoutes;
+      return [...staticRoutes, ...projectRoutes];
     }
 
     const posts = await blogPost
@@ -43,13 +51,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .map((post) => ({
         url: `${SITE_URL}/blog/${post.slug}`,
         lastModified: new Date(post.updatedAt || Date.now()),
-        changeFrequency: "weekly",
+        changeFrequency: "weekly" as const,
         priority: 0.8,
       }));
 
-    return [...staticRoutes, ...blogRoutes];
+    return [...staticRoutes, ...projectRoutes, ...blogRoutes];
   } catch (error) {
     console.error("Failed to generate sitemap:", error);
-    return staticRoutes;
+    return [...staticRoutes, ...projectRoutes];
   }
 }

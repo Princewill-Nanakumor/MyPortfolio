@@ -106,8 +106,8 @@ const Skills: React.FC = () => {
       <div className="relative z-10 py-16 container-custom">
         <motion.div
           className="mb-16 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 30 }}
+          whileInView={{ y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
@@ -125,8 +125,8 @@ const Skills: React.FC = () => {
               <motion.div
                 key={skill.description}
                 className="relative group"
-                initial={{ opacity: 0, scale: 0.8, rotate: -180 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                initial={{ scale: 0.8, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
                 transition={{
                   duration: 1,
                   delay: index * 0.15,

@@ -15,6 +15,8 @@ interface BlogPostLayoutProps {
   likeCount: number;
   onLike: () => void;
   onShare: () => void;
+  /** Server-rendered article body for crawlers */
+  children?: React.ReactNode;
 }
 
 const BlogPostLayout = ({
@@ -26,7 +28,19 @@ const BlogPostLayout = ({
   likeCount,
   onLike,
   onShare,
+  children,
 }: BlogPostLayoutProps) => {
+  const articleBody = (
+    <BlogContent
+      post={post}
+      designStyle={designStyle}
+      layoutStyle={layoutStyle}
+      currentLayout={currentLayout}
+    >
+      {children}
+    </BlogContent>
+  );
+
   const renderSplitLayout = () => (
     <div className={layoutStyle.proseClass}>
       {/* Main content area (2/3 width) */}
@@ -41,12 +55,7 @@ const BlogPostLayout = ({
           onShare={onShare}
         />
 
-        <BlogContent
-          post={post}
-          designStyle={designStyle}
-          layoutStyle={layoutStyle}
-          currentLayout={currentLayout}
-        />
+        {articleBody}
       </div>
 
       {/* Sidebar area (1/3 width) */}
@@ -103,12 +112,7 @@ const BlogPostLayout = ({
         onShare={onShare}
       />
 
-      <BlogContent
-        post={post}
-        designStyle={designStyle}
-        layoutStyle={layoutStyle}
-        currentLayout={currentLayout}
-      />
+      {articleBody}
 
       {/* Social Links for Magazine Layout */}
       <div className="pt-8 mt-12 border-t border-gray-200">
@@ -131,12 +135,7 @@ const BlogPostLayout = ({
         onShare={onShare}
       />
 
-      <BlogContent
-        post={post}
-        designStyle={designStyle}
-        layoutStyle={layoutStyle}
-        currentLayout={currentLayout}
-      />
+      {articleBody}
 
       {/* Social Links for Default Layout */}
       <div className="pt-8 mt-12 border-t border-gray-200">

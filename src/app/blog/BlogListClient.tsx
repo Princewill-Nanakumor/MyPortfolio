@@ -38,8 +38,8 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
       {categories.length > 1 && (
         <motion.div
           className="flex flex-wrap justify-center gap-2 mb-8 sm:gap-3 sm:mb-12 lg:gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           {categories.map((category) => (
@@ -65,8 +65,8 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
             <motion.article
               key={post._id || index}
               className="group"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
@@ -145,8 +145,8 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
       ) : (
         <motion.div
           className="py-8 text-center sm:py-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ y: 10 }}
+          animate={{ y: 0 }}
         >
           <div className="w-12 h-12 mx-auto mb-3 text-gray-400 sm:w-16 sm:h-16 sm:mb-4">
             <svg

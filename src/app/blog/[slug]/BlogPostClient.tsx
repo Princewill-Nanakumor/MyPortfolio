@@ -11,9 +11,10 @@ import { designStyles, layoutOptions } from "@/components/blog/DesignConfig";
 
 interface BlogPostClientProps {
   initialPost: BlogPostType;
+  children?: React.ReactNode;
 }
 
-const BlogPostClient = ({ initialPost }: BlogPostClientProps) => {
+const BlogPostClient = ({ initialPost, children }: BlogPostClientProps) => {
   const [post] = useState<BlogPostType>(initialPost);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(
@@ -155,7 +156,9 @@ const BlogPostClient = ({ initialPost }: BlogPostClientProps) => {
         likeCount={likeCount}
         onLike={handleLikeClick}
         onShare={handleShareClick}
-      />
+      >
+        {children}
+      </BlogPostLayout>
 
       <ScrollToTop />
 

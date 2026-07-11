@@ -110,7 +110,7 @@ const NotFoundPage = (): React.JSX.Element => {
             ·
           </span>
           <Link
-            href="/#projects"
+            href="/projects"
             className="transition-colors hover:text-secondary-indigo"
           >
             Projects

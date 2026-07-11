@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPostBySlug } from "@/lib/blogData";
+import BlogArticleBody from "@/components/blog/BlogArticleBody";
 import BlogPostClient from "./BlogPostClient";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  breadcrumbJsonLd,
+} from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-
-const SITE_URL = "https://princewillnanakumor.com";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -19,7 +24,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found | Nanakumor Princewill",
+      title: "Post Not Found",
       robots: { index: false, follow: false },
     };
   }
@@ -29,7 +34,7 @@ export async function generateMetadata({
     post.excerpt?.trim() ||
     "Read software engineering articles by Nanakumor Princewill.";
   const canonicalUrl = `${SITE_URL}/blog/${post.slug}`;
-  const imageUrl = post.image?.trim() || `${SITE_URL}/myPhoto.jpg`;
+  const imageUrl = post.image?.trim() || DEFAULT_OG_IMAGE;
 
   return {
     title,
@@ -41,10 +46,10 @@ export async function generateMetadata({
       : { index: false, follow: false },
     openGraph: {
       type: "article",
-      title,
+      title: `${post.title} | ${SITE_NAME}`,
       description,
       url: canonicalUrl,
-      siteName: "Nanakumor Princewill",
+      siteName: SITE_NAME,
       images: [{ url: imageUrl, width: 1200, height: 630, alt: post.title }],
       publishedTime: post.createdAt,
       modifiedTime: post.updatedAt,
@@ -52,7 +57,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: `${post.title} | ${SITE_NAME}`,
       description,
       images: [imageUrl],
     },
@@ -68,7 +73,13 @@ const BlogPostPage = async ({ params }: BlogPostPageProps) => {
   }
 
   const canonicalUrl = `${SITE_URL}/blog/${post.slug}`;
-  const imageUrl = post.image?.trim() || `${SITE_URL}/myPhoto.jpg`;
+  const imageUrl = post.image?.trim() || DEFAULT_OG_IMAGE;
+
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", url: SITE_URL },
+    { name: "Blog", url: `${SITE_URL}/blog` },
+    { name: post.title, url: canonicalUrl },
+  ]);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -80,12 +91,12 @@ const BlogPostPage = async ({ params }: BlogPostPageProps) => {
     dateModified: post.updatedAt || post.createdAt,
     author: {
       "@type": "Person",
-      name: "Nanakumor Princewill",
+      name: SITE_NAME,
       url: SITE_URL,
     },
     publisher: {
       "@type": "Person",
-      name: "Nanakumor Princewill",
+      name: SITE_NAME,
       url: SITE_URL,
     },
     mainEntityOfPage: {
@@ -100,9 +111,15 @@ const BlogPostPage = async ({ params }: BlogPostPageProps) => {
     <>
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
-      <BlogPostClient initialPost={post} />
+      <BlogPostClient initialPost={post}>
+        <BlogArticleBody post={post} omitTitle />
+      </BlogPostClient>
     </>
   );
 };

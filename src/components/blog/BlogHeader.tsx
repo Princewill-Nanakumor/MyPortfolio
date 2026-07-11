@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import {
   HiCalendar,
@@ -42,12 +41,7 @@ const BlogHeader = ({
 
   return (
     <>
-      <motion.header
-        className="mb-6 sm:mb-8 lg:mb-12"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
+      <header className="mb-6 sm:mb-8 lg:mb-12">
         {/* Category Badge */}
         <div className="mb-3 sm:mb-4 lg:mb-6">
           <span
@@ -121,15 +115,10 @@ const BlogHeader = ({
             ))}
           </div>
         )}
-      </motion.header>
+      </header>
 
       {/* Featured Image */}
-      <motion.div
-        className="relative mb-6 overflow-hidden rounded-2xl shadow-large sm:mb-8 lg:mb-12 lg:rounded-3xl"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
+      <div className="relative mb-6 overflow-hidden rounded-2xl shadow-large sm:mb-8 lg:mb-12 lg:rounded-3xl">
         <Image
           src={post.image}
           alt={post.title}
@@ -141,7 +130,7 @@ const BlogHeader = ({
             console.error("Failed to load image:", post.image);
           }}
         />
-      </motion.div>
+      </div>
     </>
   );
 };

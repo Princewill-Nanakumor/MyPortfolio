@@ -142,8 +142,8 @@ const Contact: React.FC = () => {
             {/* Section Header */}
             <motion.div
               className="mb-8 text-center sm:mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
@@ -161,8 +161,8 @@ const Contact: React.FC = () => {
               {/* Contact Information */}
               <motion.div
                 className="order-2 space-y-6 sm:space-y-8 lg:order-1"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ x: -50 }}
+                whileInView={{ x: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
@@ -235,8 +235,8 @@ const Contact: React.FC = () => {
               {/* Contact Form */}
               <motion.div
                 className="order-1 lg:order-2"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ x: 50 }}
+                whileInView={{ x: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >

@@ -30,8 +30,8 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
           {/* Section Header */}
           <motion.div
             className="mb-6 text-center sm:mb-8 lg:mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 30 }}
+            whileInView={{ y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
@@ -56,8 +56,8 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
                 <motion.article
                   key={post._id || index}
                   className="group"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ y: 30 }}
+                  whileInView={{ y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
@@ -174,8 +174,8 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
           {posts.length > 0 && (
             <motion.div
               className="mt-8 text-center sm:mt-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >

@@ -115,8 +115,8 @@ const About: React.FC = () => {
           {/* Section Header */}
           <motion.div
             className="mb-8 text-center sm:mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 30 }}
+            whileInView={{ y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
@@ -133,8 +133,8 @@ const About: React.FC = () => {
             {/* Text Content */}
             <motion.div
               className="order-2 space-y-6 lg:order-1"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ x: -50 }}
+              whileInView={{ x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
             >
@@ -294,8 +294,8 @@ const About: React.FC = () => {
             {/* Image Slider Section */}
             <motion.div
               className="relative order-1 lg:order-2"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ x: 50 }}
+              whileInView={{ x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >

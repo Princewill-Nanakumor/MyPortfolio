@@ -36,27 +36,30 @@ const Hero: React.FC = () => {
             {/* Greeting */}
             <motion.div
               className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 backdrop-blur-sm sm:px-6 sm:py-3 label-medium text-secondary-indigo bg-white/80 shadow-soft"
-              animate={{ y: 0, opacity: 1 }}
-              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 0 }}
+              initial={{ y: -50 }}
               transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
             >
               Welcome to my portfolio
             </motion.div>
 
-            {/* Main Heading */}
+            {/* Main Heading — always visible in HTML for crawlers (no opacity:0) */}
             <motion.div
               className="space-y-2"
-              animate={{ y: 0, opacity: 1 }}
-              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0 }}
+              initial={{ y: 50 }}
               transition={{ type: "spring", stiffness: 100, delay: 0.4 }}
             >
               <h1 className="heading-hero">
                 <span className="sr-only">
-                  Nanakumor Princewill, Princewill Nanakumor, Prince Nanakumor
+                  Nanakumor Princewill, Princewill Nanakumor, Prince Nanakumor —
+                  Next.js Developer
                 </span>
                 {/* Mobile: Split into two lines */}
-                <span className="block md:hidden">Hi, I&lsquo;m</span>
-                <span className="block relative md:hidden">
+                <span className="block md:hidden" aria-hidden="true">
+                  Hi, I&lsquo;m
+                </span>
+                <span className="block relative md:hidden" aria-hidden="true">
                   <span className="gradient-text">
                     {typeEffect}
                     <Cursor cursorColor="#4f46e5" />
@@ -65,8 +68,10 @@ const Hero: React.FC = () => {
                 </span>
 
                 {/* Desktop: Keep on one line */}
-                <span className="hidden md:inline">Hi, I&lsquo;m </span>
-                <span className="hidden relative md:inline">
+                <span className="hidden md:inline" aria-hidden="true">
+                  Hi, I&lsquo;m{" "}
+                </span>
+                <span className="hidden relative md:inline" aria-hidden="true">
                   <span className="gradient-text">
                     {typeEffect}
                     <Cursor cursorColor="#4f46e5" />
@@ -80,8 +85,8 @@ const Hero: React.FC = () => {
             {/* Decorative Line */}
             <motion.div
               className="flex justify-center items-center space-x-2 sm:space-x-4"
-              animate={{ scaleX: 1, opacity: 1 }}
-              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1 }}
+              initial={{ scaleX: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <div className="w-8 h-px bg-gradient-to-r from-transparent sm:w-16 to-secondary-indigo"></div>
@@ -92,8 +97,8 @@ const Hero: React.FC = () => {
             {/* Description */}
             <motion.p
               className="px-4 mx-auto max-w-2xl body-hero"
-              animate={{ y: 0, opacity: 1 }}
-              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0 }}
+              initial={{ y: 30 }}
               transition={{ type: "spring", stiffness: 100, delay: 0.8 }}
             >
               I build modern web applications with Next.js and React.
@@ -104,8 +109,8 @@ const Hero: React.FC = () => {
             {/* CTA Buttons */}
             <motion.div
               className="flex flex-col gap-4 justify-center items-center px-4 sm:gap-6 sm:flex-row"
-              animate={{ y: 0, opacity: 1 }}
-              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0 }}
+              initial={{ y: 30 }}
               transition={{ type: "spring", stiffness: 100, delay: 1.0 }}
             >
               <Link href="#projects" className="w-full btn-primary sm:w-auto">
@@ -118,8 +123,8 @@ const Hero: React.FC = () => {
 
             {/* Social Links */}
             <motion.div
-              animate={{ y: 0, opacity: 1 }}
-              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0 }}
+              initial={{ y: 30 }}
               transition={{ type: "spring", stiffness: 100, delay: 1.2 }}
             >
               <SocialLinks />
@@ -128,8 +133,8 @@ const Hero: React.FC = () => {
             {/* Scroll Indicator */}
             <motion.div
               className="py-4"
-              animate={{ y: 0, opacity: 1 }}
-              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0 }}
+              initial={{ y: 30 }}
               transition={{ type: "spring", stiffness: 100, delay: 1.4 }}
             >
               <Link

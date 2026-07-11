@@ -1,19 +1,25 @@
 import React from "react";
+import type { Metadata } from "next";
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import { ToastProvider } from "@/context/ToastContext";
 import CustomCursor from "@/components/common/CustomCursor";
 import { ReactNode } from "react";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  personJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 
-// Primary Font: Inter - Modern, clean, highly readable
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 });
 
-// Secondary Font: Poppins - Modern geometric font (Google Fonts alternative to Satoshi)
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -21,78 +27,56 @@ const poppins = Poppins({
   display: "swap",
 });
 
-// Mono Font: JetBrains Mono - Clean developer font
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
-    default: "Nanakumor Princewill | Next.js Web Developer",
-    template: "%s | Nanakumor Princewill",
+    default: `${SITE_NAME} | Next.js Web Developer`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Building sleek, responsive, and high-performance web applications with React, Next.js, Tailwind CSS and TypeScript ",
+    "Portfolio of Nanakumor Princewill — Next.js developer building modern web apps, SaaS products, cloud engineering tools, and backend systems with React, TypeScript, and MongoDB.",
   keywords: [
     "Nanakumor Princewill",
     "Nanakumor Prince",
     "Prince Nanakumor",
     "Princewill Nanakumor",
-    "nanakumor princewill",
-    "nanakumor prince",
-    "prince nanakumor",
-    "princewill nanakumor",
-    "Nanakumor Princewill Wosowei",
-    "Nanakumor Princewill",
-    "nanakumor princewill",
-    "Princewill Nanakumor",
-    "princewill nanakumor",
-    "Frontend Developer",
-    "React Developer",
     "Next.js Developer",
+    "React Developer",
     "TypeScript Developer",
-    "Web Developer",
-    "JavaScript Developer",
     "Full Stack Developer",
-    "React.js",
-    "Next.js",
-    "Tailwind css",
-    "TypeScript",
-    "JavaScript",
+    "Cloud Engineering",
     "Web Development",
-    "Frontend Development",
-    "Modern Web Applications",
-    "Responsive Design",
-    "Clean Code",
     "Portfolio",
-    "Developer Portfolio",
   ].join(", "),
-  authors: [{ name: "Nanakumor Princewill" }],
-  creator: "Nanakumor Princewill",
-  publisher: "Nanakumor Princewill",
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://princewillnanakumor.com/"),
+  metadataBase: new URL(`${SITE_URL}/`),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Nanakumor Princewill | Next.js Web Developer",
+    title: `${SITE_NAME} | Next.js Web Developer`,
     description:
-      "Building sleek, responsive, and high-performance web applications with React, Next.js, Tailwind CSS and TypeScript",
-    url: "https://princewillnanakumor.com/",
-    siteName: "Princewill Portfolio",
+      "Portfolio of Nanakumor Princewill — Next.js developer building modern web apps, SaaS products, and cloud engineering tools.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
     images: [
       {
-        url: "https://princewillnanakumor.com/myPhoto.jpg",
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Princewill - Web Developer",
+        alt: `${SITE_NAME} — Next.js Web Developer`,
       },
     ],
     locale: "en_US",
@@ -100,10 +84,10 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nanakumor Princewill | Next.js Developer",
+    title: `${SITE_NAME} | Next.js Developer`,
     description:
-      "Building sleek, responsive, and high-performance web applications with React, Next.js, Tailwind CSS and TypeScript",
-    images: ["/myPhoto.jpg"],
+      "Portfolio of Nanakumor Princewill — Next.js developer building modern web apps, SaaS products, and cloud engineering tools.",
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
@@ -119,8 +103,6 @@ export const metadata = {
   verification: {
     google:
       "google-site-verification=PkMRZNBrIxjh7weOqOBJb9mTtrqlvjKssfVEFfsSws0",
-    // yandex: "your-yandex-verification-code",
-    // yahoo: "your-yahoo-verification-code",
   },
   icons: {
     icon: "/icon",
@@ -138,46 +120,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="!scroll-smooth">
       <head>
-        {/* Additional meta tags for better SEO */}
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
-
-        {/* Structured Data for better search results */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Nanakumor Princewill",
-              alternateName: [
-                "Nanakumor Prince",
-                "Prince Nanakumor",
-                "Princewill Nanakumor",
-              ],
-              jobTitle: "Frontend Developer",
-              description:
-                "Crafting modern web experiences with clean code and innovative design",
-              url: "https://princewillnanakumor.com/",
-              sameAs: [
-                "https://github.com/Princewill-Nanakumor",
-                "https://linkedin.com/in/princewill-nanakumor-0a68b824a/",
-                // "https://twitter.com/your-twitter",
-              ],
-              knowsAbout: [
-                "React",
-                "Next.js",
-                "TypeScript",
-                "JavaScript",
-                "Web Development",
-                "Frontend Development",
-              ],
-              worksFor: {
-                "@type": "Organization",
-                name: "Freelance",
-              },
-            }),
+            __html: JSON.stringify(personJsonLd()),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd()),
           }}
         />
       </head>

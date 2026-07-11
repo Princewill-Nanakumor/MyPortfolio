@@ -1,33 +1,50 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/lib/blogData";
 import BlogListClient from "./BlogListClient";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  breadcrumbJsonLd,
+} from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-
-const SITE_URL = "https://princewillnanakumor.com";
 
 export const metadata: Metadata = {
   title: "Blog Articles",
   description:
-    "Articles by Nanakumor Princewill on web development, Next.js, React, TypeScript, backend engineering, CLI tools and data pipelines.",
+    "Articles by Nanakumor Princewill on web development, Next.js, React, TypeScript, backend engineering, CLI tools, cloud engineering, and data pipelines.",
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {
-    title: "Blog Articles | Nanakumor Princewill",
+    title: `Blog Articles | ${SITE_NAME}`,
     description:
-      "Articles by Nanakumor Princewill on web development, Next.js, React, TypeScript, backend engineering, CLI tools and data pipelines.",
+      "Articles by Nanakumor Princewill on web development, Next.js, React, TypeScript, backend engineering, CLI tools, and cloud engineering.",
     url: `${SITE_URL}/blog`,
-    siteName: "Nanakumor Princewill",
+    siteName: SITE_NAME,
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630 }],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Blog Articles | ${SITE_NAME}`,
+    description:
+      "Articles by Nanakumor Princewill on web development, Next.js, React, TypeScript, and cloud engineering.",
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
 const BlogPage = async () => {
   const posts = await getPublishedPosts();
 
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", url: SITE_URL },
+    { name: "Blog", url: `${SITE_URL}/blog` },
+  ]);
+
   const listJsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Nanakumor Princewill — Blog",
+    name: `${SITE_NAME} — Blog`,
     url: `${SITE_URL}/blog`,
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
@@ -36,7 +53,7 @@ const BlogPage = async () => {
       url: `${SITE_URL}/blog/${post.slug}`,
       datePublished: post.createdAt,
       dateModified: post.updatedAt || post.createdAt,
-      image: post.image || `${SITE_URL}/myPhoto.jpg`,
+      image: post.image || DEFAULT_OG_IMAGE,
     })),
   };
 
@@ -44,11 +61,14 @@ const BlogPage = async () => {
     <div className="min-h-screen pt-16 bg-bg-primary sm:pt-20">
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd) }}
       />
       <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-12">
         <div className="py-8 sm:py-12 lg:py-16">
-          {/* Header */}
           <div className="mb-8 text-center sm:mb-12">
             <h1 className="mb-3 text-2xl font-bold sm:text-3xl lg:text-4xl xl:text-5xl text-text-primary">
               Blog <span className="gradient-text">Articles</span>
