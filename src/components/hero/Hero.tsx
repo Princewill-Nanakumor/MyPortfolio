@@ -33,11 +33,11 @@ const Hero: React.FC = () => {
       <div className="relative z-10 px-6 mx-auto w-full max-w-6xl sm:px-8 lg:px-12">
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] text-center">
           <div className="mx-auto space-y-6 max-w-4xl sm:space-y-8">
-            {/* Greeting */}
+            {/* Greeting — same upward motion as other hero text (not from top) */}
             <motion.div
               className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 backdrop-blur-sm sm:px-6 sm:py-3 label-medium text-secondary-indigo bg-white/80 shadow-soft"
               animate={{ y: 0 }}
-              initial={{ y: -50 }}
+              initial={{ y: 30 }}
               transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
             >
               Welcome to my portfolio

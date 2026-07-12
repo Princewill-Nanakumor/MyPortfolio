@@ -55,7 +55,7 @@ const ProjectsIndexPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-bg-primary sm:pt-20">
+    <div className="min-h-screen pt-24 bg-bg-primary sm:pt-28">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
@@ -108,7 +108,7 @@ const ProjectsIndexPage = () => {
                       {project.name}
                     </h2>
                     <p className="mb-3 text-sm text-text-secondary line-clamp-3">
-                      {project.description}
+                      {project.summary}
                     </p>
                     <p className="text-xs font-medium text-secondary-indigo line-clamp-2">
                       {project.technology}

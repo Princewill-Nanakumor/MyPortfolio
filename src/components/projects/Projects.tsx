@@ -18,7 +18,7 @@ const projectsJsonLd = {
     item: {
       "@type": "CreativeWork",
       name: project.name,
-      description: project.description,
+      description: project.summary,
       url: `${SITE_URL}/projects/${project.slug}`,
       image: project.image.startsWith("http")
         ? project.image
@@ -115,7 +115,7 @@ const ProjectsSection: React.FC = () => {
                     </h3>
                   </div>
                   <p className="body-medium text-text-secondary">
-                    {project.description}
+                    {project.summary}
                   </p>
                   <p className="text-xs font-medium sm:text-sm text-secondary-indigo">
                     {project.technology}

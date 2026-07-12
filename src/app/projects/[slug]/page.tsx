@@ -7,13 +7,10 @@ import { HiArrowLeft } from "react-icons/hi";
 import {
   getProjectBySlug,
   getProjectImageUrl,
+  getProjectTechList,
   projects,
 } from "@/data/projects";
-import {
-  SITE_NAME,
-  SITE_URL,
-  breadcrumbJsonLd,
-} from "@/lib/seo";
+import { SITE_NAME, SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -37,14 +34,14 @@ export async function generateMetadata({
   }
 
   const title = project.name;
-  const description = project.description;
+  const description = project.summary;
   const canonicalUrl = `${SITE_URL}/projects/${project.slug}`;
   const imageUrl = getProjectImageUrl(project);
 
   return {
     title,
     description,
-    keywords: project.technology.split(",").map((t) => t.trim()),
+    keywords: getProjectTechList(project),
     alternates: { canonical: canonicalUrl },
     openGraph: {
       type: "website",
@@ -80,6 +77,7 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
 
   const canonicalUrl = `${SITE_URL}/projects/${project.slug}`;
   const imageUrl = getProjectImageUrl(project);
+  const techList = getProjectTechList(project);
 
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", url: SITE_URL },
@@ -91,7 +89,7 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: project.name,
-    description: project.description,
+    description: project.overview,
     image: imageUrl,
     url: canonicalUrl,
     dateCreated: project.year,
@@ -106,7 +104,7 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-bg-primary sm:pt-20">
+    <div className="relative z-0 min-h-screen pt-24 bg-bg-primary sm:pt-28">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
@@ -116,10 +114,10 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
       />
 
-      <article className="max-w-4xl px-4 mx-auto sm:px-6 lg:px-12 py-8 sm:py-12">
+      <article className="relative z-10 max-w-4xl px-4 py-8 mx-auto sm:px-6 lg:px-12 sm:py-12">
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 mb-8 text-sm transition-colors text-secondary-indigo hover:text-secondary-indigo/80"
+          className="relative z-10 inline-flex items-center gap-2 px-1 py-2 -ml-1 mb-8 text-sm transition-colors text-secondary-indigo hover:text-secondary-indigo/80"
         >
           <HiArrowLeft className="w-4 h-4" />
           All Projects
@@ -131,11 +129,11 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
           </span>
           <h1 className="mb-4 heading-2 text-text-primary">{project.name}</h1>
           <p className="text-base sm:text-lg text-text-secondary">
-            {project.description}
+            {project.summary}
           </p>
         </header>
 
-        <div className="relative mb-8 overflow-hidden rounded-2xl shadow-large aspect-[16/10]">
+        <div className="relative mb-10 overflow-hidden rounded-2xl shadow-large aspect-[16/10]">
           <Image
             src={project.image}
             alt={`${project.name} — project screenshot by ${SITE_NAME}`}
@@ -146,13 +144,49 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
           />
         </div>
 
-        <section className="mb-8">
+        <section className="mb-10">
           <h2 className="mb-3 text-lg font-semibold text-text-primary">
+            Overview
+          </h2>
+          <p className="text-sm leading-relaxed sm:text-base text-text-secondary">
+            {project.overview}
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">
+            What it includes
+          </h2>
+          <ul className="space-y-3">
+            {project.highlights.map((item) => (
+              <li
+                key={item}
+                className="flex gap-3 text-sm sm:text-base text-text-secondary"
+              >
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-indigo"
+                  aria-hidden
+                />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">
             Tech Stack
           </h2>
-          <p className="text-sm sm:text-base text-secondary-indigo">
-            {project.technology}
-          </p>
+          <ul className="flex flex-wrap gap-2">
+            {techList.map((tech) => (
+              <li
+                key={tech}
+                className="px-3 py-1.5 text-xs font-medium rounded-lg sm:text-sm text-secondary-indigo bg-secondary-indigo/10"
+              >
+                {tech}
+              </li>
+            ))}
+          </ul>
         </section>
 
         <div className="flex flex-col gap-3 sm:flex-row">
