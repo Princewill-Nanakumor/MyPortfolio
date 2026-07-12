@@ -33,7 +33,7 @@ export interface LayoutOption {
 export const designStyles: Record<string, DesignStyle> = {
   minimalist: {
     name: "Minimalist & Clean",
-    icon: () => <FaRegLightbulb className="w-6 h-6" />,
+    icon: () => <FaRegLightbulb className="w-full h-full" />,
     colors: {
       bg: "bg-white",
       textPrimary: "text-gray-800",
@@ -49,7 +49,7 @@ export const designStyles: Record<string, DesignStyle> = {
   },
   darkMode: {
     name: "Dark Mode",
-    icon: () => <FaMoon className="w-6 h-6" />,
+    icon: () => <FaMoon className="w-full h-full" />,
     colors: {
       bg: "bg-[#1A1A1A]",
       textPrimary: "text-gray-100",
@@ -65,7 +65,7 @@ export const designStyles: Record<string, DesignStyle> = {
   },
   playful: {
     name: "Playful & Colorful",
-    icon: () => <FaPaintBrush className="w-6 h-6" />,
+    icon: () => <FaPaintBrush className="w-full h-full" />,
     colors: {
       bg: "bg-pink-50",
       textPrimary: "text-gray-800",
@@ -81,7 +81,7 @@ export const designStyles: Record<string, DesignStyle> = {
   },
   editorial: {
     name: "Editorial & Serif",
-    icon: () => <FaNewspaper className="w-6 h-6" />,
+    icon: () => <FaNewspaper className="w-full h-full" />,
     colors: {
       bg: "bg-gray-50",
       textPrimary: "text-gray-900",
@@ -97,7 +97,7 @@ export const designStyles: Record<string, DesignStyle> = {
   },
   bold: {
     name: "Modern & Bold",
-    icon: () => <FaBolt className="w-6 h-6" />,
+    icon: () => <FaBolt className="w-full h-full" />,
     colors: {
       bg: "bg-gray-950",
       textPrimary: "text-gray-50",

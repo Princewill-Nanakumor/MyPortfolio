@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import { designStyles, layoutOptions } from "./DesignConfig";
 
 interface DesignSwitcherProps {
@@ -15,72 +14,57 @@ const DesignSwitcher = ({
   currentLayout,
   setCurrentLayout,
 }: DesignSwitcherProps) => {
-  // Load saved preferences from localStorage on component mount
-  useEffect(() => {
-    const savedDesign = localStorage.getItem("blogDesign");
-    const savedLayout = localStorage.getItem("blogLayout");
-
-    if (savedDesign && designStyles[savedDesign]) {
-      setCurrentDesign(savedDesign);
-    }
-
-    if (savedLayout && layoutOptions[savedLayout]) {
-      setCurrentLayout(savedLayout);
-    }
-  }, [setCurrentDesign, setCurrentLayout]);
-
-  // Save design preference to localStorage
-  const handleDesignChange = (design: string) => {
-    setCurrentDesign(design);
-    localStorage.setItem("blogDesign", design);
-  };
-
-  // Save layout preference to localStorage
-  const handleLayoutChange = (layout: string) => {
-    setCurrentLayout(layout);
-    localStorage.setItem("blogLayout", layout);
-  };
-
   return (
-    <div className="fixed z-50 flex-wrap hidden gap-2 p-3 border border-gray-200 rounded-full shadow-lg lg:flex bottom-4 right-4 bg-white/80 backdrop-blur-md">
-      {/* Design Theme Buttons */}
-      <div className="flex gap-2">
+    <div
+      className="fixed z-[90] flex items-center gap-1 p-1.5 border shadow-lg bottom-4 right-4 rounded-full bg-bg-primary/95 border-[rgb(var(--card-border))] backdrop-blur-md sm:gap-2 sm:p-3 safe-bottom"
+      style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
+    >
+      {/* Theme buttons — compact on mobile */}
+      <div className="flex items-center gap-1 sm:gap-2">
         {Object.entries(designStyles).map(([key, style]) => (
           <button
             key={key}
-            onClick={() => handleDesignChange(key)}
-            className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white sm:w-12 sm:h-12 ${
+            type="button"
+            onClick={() => setCurrentDesign(key)}
+            className={`flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-transparent w-8 h-8 sm:w-12 sm:h-12 ${
               currentDesign === key
-                ? "bg-blue-600 text-white shadow-lg scale-110"
-                : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                ? "bg-blue-600 text-white shadow-md scale-105 sm:scale-110"
+                : "bg-bg-accent text-text-primary active:bg-secondary-indigo/20"
             }`}
             aria-label={`Switch to ${style.name}`}
             title={style.name}
           >
-            <div className="w-4 h-4 sm:w-6 sm:h-6">{style.icon()}</div>
+            <div className="w-3.5 h-3.5 sm:w-6 sm:h-6 [&>svg]:w-full [&>svg]:h-full">
+              {style.icon()}
+            </div>
           </button>
         ))}
       </div>
 
-      {/* Layout Selector */}
-      <div className="relative">
+      {/* Layout width — desktop only (narrow screens don't need it) */}
+      <div className="relative hidden sm:block">
+        <label htmlFor="layout-switcher" className="sr-only">
+          Content width layout
+        </label>
         <select
+          id="layout-switcher"
           value={currentLayout}
-          onChange={(e) => handleLayoutChange(e.target.value)}
-          className="w-32 px-3 py-2 pr-8 text-xs font-medium text-gray-700 bg-gray-100 rounded-full appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-40 sm:text-sm"
+          onChange={(e) => setCurrentLayout(e.target.value)}
+          className="w-36 px-3 py-2 pr-8 text-sm font-medium appearance-none rounded-full cursor-pointer bg-bg-accent text-text-primary border border-[rgb(var(--card-border))] focus:outline-none focus:ring-2 focus:ring-secondary-indigo"
         >
           {Object.entries(layoutOptions).map(([key, layout]) => (
-            <option key={key} value={key}>
+            <option key={key} value={key} className="bg-white text-gray-900">
               {layout.name}
             </option>
           ))}
         </select>
-        <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-text-primary">
           <svg
-            className="w-4 h-4 sm:w-5 sm:h-5"
+            className="w-5 h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden
           >
             <path
               strokeLinecap="round"

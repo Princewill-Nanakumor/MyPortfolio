@@ -9,12 +9,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Modern Color Palette
-        "primary-slate": "#0f172a", // Deep slate for primary text
-        "secondary-indigo": "#4f46e5", // Vibrant indigo for accents
-        "accent-emerald": "#10b981", // Fresh emerald for highlights
+        // Theme tokens (RGB CSS vars — follow DesignThemeProvider)
+        "primary-slate": "rgb(var(--primary-slate) / <alpha-value>)",
+        "secondary-indigo": "rgb(var(--secondary-indigo) / <alpha-value>)",
+        "accent-emerald": "rgb(var(--accent-emerald) / <alpha-value>)",
 
-        // Neutral System
+        // Neutral System (static)
         "gray-50": "#f8fafc",
         "gray-100": "#f1f5f9",
         "gray-200": "#e2e8f0",
@@ -26,17 +26,17 @@ module.exports = {
         "gray-800": "#1e293b",
         "gray-900": "#0f172a",
 
-        // Semantic Colors
-        "text-primary": "#0f172a",
-        "text-secondary": "#475569",
-        "text-muted": "#64748b",
-        "bg-primary": "#ffffff",
-        "bg-secondary": "#f8fafc",
-        "bg-accent": "#f1f5f9",
+        // Semantic Colors (themeable)
+        "text-primary": "rgb(var(--text-primary) / <alpha-value>)",
+        "text-secondary": "rgb(var(--text-secondary) / <alpha-value>)",
+        "text-muted": "rgb(var(--text-muted) / <alpha-value>)",
+        "bg-primary": "rgb(var(--bg-primary) / <alpha-value>)",
+        "bg-secondary": "rgb(var(--bg-secondary) / <alpha-value>)",
+        "bg-accent": "rgb(var(--bg-accent) / <alpha-value>)",
 
         // Gradient Colors
-        "gradient-from": "#4f46e5",
-        "gradient-to": "#10b981",
+        "gradient-from": "rgb(var(--gradient-from) / <alpha-value>)",
+        "gradient-to": "rgb(var(--gradient-to) / <alpha-value>)",
       },
       fontFamily: {
         // Primary: Inter - Modern, clean, highly readable

@@ -55,7 +55,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
         className="group"
       >
         <div
-          className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-primary-slate rounded-2xl hover:shadow-medium hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
+          className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-gray-900 rounded-2xl hover:bg-gray-800 hover:shadow-medium hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
         >
           <FaGithub />
         </div>

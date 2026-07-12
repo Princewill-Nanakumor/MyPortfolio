@@ -17,16 +17,16 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="flex overflow-hidden relative justify-center items-center pt-16 min-h-screen bg-gradient-to-br sm:pt-20 from-bg-primary via-bg-secondary to-bg-accent"
+      className="flex overflow-hidden relative justify-center items-center pt-16 min-h-screen bg-gradient-to-br sm:pt-20 from-bg-primary via-bg-secondary to-bg-secondary"
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-10 -left-20 w-40 h-40 rounded-full blur-3xl sm:top-20 sm:-left-40 sm:w-80 sm:h-80 bg-secondary-indigo/10 animate-float"></div>
+      {/* Soft atmosphere — low opacity so default stays white, not lavender/pink */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 -left-20 w-40 h-40 rounded-full blur-3xl sm:top-20 sm:-left-40 sm:w-80 sm:h-80 bg-secondary-indigo/[0.04] animate-float"></div>
         <div
-          className="absolute bottom-10 -right-20 w-48 h-48 rounded-full blur-3xl sm:bottom-20 sm:-right-40 sm:w-96 sm:h-96 bg-accent-emerald/10 animate-float"
+          className="absolute bottom-10 -right-20 w-48 h-48 rounded-full blur-3xl sm:bottom-20 sm:-right-40 sm:w-96 sm:h-96 bg-accent-emerald/[0.04] animate-float"
           style={{ animationDelay: "2s" }}
         ></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] bg-gradient-to-r from-secondary-indigo/5 to-accent-emerald/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] bg-gradient-to-r from-secondary-indigo/[0.03] to-accent-emerald/[0.03] rounded-full blur-3xl"></div>
       </div>
 
       {/* Main Content Container */}

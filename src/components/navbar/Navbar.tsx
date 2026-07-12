@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
     <div
       className={
         shadow
-          ? "fixed w-full h-20 bg-white/80 backdrop-blur-md text-text-primary shadow-soft z-[100] ease-in-out duration-500 border-b border-gray-200"
+          ? "fixed w-full h-20 bg-bg-primary/80 backdrop-blur-md text-text-primary shadow-soft z-[100] ease-in-out duration-500 border-b border-gray-200"
           : "fixed w-full h-20 z-[100] ease-in-out duration-500"
       }
     >
@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
         <div
           className={
             nav
-              ? "fixed left-0 top-0 w-[75%] sm:w-[60%] md:w-[45%] h-screen bg-white shadow-large z-[300] p-8 ease-in duration-500"
+              ? "fixed left-0 top-0 w-[75%] sm:w-[60%] md:w-[45%] h-screen bg-bg-primary shadow-large z-[300] p-8 ease-in duration-500"
               : "fixed left-[-100%] top-0 p-8 ease-in duration-500"
           }
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -193,7 +193,7 @@ const Navbar: React.FC = () => {
                   rel="noreferrer"
                   className="group"
                 >
-                  <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-primary-slate rounded-xl shadow-soft hover:shadow-medium hover:scale-110 hover:-translate-y-1">
+                  <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-gray-900 rounded-xl shadow-soft hover:bg-gray-800 hover:shadow-medium hover:scale-110 hover:-translate-y-1">
                     <FaGithub className="text-lg" />
                   </div>
                 </Link>

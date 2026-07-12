@@ -177,7 +177,7 @@ const About: React.FC = () => {
 
               {/* Key Highlights - Compact Grid */}
               <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2">
-                <div className="p-4 bg-white border border-gray-100 rounded-xl shadow-soft">
+                <div className="p-4 border rounded-xl shadow-soft surface-card">
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary-indigo/10">
                       <svg
@@ -205,7 +205,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-white border border-gray-100 rounded-xl shadow-soft">
+                <div className="p-4 border rounded-xl shadow-soft surface-card">
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-emerald/10">
                       <svg
@@ -233,7 +233,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-white border border-gray-100 rounded-xl shadow-soft">
+                <div className="p-4 border rounded-xl shadow-soft surface-card">
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary-indigo/10">
                       <svg
@@ -261,7 +261,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-white border border-gray-100 rounded-xl shadow-soft">
+                <div className="p-4 border rounded-xl shadow-soft surface-card">
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-emerald/10">
                       <svg
@@ -378,7 +378,7 @@ const About: React.FC = () => {
               </div>
 
               {/* Experience Badge */}
-              <div className="absolute p-2 bg-white border border-gray-100 sm:p-3 -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 rounded-xl shadow-large">
+              <div className="absolute p-2 border sm:p-3 -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 rounded-xl shadow-large surface-card">
                 <div className="text-center">
                   <div className="text-lg font-bold sm:text-xl text-secondary-indigo">
                     3+
@@ -390,7 +390,7 @@ const About: React.FC = () => {
               </div>
 
               {/* Next.js Badge */}
-              <div className="absolute p-2 bg-white border border-gray-100 sm:p-3 -top-2 -right-2 sm:-top-4 sm:-right-4 rounded-xl shadow-large">
+              <div className="absolute p-2 border sm:p-3 -top-2 -right-2 sm:-top-4 sm:-right-4 rounded-xl shadow-large surface-card">
                 <div className="text-center">
                   <div className="text-xs font-bold text-secondary-indigo">
                     NEXT.JS

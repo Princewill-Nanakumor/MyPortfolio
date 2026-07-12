@@ -4,7 +4,10 @@ import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import { ToastProvider } from "@/context/ToastContext";
+import DesignThemeProvider from "@/context/DesignThemeContext";
 import CustomCursor from "@/components/common/CustomCursor";
+import ScrollToTop from "@/components/common/ScrollToTop";
+import ScrollToTopOnRouteChange from "@/components/common/ScrollToTopOnRouteChange";
 import { ReactNode } from "react";
 import {
   DEFAULT_OG_IMAGE,
@@ -114,14 +117,18 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
+/** Runs before first paint so saved theme/layout apply without a flash. */
+const themeInitScript = `(function(){try{var d=localStorage.getItem("blogDesign");var l=localStorage.getItem("blogLayout");var r=document.documentElement;var D={minimalist:1,darkMode:1,playful:1,editorial:1,bold:1};var L={default:1,wide:1,narrow:1,magazine:1};if(d&&D[d])r.setAttribute("data-design",d);if(l&&L[l])r.setAttribute("data-layout",l);}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: RootLayoutProps): React.JSX.Element {
   return (
-    <html lang="en" className="!scroll-smooth">
+    <html lang="en" className="!scroll-smooth" data-design="minimalist" data-layout="default" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#0f172a" />
-        <meta name="color-scheme" content="dark light" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="color-scheme" content="light" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -139,9 +146,13 @@ export default function RootLayout({
         className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ToastProvider>
-          <CustomCursor />
-          <Navbar />
-          {children}
+          <DesignThemeProvider>
+            <CustomCursor />
+            <ScrollToTopOnRouteChange />
+            <Navbar />
+            {children}
+            <ScrollToTop />
+          </DesignThemeProvider>
         </ToastProvider>
       </body>
     </html>

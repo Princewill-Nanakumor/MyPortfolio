@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+function buildStaticAndProjectRoutes(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
@@ -26,19 +26,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/llms.txt`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
   ];
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
     url: `${SITE_URL}/projects/${project.slug}`,
     lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.8,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
   }));
+
+  return [...staticRoutes, ...projectRoutes];
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Always emit home, blog index, projects index, and every project slug —
+  // even if MongoDB is down (blog posts are optional extras).
+  const base = buildStaticAndProjectRoutes();
 
   try {
     const isConnected = await connectDB();
     if (!isConnected) {
-      return [...staticRoutes, ...projectRoutes];
+      return base;
     }
 
     const posts = await blogPost
@@ -55,9 +69,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
       }));
 
-    return [...staticRoutes, ...projectRoutes, ...blogRoutes];
+    return [...base, ...blogRoutes];
   } catch (error) {
-    console.error("Failed to generate sitemap:", error);
-    return [...staticRoutes, ...projectRoutes];
+    console.error("Failed to add blog posts to sitemap:", error);
+    return base;
   }
 }

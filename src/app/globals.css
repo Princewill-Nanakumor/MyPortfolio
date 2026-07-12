@@ -2,20 +2,131 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables for Modern Design System */
+/* CSS Variables for Modern Design System (RGB channels for Tailwind opacity) */
 :root {
-  --primary-slate: #0f172a;
-  --secondary-indigo: #4f46e5;
-  --accent-emerald: #10b981;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-accent: #f1f5f9;
-  --gradient-from: #4f46e5;
-  --gradient-to: #10b981;
+  --primary-slate: 15 23 42;
+  --secondary-indigo: 79 70 229;
+  --accent-emerald: 16 185 129;
+  --text-primary: 15 23 42;
+  --text-secondary: 71 85 105;
+  --text-muted: 100 116 139;
+  --bg-primary: 255 255 255;
+  --bg-secondary: 248 250 252;
+  --bg-accent: 241 245 249;
+  --gradient-from: 79 70 229;
+  --gradient-to: 16 185 129;
+  --card-bg: 255 255 255;
+  --card-border: 229 231 235;
+  --content-max-width: 56rem;
 }
+
+/* Global design themes (DesignThemeProvider → data-design on <html>) */
+html[data-design="minimalist"] {
+  --primary-slate: 15 23 42;
+  --text-primary: 15 23 42;
+  --text-secondary: 71 85 105;
+  --text-muted: 100 116 139;
+  --bg-primary: 255 255 255;
+  --bg-secondary: 248 250 252;
+  --bg-accent: 241 245 249;
+  --card-bg: 255 255 255;
+  --card-border: 229 231 235;
+}
+
+html[data-design="darkMode"] {
+  --primary-slate: 243 244 246;
+  --text-primary: 243 244 246;
+  --text-secondary: 156 163 175;
+  --text-muted: 107 114 128;
+  --bg-primary: 26 26 26;
+  --bg-secondary: 17 17 17;
+  --bg-accent: 38 38 38;
+  --card-bg: 38 38 38;
+  --card-border: 55 65 81;
+}
+
+html[data-design="playful"] {
+  --primary-slate: 31 41 55;
+  --text-primary: 31 41 55;
+  --text-secondary: 75 85 99;
+  --text-muted: 107 114 128;
+  --bg-primary: 253 242 248;
+  --bg-secondary: 252 231 243;
+  --bg-accent: 251 207 232;
+  --card-bg: 243 232 255;
+  --card-border: 216 180 254;
+}
+
+html[data-design="editorial"] {
+  --primary-slate: 17 24 39;
+  --text-primary: 17 24 39;
+  --text-secondary: 75 85 99;
+  --text-muted: 107 114 128;
+  --bg-primary: 249 250 251;
+  --bg-secondary: 243 244 246;
+  --bg-accent: 229 231 235;
+  --card-bg: 254 226 226;
+  --card-border: 209 213 219;
+}
+
+html[data-design="bold"] {
+  --primary-slate: 249 250 251;
+  --text-primary: 249 250 251;
+  --text-secondary: 209 213 219;
+  --text-muted: 156 163 175;
+  --bg-primary: 3 7 18;
+  --bg-secondary: 17 24 39;
+  --bg-accent: 31 41 55;
+  --card-bg: 22 78 99;
+  --card-border: 31 41 55;
+}
+
+/* Match DesignConfig.containerClass (max-w-2xl / 4xl / 6xl / 7xl) */
+html[data-layout="narrow"] {
+  --content-max-width: 42rem;
+}
+
+html[data-layout="default"] {
+  --content-max-width: 56rem;
+}
+
+html[data-layout="wide"] {
+  --content-max-width: 72rem;
+}
+
+html[data-layout="magazine"] {
+  --content-max-width: 80rem;
+}
+
+@layer components {
+  .surface-card {
+    background-color: rgb(var(--card-bg));
+    border-color: rgb(var(--card-border));
+  }
+
+  .content-shell {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    transition: max-width 300ms ease;
+  }
+
+  .form-control {
+    background-color: rgb(var(--bg-primary));
+    color: rgb(var(--text-primary));
+    border-color: rgb(var(--card-border));
+  }
+
+  .form-control::placeholder {
+    color: rgb(var(--text-muted));
+  }
+
+  .form-control:focus {
+    border-color: rgb(var(--secondary-indigo));
+  }
+}
+
 
 /* Base Styles */
 * {
@@ -32,11 +143,19 @@ html {
 body {
   font-family: var(--font-inter), system-ui, sans-serif;
   line-height: 1.7;
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
+  color: rgb(var(--text-primary));
+  background-color: #ffffff;
+  transition: background-color 300ms ease, color 300ms ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+html[data-design="darkMode"] body,
+html[data-design="bold"] body,
+html[data-design="playful"] body,
+html[data-design="editorial"] body {
+  background-color: rgb(var(--bg-primary));
 }
 
 /* Modern Typography Scale */
@@ -48,8 +167,8 @@ body {
   letter-spacing: -0.035em;
   background: linear-gradient(
     135deg,
-    var(--primary-slate) 0%,
-    var(--secondary-indigo) 100%
+    rgb(var(--primary-slate)) 0%,
+    rgb(var(--secondary-indigo)) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -92,28 +211,28 @@ body {
   font-size: 1.25rem;
   line-height: 1.7;
   font-weight: 400;
-  color: var(--text-secondary);
+  color: rgb(var(--text-secondary));
 }
 
 .body-large {
   font-size: 1.125rem;
   line-height: 1.7;
   font-weight: 400;
-  color: var(--text-secondary);
+  color: rgb(var(--text-secondary));
 }
 
 .body-medium {
   font-size: 1rem;
   line-height: 1.7;
   font-weight: 400;
-  color: var(--text-secondary);
+  color: rgb(var(--text-secondary));
 }
 
 .body-small {
   font-size: 0.875rem;
   line-height: 1.6;
   font-weight: 400;
-  color: var(--text-muted);
+  color: rgb(var(--text-muted));
 }
 
 .label-large {
@@ -198,32 +317,32 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: rgb(var(--bg-secondary));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
+  background: rgb(var(--text-muted));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
+  background: rgb(var(--text-secondary));
 }
 
 /* Focus Styles */
 *:focus-visible {
-  outline: 2px solid var(--secondary-indigo);
+  outline: 2px solid rgb(var(--secondary-indigo));
   outline-offset: 2px;
 }
 
 /* Selection Styles */
 ::selection {
-  background-color: var(--secondary-indigo);
+  background-color: rgb(var(--secondary-indigo));
   color: white;
 }
 
 ::-moz-selection {
-  background-color: var(--secondary-indigo);
+  background-color: rgb(var(--secondary-indigo));
   color: white;
 }
 
@@ -278,7 +397,11 @@ body {
   margin-left: -5px;
   margin-top: -5px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--secondary-indigo), var(--accent-emerald));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--secondary-indigo)),
+    rgb(var(--accent-emerald))
+  );
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 12px rgba(79, 70, 229, 0.4);
   pointer-events: none;
   z-index: 2147483647;

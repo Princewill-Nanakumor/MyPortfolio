@@ -17,17 +17,19 @@ export interface Project {
   link?: string;
   linkLabel?: string;
   year: string;
+  /** Extra phrases so search/AI don't confuse this with unrelated “Helix” brands */
+  searchTerms?: string[];
 }
 
 export const projects: Project[] = [
   {
     slug: "helix-ticketing-app",
-    image: "/heliz_homepage_img.png",
+    image: "/helix_homepage_img.png",
     name: "Helix Ticketing App",
     summary:
-      "Production-inspired customer support platform with tickets, roles, and admin tooling — built with Next.js 16 and PostgreSQL.",
+      "Production-inspired customer support platform with tickets, roles, and admin tooling — built with Next.js 16 and PostgreSQL by Nanakumor Princewill.",
     overview:
-      "Helix is a full-stack helpdesk system modeled after real support workflows. Users open and discuss tickets; admins manage users, priorities, and system activity from a dedicated console. The goal was to practice enterprise patterns: auth, RBAC, audit trails, and soft deletes — not just a CRUD demo.",
+      "Helix Ticketing App is Nanakumor Princewill’s full-stack helpdesk / customer-support system (not related to other products named Helix). Users open and discuss tickets; admins manage users, priorities, and system activity from a dedicated console. The goal was to practice enterprise patterns: auth, RBAC, audit trails, and soft deletes — not just a CRUD demo.",
     highlights: [
       "JWT authentication with role-based access for users and admins",
       "Ticket conversations, priority, and status management",
@@ -41,6 +43,13 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/ticketing_app",
     link: "https://hilex-ticketing-app.netlify.app",
     year: "2026",
+    searchTerms: [
+      "Helix Ticketing App Nanakumor Princewill",
+      "Next.js helpdesk",
+      "Next.js ticketing app",
+      "PostgreSQL Prisma JWT ticketing",
+      "customer support platform Next.js 16",
+    ],
   },
   {
     slug: "counter-strike-2-demo-analyzer",

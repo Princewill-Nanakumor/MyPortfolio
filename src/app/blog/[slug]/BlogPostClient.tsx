@@ -3,11 +3,9 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { HiArrowLeft } from "react-icons/hi";
 import { BlogPost as BlogPostType } from "@/types/Blog";
-import ScrollToTop from "@/components/common/ScrollToTop";
-import DesignSwitcher from "@/components/blog/DesignSwitcher";
 import MessageModal from "@/components/blog/MessageModal";
 import BlogPostLayout from "@/components/blog/BlogPostLayout";
-import { designStyles, layoutOptions } from "@/components/blog/DesignConfig";
+import { useDesignTheme } from "@/context/DesignThemeContext";
 
 interface BlogPostClientProps {
   initialPost: BlogPostType;
@@ -20,24 +18,10 @@ const BlogPostClient = ({ initialPost, children }: BlogPostClientProps) => {
   const [likeCount, setLikeCount] = useState<number>(
     typeof initialPost.likes === "number" ? initialPost.likes : 0
   );
-
-  const [currentDesign, setCurrentDesign] = useState<string>("minimalist");
-  const [currentLayout, setCurrentLayout] = useState<string>("default");
   const [modalMessage, setModalMessage] = useState<string>("");
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  useEffect(() => {
-    const savedDesign = localStorage.getItem("blogDesign");
-    const savedLayout = localStorage.getItem("blogLayout");
-
-    if (savedDesign && designStyles[savedDesign]) {
-      setCurrentDesign(savedDesign);
-    }
-
-    if (savedLayout && layoutOptions[savedLayout]) {
-      setCurrentLayout(savedLayout);
-    }
-  }, []);
+  const { currentLayout, designStyle, layoutStyle } = useDesignTheme();
 
   useEffect(() => {
     const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
@@ -122,12 +106,9 @@ const BlogPostClient = ({ initialPost, children }: BlogPostClientProps) => {
     });
   };
 
-  const designStyle = designStyles[currentDesign];
-  const layoutStyle = layoutOptions[currentLayout];
-
   return (
     <div
-      className={`min-h-screen pt-16 ${designStyle.font} ${designStyle.colors.bg} sm:pt-20 lg:pt-24`}
+      className={`min-h-screen pt-16 transition-colors duration-300 ${designStyle.font} sm:pt-20 lg:pt-24`}
     >
       <MessageModal
         message={modalMessage}
@@ -136,7 +117,7 @@ const BlogPostClient = ({ initialPost, children }: BlogPostClientProps) => {
       />
 
       <div
-        className={`px-4 pt-6 mx-auto sm:px-6 sm:pt-8 lg:px-8 xl:px-12 ${layoutStyle.containerClass}`}
+        className={`px-4 pt-6 mx-auto transition-all duration-300 content-shell sm:px-6 sm:pt-8 lg:px-8 xl:px-12 ${layoutStyle.containerClass}`}
       >
         <Link
           href="/blog"
@@ -159,15 +140,6 @@ const BlogPostClient = ({ initialPost, children }: BlogPostClientProps) => {
       >
         {children}
       </BlogPostLayout>
-
-      <ScrollToTop />
-
-      <DesignSwitcher
-        currentDesign={currentDesign}
-        setCurrentDesign={setCurrentDesign}
-        currentLayout={currentLayout}
-        setCurrentLayout={setCurrentLayout}
-      />
     </div>
   );
 };

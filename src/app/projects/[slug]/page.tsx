@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BsGithub, BsArrowUpRightSquare } from "react-icons/bs";
-import { HiArrowLeft } from "react-icons/hi";
 import {
   getProjectBySlug,
   getProjectImageUrl,
   getProjectTechList,
   projects,
 } from "@/data/projects";
+import ProjectDetailView from "@/components/projects/ProjectDetailView";
 import { SITE_NAME, SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
 
 interface ProjectPageProps {
@@ -33,15 +30,20 @@ export async function generateMetadata({
     };
   }
 
-  const title = project.name;
   const description = project.summary;
   const canonicalUrl = `${SITE_URL}/projects/${project.slug}`;
   const imageUrl = getProjectImageUrl(project);
+  const keywords = [
+    ...getProjectTechList(project),
+    ...(project.searchTerms || []),
+    SITE_NAME,
+    "portfolio project",
+  ];
 
   return {
-    title,
+    title: `${project.name} — Project by ${SITE_NAME}`,
     description,
-    keywords: getProjectTechList(project),
+    keywords,
     alternates: { canonical: canonicalUrl },
     openGraph: {
       type: "website",
@@ -77,7 +79,6 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
 
   const canonicalUrl = `${SITE_URL}/projects/${project.slug}`;
   const imageUrl = getProjectImageUrl(project);
-  const techList = getProjectTechList(project);
 
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", url: SITE_URL },
@@ -87,24 +88,33 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
 
   const projectJsonLd = {
     "@context": "https://schema.org",
-    "@type": "CreativeWork",
+    "@type": "SoftwareApplication",
     name: project.name,
+    alternateName: project.searchTerms || undefined,
     description: project.overview,
     image: imageUrl,
     url: canonicalUrl,
     dateCreated: project.year,
+    applicationCategory: "DeveloperApplication",
     creator: {
       "@type": "Person",
       name: SITE_NAME,
       url: SITE_URL,
     },
-    keywords: project.technology,
+    author: {
+      "@type": "Person",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    keywords: [project.technology, ...(project.searchTerms || [])].join(", "),
     codeRepository: project.github,
-    ...(project.link ? { sameAs: [project.link, project.github] } : {}),
+    ...(project.link
+      ? { sameAs: [project.link, project.github] }
+      : { sameAs: [project.github] }),
   };
 
   return (
-    <div className="relative z-0 min-h-screen pt-24 bg-bg-primary sm:pt-28">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
@@ -113,106 +123,8 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
       />
-
-      <article className="relative z-10 max-w-4xl px-4 py-8 mx-auto sm:px-6 lg:px-12 sm:py-12">
-        <Link
-          href="/projects"
-          className="relative z-10 inline-flex items-center gap-2 px-1 py-2 -ml-1 mb-8 text-sm transition-colors text-secondary-indigo hover:text-secondary-indigo/80"
-        >
-          <HiArrowLeft className="w-4 h-4" />
-          All Projects
-        </Link>
-
-        <header className="mb-8">
-          <span className="inline-block px-3 py-1 mb-4 text-xs font-bold text-white rounded-full bg-secondary-indigo">
-            {project.year}
-          </span>
-          <h1 className="mb-4 heading-2 text-text-primary">{project.name}</h1>
-          <p className="text-base sm:text-lg text-text-secondary">
-            {project.summary}
-          </p>
-        </header>
-
-        <div className="relative mb-10 overflow-hidden rounded-2xl shadow-large aspect-[16/10]">
-          <Image
-            src={project.image}
-            alt={`${project.name} — project screenshot by ${SITE_NAME}`}
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 896px) 100vw, 896px"
-          />
-        </div>
-
-        <section className="mb-10">
-          <h2 className="mb-3 text-lg font-semibold text-text-primary">
-            Overview
-          </h2>
-          <p className="text-sm leading-relaxed sm:text-base text-text-secondary">
-            {project.overview}
-          </p>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">
-            What it includes
-          </h2>
-          <ul className="space-y-3">
-            {project.highlights.map((item) => (
-              <li
-                key={item}
-                className="flex gap-3 text-sm sm:text-base text-text-secondary"
-              >
-                <span
-                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-indigo"
-                  aria-hidden
-                />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">
-            Tech Stack
-          </h2>
-          <ul className="flex flex-wrap gap-2">
-            {techList.map((tech) => (
-              <li
-                key={tech}
-                className="px-3 py-1.5 text-xs font-medium rounded-lg sm:text-sm text-secondary-indigo bg-secondary-indigo/10"
-              >
-                {tech}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 btn-primary"
-          >
-            <BsGithub className="text-lg" />
-            View Code
-          </Link>
-          {project.link && (
-            <Link
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 btn-secondary"
-            >
-              <BsArrowUpRightSquare className="text-lg" />
-              {project.linkLabel || "Live Demo"}
-            </Link>
-          )}
-        </div>
-      </article>
-    </div>
+      <ProjectDetailView project={project} />
+    </>
   );
 };
 

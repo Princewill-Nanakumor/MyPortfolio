@@ -58,8 +58,8 @@ const BlogContent = ({
   };
 
   return (
-    <div className={layoutStyle.contentLayout}>
-      <div className={`prose max-w-none ${designStyle.prose} ${s.textPrimary}`}>
+    <div className={`transition-all duration-300 ${layoutStyle.contentLayout}`}>
+      <div className={`prose max-w-none transition-colors duration-300 ${designStyle.prose} ${s.textPrimary}`}>
         {children ?? <BlogArticleBody post={post} omitTitle />}
       </div>
 

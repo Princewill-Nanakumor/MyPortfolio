@@ -42,7 +42,7 @@ const BlogPostLayout = ({
   );
 
   const renderSplitLayout = () => (
-    <div className={layoutStyle.proseClass}>
+    <div className={`transition-all duration-300 ${layoutStyle.proseClass}`}>
       {/* Main content area (2/3 width) */}
       <div className="lg:col-span-2">
         <BlogHeader
@@ -101,7 +101,7 @@ const BlogPostLayout = ({
   );
 
   const renderMagazineLayout = () => (
-    <div className={layoutStyle.proseClass}>
+    <div className={`transition-all duration-300 ${layoutStyle.proseClass}`}>
       <BlogHeader
         post={post}
         designStyle={designStyle}
@@ -148,7 +148,7 @@ const BlogPostLayout = ({
 
   return (
     <article
-      className={`px-4 py-6 mx-auto sm:px-6 sm:py-8 lg:px-8 lg:py-12 xl:px-12 ${layoutStyle.containerClass}`}
+      className={`px-4 py-6 mx-auto transition-all duration-300 content-shell sm:px-6 sm:py-8 lg:px-8 lg:py-12 xl:px-12 ${layoutStyle.containerClass}`}
     >
       {currentLayout === "split"
         ? renderSplitLayout()

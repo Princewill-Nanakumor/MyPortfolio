@@ -37,7 +37,7 @@ const RelatedPosts: React.FC<RelatedPostsProps> = ({ relatedPosts }) => {
                 viewport={{ once: true }}
               >
                 <Link href={`/blog/${relatedPost.slug}`}>
-                  <div className="overflow-hidden transition-all duration-500 bg-white border border-gray-200 rounded-3xl shadow-soft hover:shadow-large hover:-translate-y-2">
+                  <div className="overflow-hidden transition-all duration-500 border rounded-3xl shadow-soft hover:shadow-large hover:-translate-y-2 surface-card">
                     <div className="relative h-48 overflow-hidden">
                       <Image
                         src={relatedPost.image}

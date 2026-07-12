@@ -5,7 +5,6 @@ import { FaTelegramPlane, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-import ScrollToTop from "../common/ScrollToTop";
 
 interface FormData {
   name: string;
@@ -216,7 +215,7 @@ const Contact: React.FC = () => {
                       href="https://github.com/Princewill-Nanakumor"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center text-white transition-all duration-300 w-9 h-9 sm:w-10 sm:h-10 bg-primary-slate rounded-xl hover:bg-gray-800 hover:scale-105"
+                      className="flex items-center justify-center text-white transition-all duration-300 w-9 h-9 sm:w-10 sm:h-10 bg-gray-900 rounded-xl hover:bg-gray-800 hover:scale-105"
                     >
                       <FaGithub className="text-sm sm:text-base" />
                     </Link>
@@ -240,7 +239,7 @@ const Contact: React.FC = () => {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <div className="p-6 transition-all duration-300 bg-white border border-gray-300 shadow-sm rounded-xl">
+                <div className="p-6 transition-all duration-300 border shadow-sm rounded-xl surface-card">
                   <form
                     onSubmit={handleSubmit}
                     className="space-y-4 sm:space-y-6"
@@ -261,10 +260,10 @@ const Contact: React.FC = () => {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
+                          className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
                             errors.name
                               ? "border-red-500 focus:ring-red-200"
-                              : "border-gray-300 focus:border-secondary-indigo focus:ring-secondary-indigo/20"
+                              : "focus:ring-secondary-indigo/20"
                           }`}
                           placeholder="Your name"
                           disabled={loading}
@@ -289,10 +288,10 @@ const Contact: React.FC = () => {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
+                          className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
                             errors.email
                               ? "border-red-500 focus:ring-red-200"
-                              : "border-gray-300 focus:border-secondary-indigo focus:ring-secondary-indigo/20"
+                              : "focus:ring-secondary-indigo/20"
                           }`}
                           placeholder="your.email@example.com"
                           disabled={loading}
@@ -319,10 +318,10 @@ const Contact: React.FC = () => {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
+                        className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
                           errors.subject
                             ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-300 focus:border-secondary-indigo focus:ring-secondary-indigo/20"
+                            : "focus:ring-secondary-indigo/20"
                         }`}
                         placeholder="What's this about?"
                         disabled={loading}
@@ -348,10 +347,10 @@ const Contact: React.FC = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
-                        className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 resize-none ${
+                        className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 resize-none ${
                           errors.message
                             ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-300 focus:border-secondary-indigo focus:ring-secondary-indigo/20"
+                            : "focus:ring-secondary-indigo/20"
                         }`}
                         placeholder="Tell me about your project..."
                         disabled={loading}
@@ -382,8 +381,6 @@ const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* Scroll to Top Button */}
-      <ScrollToTop />
     </>
   );
 };

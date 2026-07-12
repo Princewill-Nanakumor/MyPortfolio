@@ -114,7 +114,7 @@ const SuccessPage = (): JSX.Element => {
                 href="https://github.com/Princewill-Nanakumor"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 text-white transition-all duration-300 rounded-lg bg-primary-slate hover:bg-gray-800 hover:scale-105"
+                className="flex items-center justify-center w-10 h-10 text-white transition-all duration-300 rounded-lg bg-gray-900 hover:bg-gray-800 hover:scale-105"
               >
                 <svg
                   className="w-5 h-5"

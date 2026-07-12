@@ -49,7 +49,7 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
               className={`px-3 py-2 text-xs rounded-full font-medium transition-all duration-300 sm:px-4 sm:py-2.5 sm:text-sm lg:px-6 lg:py-3 lg:text-base ${
                 selectedCategory === category
                   ? "bg-secondary-indigo text-white shadow-glow"
-                  : "bg-white text-text-secondary border border-gray-200 hover:border-secondary-indigo hover:text-secondary-indigo"
+                  : "bg-bg-primary text-text-secondary border border-[rgb(var(--card-border))] hover:border-secondary-indigo hover:text-secondary-indigo"
               }`}
             >
               {category}
@@ -70,7 +70,7 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <div className="overflow-hidden transition-all duration-500 bg-white border border-gray-200 rounded-2xl shadow-soft hover:shadow-large lg:rounded-3xl">
+              <div className="overflow-hidden transition-all duration-500 border rounded-2xl shadow-soft hover:shadow-large surface-card lg:rounded-3xl">
                 {/* Post Image */}
                 <div className="relative h-40 overflow-hidden sm:h-48 lg:h-52">
                   <Image
@@ -118,13 +118,13 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
                     {post.tags?.slice(0, 2).map((tag, tagIndex) => (
                       <span
                         key={tagIndex}
-                        className="inline-flex items-center px-1.5 py-0.5 text-xs text-gray-600 bg-gray-100 rounded sm:px-2 sm:py-1"
+                        className="inline-flex items-center px-1.5 py-0.5 text-xs rounded text-text-secondary bg-bg-accent sm:px-2 sm:py-1"
                       >
                         {tag}
                       </span>
                     ))}
                     {post.tags && post.tags.length > 2 && (
-                      <span className="inline-flex items-center px-1.5 py-0.5 text-xs text-gray-500 bg-gray-100 rounded sm:px-2 sm:py-1">
+                      <span className="inline-flex items-center px-1.5 py-0.5 text-xs rounded text-text-muted bg-bg-accent sm:px-2 sm:py-1">
                         +{post.tags.length - 2}
                       </span>
                     )}
