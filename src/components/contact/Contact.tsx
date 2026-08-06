@@ -215,6 +215,7 @@ const Contact: React.FC = () => {
                       href="https://github.com/Princewill-Nanakumor"
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="GitHub"
                       className="flex items-center justify-center text-white transition-all duration-300 w-9 h-9 sm:w-10 sm:h-10 bg-gray-900 rounded-xl hover:bg-gray-800 hover:scale-105"
                     >
                       <FaGithub className="text-sm sm:text-base" />
@@ -223,6 +224,7 @@ const Contact: React.FC = () => {
                       href="https://www.linkedin.com/in/princewill-nanakumor-0a68b824a/"
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="LinkedIn"
                       className="flex items-center justify-center text-white transition-all duration-300 w-9 h-9 sm:w-10 sm:h-10 bg-secondary-indigo rounded-xl hover:bg-blue-700 hover:scale-105"
                     >
                       <FaLinkedinIn className="text-sm sm:text-base" />

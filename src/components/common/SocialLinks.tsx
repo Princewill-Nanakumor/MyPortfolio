@@ -39,6 +39,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
         href="https://www.linkedin.com/in/princewill-nanakumor-0a68b824a/"
         target="_blank"
         rel="noreferrer"
+        aria-label="LinkedIn"
         className="group"
       >
         <div
@@ -52,6 +53,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
         href="https://github.com/Princewill-Nanakumor"
         target="_blank"
         rel="noreferrer"
+        aria-label="GitHub"
         className="group"
       >
         <div
@@ -62,7 +64,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
       </Link>
 
       {showSkills && (
-        <Link href="#skills" className="group">
+        <Link href="#skills" aria-label="Skills" className="group">
           <div
             className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-accent-emerald rounded-2xl hover:shadow-glow-emerald hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
           >
@@ -72,7 +74,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
       )}
 
       {showEmail && (
-        <Link href="#contact" className="group">
+        <Link href="#contact" aria-label="Contact" className="group">
           <div
             className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-gradient-to-r from-secondary-indigo to-accent-emerald rounded-2xl hover:shadow-large hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
           >

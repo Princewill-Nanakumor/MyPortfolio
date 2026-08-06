@@ -73,12 +73,15 @@ const Navbar: React.FC = () => {
             </li>
           </ul>
           {/* Hamburger Icon */}
-          <div
+          <button
+            type="button"
             onClick={handleNav}
+            aria-label="Open menu"
+            aria-expanded={nav}
             className="transition-colors duration-300 cursor-pointer md:hidden text-text-primary hover:text-secondary-indigo"
           >
             <AiOutlineMenu size={28} />
-          </div>
+          </button>
         </div>
       </div>
 
@@ -111,65 +114,73 @@ const Navbar: React.FC = () => {
                   <span className="gradient-text">Princewill</span>
                 </h2>
               </Link>
-              <div
+              <button
+                type="button"
                 onClick={handleNav}
+                aria-label="Close menu"
                 className="p-3 transition-colors duration-300 rounded-full cursor-pointer text-text-primary shadow-soft hover:bg-gray-100"
               >
                 <AiOutlineClose size={24} />
-              </div>
+              </button>
             </div>
             <div className="mt-6 border-b border-gray-200"></div>
           </div>
           <div className="flex flex-col py-6">
             <ul className="space-y-2 text-text-primary">
-              <Link href="/">
-                <li
+              <li>
+                <Link
+                  href="/"
                   onClick={() => setNav(false)}
-                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">Home</span>
-                </li>
-              </Link>
-              <Link href="/#about">
-                <li
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#about"
                   onClick={() => setNav(false)}
-                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">About</span>
-                </li>
-              </Link>
-              <Link href="/#skills">
-                <li
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#skills"
                   onClick={() => setNav(false)}
-                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">Skills</span>
-                </li>
-              </Link>
-              <Link href="/#projects">
-                <li
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#projects"
                   onClick={() => setNav(false)}
-                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">Projects</span>
-                </li>
-              </Link>
-              <Link href="/#blog">
-                <li
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#blog"
                   onClick={() => setNav(false)}
-                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">Blog</span>
-                </li>
-              </Link>
-              <Link href="/#contact">
-                <li
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#contact"
                   onClick={() => setNav(false)}
-                  className="px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
                   <span className="label-large">Contact</span>
-                </li>
-              </Link>
+                </Link>
+              </li>
             </ul>
 
             <div className="pt-12 mt-8 border-t border-gray-200">
@@ -181,6 +192,7 @@ const Navbar: React.FC = () => {
                   href="https://www.linkedin.com/in/princewill-nanakumor-0a68b824a/"
                   target="_blank"
                   rel="noreferrer"
+                  aria-label="LinkedIn"
                   className="group"
                 >
                   <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-secondary-indigo rounded-xl shadow-soft hover:shadow-glow hover:scale-110 hover:-translate-y-1">
@@ -191,25 +203,30 @@ const Navbar: React.FC = () => {
                   href="https://github.com/Princewill-Nanakumor"
                   target="_blank"
                   rel="noreferrer"
+                  aria-label="GitHub"
                   className="group"
                 >
                   <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-gray-900 rounded-xl shadow-soft hover:bg-gray-800 hover:shadow-medium hover:scale-110 hover:-translate-y-1">
                     <FaGithub className="text-lg" />
                   </div>
                 </Link>
-                <Link href="#skills" className="group">
-                  <div
-                    onClick={() => setNav(false)}
-                    className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-accent-emerald rounded-xl shadow-soft hover:shadow-glow-emerald hover:scale-110 hover:-translate-y-1"
-                  >
+                <Link
+                  href="#skills"
+                  aria-label="Skills"
+                  onClick={() => setNav(false)}
+                  className="group"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-accent-emerald rounded-xl shadow-soft hover:shadow-glow-emerald hover:scale-110 hover:-translate-y-1">
                     <BsFillPersonLinesFill className="text-lg" />
                   </div>
                 </Link>
-                <Link href="/#contact" className="group">
-                  <div
-                    onClick={() => setNav(false)}
-                    className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-gradient-to-r from-secondary-indigo to-accent-emerald rounded-xl shadow-soft hover:shadow-large hover:scale-110 hover:-translate-y-1"
-                  >
+                <Link
+                  href="/#contact"
+                  aria-label="Contact"
+                  onClick={() => setNav(false)}
+                  className="group"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-gradient-to-r from-secondary-indigo to-accent-emerald rounded-xl shadow-soft hover:shadow-large hover:scale-110 hover:-translate-y-1">
                     <AiOutlineMail className="text-lg" />
                   </div>
                 </Link>

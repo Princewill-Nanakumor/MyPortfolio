@@ -332,7 +332,9 @@ const About: React.FC = () => {
 
                   {/* Navigation Arrows */}
                   <button
+                    type="button"
                     onClick={prevImage}
+                    aria-label="Previous image"
                     className={`absolute z-10 flex items-center justify-center w-10 h-10 transition-all duration-300 transform -translate-y-1/2 rounded-full shadow-lg left-4 top-1/2 bg-white/80 hover:bg-white hover:scale-110 ${
                       isHovered
                         ? "opacity-100 translate-x-0"
@@ -343,7 +345,9 @@ const About: React.FC = () => {
                   </button>
 
                   <button
+                    type="button"
                     onClick={nextImage}
+                    aria-label="Next image"
                     className={`absolute z-10 flex items-center justify-center w-10 h-10 transition-all duration-300 transform -translate-y-1/2 rounded-full shadow-lg right-4 top-1/2 bg-white/80 hover:bg-white hover:scale-110 ${
                       isHovered
                         ? "opacity-100 translate-x-0"
@@ -358,8 +362,13 @@ const About: React.FC = () => {
                 <div className="flex justify-center mt-4 space-x-2">
                   {images.map((_, index) => (
                     <button
+                      type="button"
                       key={index}
                       onClick={() => goToImage(index)}
+                      aria-label={`Go to image ${index + 1}`}
+                      aria-current={
+                        index === currentImageIndex ? "true" : undefined
+                      }
                       className={`w-3 h-3 rounded-full transition-all duration-200 ${
                         index === currentImageIndex
                           ? "bg-secondary-indigo w-8"
