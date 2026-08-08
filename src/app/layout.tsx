@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
@@ -152,6 +153,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <ScrollToTop />
+            <SpeedInsights />
           </DesignThemeProvider>
         </ToastProvider>
       </body>

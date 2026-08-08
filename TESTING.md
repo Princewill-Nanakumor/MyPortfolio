@@ -73,7 +73,7 @@ npx playwright install chromium
 
 Vitest does not need MongoDB or email credentials. Contact E2E stubs `POST /api/contact` so it never sends real mail. SEO checks against `robots.txt` / `sitemap.xml` work with the local Next server Playwright starts.
 
-`postinstall` runs `playwright install chromium` so a fresh `npm install` usually has the browser binary. If you see `Executable doesn't exist … chrome-headless-shell`, run `npx playwright install chromium` once.
+`postinstall` installs Chromium for local/CI use. It **skips on Vercel** (`VERCEL` env) so production deploys don’t try to download browsers. If you see `Executable doesn't exist … chrome-headless-shell` locally, run `npx playwright install chromium` once.
 
 ## What’s covered
 
