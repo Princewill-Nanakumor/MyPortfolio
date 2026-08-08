@@ -76,9 +76,9 @@ const BlogListClient = ({ posts }: BlogListClientProps) => {
                   <Image
                     src={post.image || "/myPhoto.jpg"}
                     alt={post.title}
-                    width={400}
-                    height={192}
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                     unoptimized={true}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t to-transparent from-black/20"></div>

@@ -93,7 +93,10 @@ const ProjectsSection: React.FC = () => {
                         alt={`${project.name} — project by ${SITE_NAME}`}
                         width={500}
                         height={300}
+                        sizes="(max-width: 1024px) 100vw, 500px"
+                        quality={75}
                         className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
+                        style={{ width: "100%", height: "auto" }}
                       />
                       <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-t to-transparent from-black/20 group-hover:opacity-100"></div>
                     </div>

@@ -101,6 +101,7 @@ function renderBlock(block: ContentBlock, index: number): React.ReactNode {
             width={800}
             height={600}
             className="w-full h-auto rounded-xl"
+            style={{ width: "100%", height: "auto" }}
             unoptimized
           />
           {block.text ? (

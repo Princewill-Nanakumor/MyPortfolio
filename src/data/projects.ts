@@ -24,7 +24,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: "helix-ticketing-app",
-    image: "/helix_homepage_img.png",
+    image: "/helix_homepage_img.jpg",
     name: "Helix Ticketing App",
     summary:
       "Production-inspired customer support platform with tickets, roles, and admin tooling — built with Next.js 16 and PostgreSQL by Nanakumor Princewill.",
@@ -73,7 +73,7 @@ export const projects: Project[] = [
   },
   {
     slug: "aws-s3bucket-image-upload-app",
-    image: "/aws_image_upload_app.png",
+    image: "/aws_image_upload_app.jpg",
     name: "AWS S3 Image Upload App",
     summary:
       "Image gallery app with direct S3 uploads via presigned URLs, validation, pagination, and signed downloads.",
@@ -95,7 +95,7 @@ export const projects: Project[] = [
   },
   {
     slug: "kyiv-electricity-survey-app",
-    image: "/Screenshot_2026-02-08_at_8.22.17_PM_optimized_5000.png",
+    image: "/kyiv-electricity-survey.jpg",
     name: "Kyiv Electricity Survey App",
     summary:
       "Multi-step survey collecting Kyiv electricity availability, with responses delivered live via Telegram.",
@@ -117,7 +117,7 @@ export const projects: Project[] = [
   },
   {
     slug: "motherland-crm-solutions",
-    image: "/crm.png",
+    image: "/crm.jpg",
     name: "Motherland CRM Solutions",
     summary:
       "Multi-tenant SaaS CRM for high-volume lead sales teams — import, assign, collaborate, and track performance in real time.",
@@ -139,7 +139,7 @@ export const projects: Project[] = [
   },
   {
     slug: "my-portfolio",
-    image: "/myportfolio.png",
+    image: "/myportfolio.jpg",
     name: "My Portfolio",
     summary:
       "This site — portfolio, SEO blog CMS, project pages, and admin publishing on Next.js + MongoDB.",

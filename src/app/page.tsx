@@ -1,17 +1,19 @@
 // src/app/page.tsx
 import React from "react";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Hero from "@/components/hero/Hero";
-import About from "@/components/about/About";
-import Skills from "@/components/skills/Skills";
-import ProjectsSection from "@/components/projects/Projects";
-import Contact from "@/components/contact/Contact";
-import BlogSection from "@/components/blog/BlogSection";
-import AOSInit from "@/components/common/AOSInit";
 import { getPublishedPosts } from "@/lib/blogData";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+const About = dynamic(() => import("@/components/about/About"));
+const Skills = dynamic(() => import("@/components/skills/Skills"));
+const ProjectsSection = dynamic(() => import("@/components/projects/Projects"));
+const BlogSection = dynamic(() => import("@/components/blog/BlogSection"));
+const Contact = dynamic(() => import("@/components/contact/Contact"));
+
+/** Cache homepage HTML briefly so Mongo isn't on the critical path every request. */
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: {
@@ -51,7 +53,6 @@ export default async function Home(): Promise<React.JSX.Element> {
 
   return (
     <main className="bg-bg-primary">
-      <AOSInit />
       <Hero />
       <About />
       <Skills />

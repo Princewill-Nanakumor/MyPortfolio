@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--no-deprecation' next dev",
-    "build": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--no-deprecation' next build",
-    "start": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--no-deprecation' next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
     "format": "prettier --write .",
@@ -64,6 +64,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "jsdom": "^30.0.1",
     "prettier": "^3.0.0",
+    "sharp": "^0.35.3",
     "typescript": "^5.8.3",
     "vitest": "^3.2.7"
   }

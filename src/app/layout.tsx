@@ -6,7 +6,7 @@ import "./globals.css";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import { ToastProvider } from "@/context/ToastContext";
 import DesignThemeProvider from "@/context/DesignThemeContext";
-import CustomCursor from "@/components/common/CustomCursor";
+import CustomCursorGate from "@/components/common/CustomCursorGate";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import ScrollToTopOnRouteChange from "@/components/common/ScrollToTopOnRouteChange";
 import { ReactNode } from "react";
@@ -26,7 +26,7 @@ const inter = Inter({
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
   display: "swap",
 });
@@ -35,6 +35,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -125,7 +126,14 @@ export default function RootLayout({
   children,
 }: RootLayoutProps): React.JSX.Element {
   return (
-    <html lang="en" className="!scroll-smooth" data-design="minimalist" data-layout="default" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="!scroll-smooth"
+      data-scroll-behavior="smooth"
+      data-design="minimalist"
+      data-layout="default"
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <meta name="theme-color" content="#ffffff" />
@@ -148,7 +156,7 @@ export default function RootLayout({
       >
         <ToastProvider>
           <DesignThemeProvider>
-            <CustomCursor />
+            <CustomCursorGate />
             <ScrollToTopOnRouteChange />
             <Navbar />
             {children}

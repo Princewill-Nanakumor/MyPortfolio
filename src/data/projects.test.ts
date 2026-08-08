@@ -28,7 +28,7 @@ describe("getProjectImageUrl", () => {
   it("prefixes relative paths with SITE_URL", () => {
     const project = getProjectBySlug("helix-ticketing-app")!;
     expect(getProjectImageUrl(project)).toBe(
-      `${SITE_URL}/helix_homepage_img.png`
+      `${SITE_URL}/helix_homepage_img.jpg`
     );
   });
 

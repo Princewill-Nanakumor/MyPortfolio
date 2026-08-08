@@ -57,6 +57,7 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
               priority
               className="object-cover"
               sizes="(max-width: 1280px) 100vw, 1280px"
+              quality={75}
             />
           </div>
 

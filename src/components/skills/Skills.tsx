@@ -148,7 +148,8 @@ const Skills: React.FC = () => {
                         width={48}
                         height={48}
                         alt={skill.description}
-                        className="object-contain"
+                        className="object-contain w-12 h-12"
+                        style={{ width: 48, height: 48 }}
                       />
                     </div>
                   </div>

@@ -316,16 +316,19 @@ const About: React.FC = () => {
                     }}
                   >
                     {images.map((image, index) => (
-                      <div key={index} className="flex-shrink-0 w-full">
-                        <div className="relative">
-                          <Image
-                            width={600}
-                            height={600}
-                            className="object-cover object-center w-full h-auto transition-transform duration-700 hover:scale-105"
-                            alt={image.alt}
-                            src={image.src}
-                          />
-                        </div>
+                      <div
+                        key={index}
+                        className="relative w-full min-w-full flex-shrink-0 basis-full aspect-[4/5]"
+                      >
+                        <Image
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          quality={80}
+                          className="object-cover object-center"
+                          alt={image.alt}
+                          src={image.src}
+                          priority={index === 0}
+                        />
                       </div>
                     ))}
                   </div>

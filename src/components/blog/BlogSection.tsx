@@ -67,9 +67,9 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
                       <Image
                         src={post.image || "/myPhoto.jpg"}
                         alt={post.title}
-                        width={400}
-                        height={192}
-                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                         unoptimized={true}
                         onError={() => {
                           console.error("Failed to load image:", post.image);

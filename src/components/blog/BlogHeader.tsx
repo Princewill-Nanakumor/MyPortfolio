@@ -118,13 +118,13 @@ const BlogHeader = ({
       </header>
 
       {/* Featured Image */}
-      <div className="relative mb-6 overflow-hidden rounded-2xl shadow-large sm:mb-8 lg:mb-12 lg:rounded-3xl">
+      <div className="relative mb-6 overflow-hidden rounded-2xl shadow-large sm:mb-8 lg:mb-12 lg:rounded-3xl aspect-[2/1] sm:aspect-[2/1] lg:aspect-[5/2]">
         <Image
           src={post.image}
           alt={post.title}
-          width={800}
-          height={400}
-          className="object-cover w-full h-48 sm:h-64 lg:h-80 xl:h-96 2xl:h-[28rem]"
+          fill
+          sizes="(max-width: 1280px) 100vw, 800px"
+          className="object-cover"
           priority
           onError={() => {
             console.error("Failed to load image:", post.image);
