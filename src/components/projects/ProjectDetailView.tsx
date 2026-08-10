@@ -30,10 +30,10 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
         <div className={layoutStyle.proseClass}>
           <Link
             href="/projects"
-            className={`relative z-10 inline-flex items-center gap-2 px-1 py-2 -ml-1 mb-8 text-sm transition-colors ${s.accent} hover:opacity-80`}
+            className={`relative z-10 inline-flex items-center gap-2 px-1 py-2 -ml-1 mb-8 text-sm transition-colors ${s.accent} hover:opacity-80 group`}
           >
-            <HiArrowLeft className="w-4 h-4" />
-            All Projects
+            <HiArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
+            Back to All Projects
           </Link>
 
           <header className="mb-8 break-inside-avoid">

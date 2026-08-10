@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { HiArrowLeft } from "react-icons/hi";
 import { useDesignTheme } from "@/context/DesignThemeContext";
 import { getProjectTechList, type Project } from "@/data/projects";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -34,6 +35,14 @@ export default function ProjectsIndexView({ projects }: ProjectsIndexViewProps) 
     >
       <main className="w-full max-w-6xl px-4 mx-auto sm:px-6 lg:px-12">
         <div className="py-8 sm:py-12 lg:py-16">
+          <Link
+            href="/"
+            className="inline-flex items-center mb-6 space-x-2 text-sm transition-colors duration-300 text-secondary-indigo hover:text-secondary-indigo/80 group sm:mb-8 sm:text-base"
+          >
+            <HiArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1 sm:w-5 sm:h-5" />
+            <span className="font-medium">Back to Home</span>
+          </Link>
+
           <header className="mb-10 text-center sm:mb-14">
             <h1 className="mb-3 text-2xl font-bold sm:text-3xl lg:text-4xl xl:text-5xl text-text-primary">
               Featured <span className="text-secondary-indigo">Projects</span>
