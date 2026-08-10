@@ -57,12 +57,12 @@ const Navbar: React.FC = () => {
               </Link>
             </li>
             <li className="font-medium tracking-wide transition-colors duration-300 hover:text-secondary-indigo">
-              <Link href="/#projects" className="label-large">
+              <Link href="/projects" className="label-large">
                 Projects
               </Link>
             </li>
             <li className="font-medium tracking-wide transition-colors duration-300 hover:text-secondary-indigo">
-              <Link href="/#blog" className="label-large">
+              <Link href="/blog" className="label-large">
                 Blog
               </Link>
             </li>
@@ -156,7 +156,7 @@ const Navbar: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/#projects"
+                  href="/projects"
                   onClick={() => setNav(false)}
                   className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >
@@ -165,7 +165,7 @@ const Navbar: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/#blog"
+                  href="/blog"
                   onClick={() => setNav(false)}
                   className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
                 >

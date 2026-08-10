@@ -113,7 +113,7 @@ const Hero: React.FC = () => {
               </Link>
             </div>
 
-            <SocialLinks />
+            <SocialLinks showEmail={false} />
 
             <div className="py-4">
               <Link
