@@ -35,8 +35,8 @@ const Navbar: React.FC = () => {
     >
       <div className="container flex items-center justify-between w-full h-full px-6 mx-auto max-w-7xl">
         <Link href="/" className="text-2xl font-bold text-secondary-indigo">
-          <h2 className="font-bold font-display">
-            <span className="gradient-text">Princewill</span>
+          <h2 className="font-bold font-display text-secondary-indigo">
+            Princewill
           </h2>
         </Link>
         <div>
@@ -110,8 +110,8 @@ const Navbar: React.FC = () => {
                 href="/"
                 className="text-2xl font-bold text-secondary-indigo"
               >
-                <h2 className="font-bold font-display">
-                  <span className="gradient-text">Princewill</span>
+                <h2 className="font-bold font-display text-secondary-indigo">
+                  Princewill
                 </h2>
               </Link>
               <button
@@ -226,7 +226,7 @@ const Navbar: React.FC = () => {
                   onClick={() => setNav(false)}
                   className="group"
                 >
-                  <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-gradient-to-r from-secondary-indigo to-accent-emerald rounded-xl shadow-soft hover:shadow-large hover:scale-110 hover:-translate-y-1">
+                  <div className="flex items-center justify-center w-12 h-12 text-white transition-all duration-300 bg-secondary-indigo rounded-xl shadow-soft hover:shadow-large hover:scale-110 hover:-translate-y-1">
                     <AiOutlineMail className="text-lg" />
                   </div>
                 </Link>

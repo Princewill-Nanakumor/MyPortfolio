@@ -45,9 +45,6 @@ const ProjectsSection: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsJsonLd) }}
       />
-      <div className="absolute inset-0">
-        <div className="absolute w-64 h-64 -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 bg-gradient-to-r blur-3xl sm:w-80 sm:h-80 md:w-96 md:h-96 from-secondary-indigo/5 to-accent-emerald/5"></div>
-      </div>
 
       <div className="relative z-10 w-full max-w-6xl px-6 mx-auto sm:px-8 lg:px-12">
         <div className="py-12 sm:py-16">
@@ -62,9 +59,9 @@ const ProjectsSection: React.FC = () => {
               Featured Projects
             </h2>
             <div className="flex items-center justify-center space-x-2 sm:space-x-4">
-              <div className="w-8 h-px bg-gradient-to-r from-transparent sm:w-16 to-secondary-indigo"></div>
+              <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
               <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
-              <div className="w-8 h-px bg-gradient-to-r to-transparent sm:w-16 from-secondary-indigo"></div>
+              <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
             </div>
           </motion.div>
 
@@ -86,7 +83,6 @@ const ProjectsSection: React.FC = () => {
                     className="relative block group"
                     aria-label={`View details for ${project.name}`}
                   >
-                    <div className="absolute inset-0 transition-all duration-500 bg-gradient-to-br rounded-2xl blur-xl from-secondary-indigo/10 to-accent-emerald/10 group-hover:blur-2xl"></div>
                     <div className="relative overflow-hidden rounded-2xl shadow-large">
                       <Image
                         src={project.image}

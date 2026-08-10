@@ -36,15 +36,15 @@ export default function ProjectsIndexView({ projects }: ProjectsIndexViewProps) 
         <div className="py-8 sm:py-12 lg:py-16">
           <header className="mb-10 text-center sm:mb-14">
             <h1 className="mb-3 text-2xl font-bold sm:text-3xl lg:text-4xl xl:text-5xl text-text-primary">
-              Featured <span className="gradient-text">Projects</span>
+              Featured <span className="text-secondary-indigo">Projects</span>
             </h1>
             <div
               className="flex items-center justify-center mb-3 space-x-2"
               aria-hidden
             >
-              <div className="w-8 h-px bg-gradient-to-r from-transparent to-secondary-indigo" />
+              <div className="w-8 h-px bg-secondary-indigo/40" />
               <div className="w-2 h-2 rounded-full bg-secondary-indigo" />
-              <div className="w-8 h-px bg-gradient-to-r from-secondary-indigo to-transparent" />
+              <div className="w-8 h-px bg-secondary-indigo/40" />
             </div>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-text-secondary">
               Full-stack apps, cloud tooling, and backend systems built by{" "}

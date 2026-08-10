@@ -278,7 +278,7 @@ const ContentBlockEditor = ({
             }));
           })()
         }
-        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+        className="px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
       >
         <option value="paragraph">Paragraph</option>
         <option value="h1" disabled={isH1SelectionDisabled}>
@@ -301,14 +301,14 @@ const ContentBlockEditor = ({
               value={linkText}
               onChange={(e) => setLinkText(e.target.value)}
               placeholder="Link text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
             />
             <input
               type="url"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
               placeholder="URL (https://example.com)"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
             />
             <div className="flex gap-2">
               <button
@@ -339,7 +339,7 @@ const ContentBlockEditor = ({
             type="url"
             value={content.videoUrl || ""}
             onChange={(e) => handleVideoUrlChange(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Paste YouTube, Vimeo, or direct video URL"
           />
           {content.videoUrl && !isValidVideoUrl(content.videoUrl) && (
@@ -416,7 +416,7 @@ const ContentBlockEditor = ({
                 text: e.target.value,
               }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Video caption (optional)"
           />
         </div>
@@ -497,7 +497,7 @@ const ContentBlockEditor = ({
                 text: e.target.value,
               }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Image caption (optional)"
           />
         </div>
@@ -524,7 +524,7 @@ const ContentBlockEditor = ({
                     items: newItems,
                   }));
                 }}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
                 placeholder="List item text"
               />
               <button
@@ -554,7 +554,7 @@ const ContentBlockEditor = ({
               setContent((prev) => ({ ...prev, text: e.target.value }))
             }
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder={
               content.type === "h1" ||
               content.type === "h2" ||

@@ -21,7 +21,7 @@ function TypewriterSlot({ text }: { text: string }) {
         {LONGEST_WORD}
         <span className="inline-block w-[0.55ch]">|</span>
       </span>
-      <span className="col-start-1 row-start-1 whitespace-nowrap gradient-text">
+      <span className="col-start-1 row-start-1 whitespace-nowrap text-secondary-indigo">
         {text}
         <Cursor cursorColor="#4f46e5" />
       </span>
@@ -40,17 +40,8 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="flex overflow-hidden relative justify-center items-center pt-16 min-h-screen bg-gradient-to-br sm:pt-20 from-bg-primary via-bg-secondary to-bg-secondary"
+      className="flex overflow-hidden relative justify-center items-center pt-16 min-h-screen bg-bg-primary sm:pt-20"
     >
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-10 -left-20 w-40 h-40 rounded-full blur-3xl sm:top-20 sm:-left-40 sm:w-80 sm:h-80 bg-secondary-indigo/[0.04] animate-float"></div>
-        <div
-          className="absolute bottom-10 -right-20 w-48 h-48 rounded-full blur-3xl sm:bottom-20 sm:-right-40 sm:w-96 sm:h-96 bg-accent-emerald/[0.04] animate-float"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] bg-gradient-to-r from-secondary-indigo/[0.03] to-accent-emerald/[0.03] rounded-full blur-3xl"></div>
-      </div>
-
       <div className="relative z-10 px-6 mx-auto w-full max-w-6xl sm:px-8 lg:px-12">
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] text-center">
           <div className="mx-auto space-y-6 max-w-4xl sm:space-y-8">
@@ -72,10 +63,7 @@ const Hero: React.FC = () => {
                   className="relative flex justify-center md:hidden"
                   aria-hidden="true"
                 >
-                  <span className="relative">
-                    <TypewriterSlot text={typeEffect} />
-                    <div className="absolute inset-0 bg-gradient-to-r rounded-2xl opacity-20 blur-2xl from-secondary-indigo to-accent-emerald -z-10"></div>
-                  </span>
+                  <TypewriterSlot text={typeEffect} />
                 </span>
 
                 <span className="hidden md:inline" aria-hidden="true">
@@ -86,16 +74,15 @@ const Hero: React.FC = () => {
                   aria-hidden="true"
                 >
                   <TypewriterSlot text={typeEffect} />
-                  <div className="absolute inset-0 bg-gradient-to-r rounded-2xl opacity-20 blur-2xl from-secondary-indigo to-accent-emerald -z-10"></div>
                 </span>
               </h1>
               <h2 className="heading-2 text-text-primary">Next.js Developer</h2>
             </div>
 
             <div className="flex justify-center items-center space-x-2 sm:space-x-4">
-              <div className="w-8 h-px bg-gradient-to-r from-transparent sm:w-16 to-secondary-indigo"></div>
+              <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
               <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
-              <div className="w-8 h-px bg-gradient-to-r to-transparent sm:w-16 from-secondary-indigo"></div>
+              <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
             </div>
 
             <p className="px-4 mx-auto max-w-2xl body-hero">

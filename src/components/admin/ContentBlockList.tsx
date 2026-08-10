@@ -516,7 +516,7 @@ const ContentBlockList = forwardRef<ContentBlockListRef, ContentBlockListProps>(
                 }
               }}
               placeholder="Search blocks by text, heading, list item, code, image or video URL..."
-              className="w-full py-2.5 pr-10 pl-10 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary-indigo/30 focus:border-secondary-indigo"
+              className="w-full py-2.5 pr-10 pl-10 text-sm border border-gray-300 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             />
             {searchQuery && (
               <button

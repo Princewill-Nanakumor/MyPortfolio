@@ -36,12 +36,12 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
             viewport={{ once: true }}
           >
             <h2 className="mb-3 text-2xl font-bold text-text-primary sm:text-3xl sm:mb-4 lg:text-4xl xl:text-5xl">
-              Latest <span className="gradient-text">Blog Posts</span>
+              Latest <span className="text-secondary-indigo">Blog Posts</span>
             </h2>
             <div className="flex items-center justify-center mb-3 space-x-1 sm:mb-4 sm:space-x-2 lg:space-x-4">
-              <div className="w-4 h-px sm:w-8 lg:w-16 bg-gradient-to-r from-transparent to-secondary-indigo"></div>
+              <div className="w-4 h-px sm:w-8 lg:w-16 bg-secondary-indigo/40"></div>
               <div className="w-1.5 h-1.5 rounded-full sm:w-2 sm:h-2 lg:w-3 lg:h-3 bg-secondary-indigo"></div>
-              <div className="w-4 h-px sm:w-8 lg:w-16 bg-gradient-to-r from-secondary-indigo to-transparent"></div>
+              <div className="w-4 h-px sm:w-8 lg:w-16 bg-secondary-indigo/40"></div>
             </div>
             <p className="max-w-2xl mx-auto text-sm text-text-secondary sm:text-base lg:text-lg">
               Insights and thoughts on web development, Next.js, React, and the

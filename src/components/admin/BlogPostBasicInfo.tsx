@@ -149,7 +149,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
             value={formData.title || ""}
             onChange={handleInputChange}
             required
-            className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Enter post title"
           />
         </div>
@@ -163,7 +163,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
             name="slug"
             value={formData.slug || ""}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Auto-generated from title"
           />
         </div>
@@ -267,7 +267,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
               value={formData.category || ""}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             >
               <option value="">Select category</option>
               {BLOG_CATEGORY_OPTIONS.map((category) => (
@@ -287,7 +287,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
               name="readTime"
               value={formData.readTime || ""}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+              className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
               placeholder="5 min read"
             />
           </div>
@@ -305,7 +305,7 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
           onChange={handleInputChange}
           required
           rows={3}
-          className="w-full px-4 py-3 transition-colors border border-gray-200 resize-none rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+          className="w-full px-4 py-3 transition-colors border border-gray-200 resize-none rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
           placeholder="Brief description of the post"
         />
       </div>

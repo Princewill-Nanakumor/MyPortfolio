@@ -131,11 +131,6 @@ const Contact: React.FC = () => {
         id="contact"
         className="min-h-[80vh] w-full flex items-center bg-bg-primary scroll-mt-20 relative overflow-hidden"
       >
-        {/* Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute w-64 h-64 -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-gradient-to-r from-secondary-indigo/5 to-accent-emerald/5 blur-3xl"></div>
-        </div>
-
         <div className="relative z-10 w-full max-w-6xl px-6 mx-auto sm:px-8 lg:px-12">
           <div className="py-12 sm:py-16">
             {/* Section Header */}
@@ -150,9 +145,9 @@ const Contact: React.FC = () => {
                 Let&#39;s Connect
               </h2>
               <div className="flex items-center justify-center space-x-2 sm:space-x-4">
-                <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-transparent to-secondary-indigo"></div>
+                <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
                 <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
-                <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-secondary-indigo to-transparent"></div>
+                <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
               </div>
             </motion.div>
 
@@ -241,7 +236,7 @@ const Contact: React.FC = () => {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <div className="p-6 transition-all duration-300 border shadow-sm rounded-xl surface-card">
+                <div className="p-6 transition-all duration-300 border rounded-xl surface-card">
                   <form
                     onSubmit={handleSubmit}
                     className="space-y-4 sm:space-y-6"
@@ -262,10 +257,10 @@ const Contact: React.FC = () => {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
+                          className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-colors duration-150 focus:outline-none shadow-none ${
                             errors.name
-                              ? "border-red-500 focus:ring-red-200"
-                              : "focus:ring-secondary-indigo/20"
+                              ? "border-red-500"
+                              : "focus:border-secondary-indigo"
                           }`}
                           placeholder="Your name"
                           disabled={loading}
@@ -290,10 +285,10 @@ const Contact: React.FC = () => {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
+                          className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-colors duration-150 focus:outline-none shadow-none ${
                             errors.email
-                              ? "border-red-500 focus:ring-red-200"
-                              : "focus:ring-secondary-indigo/20"
+                              ? "border-red-500"
+                              : "focus:border-secondary-indigo"
                           }`}
                           placeholder="your.email@example.com"
                           disabled={loading}
@@ -320,10 +315,10 @@ const Contact: React.FC = () => {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 ${
+                        className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-colors duration-150 focus:outline-none shadow-none ${
                           errors.subject
-                            ? "border-red-500 focus:ring-red-200"
-                            : "focus:ring-secondary-indigo/20"
+                            ? "border-red-500"
+                            : "focus:border-secondary-indigo"
                         }`}
                         placeholder="What's this about?"
                         disabled={loading}
@@ -349,10 +344,10 @@ const Contact: React.FC = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
-                        className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 resize-none ${
+                        className={`form-control w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-xl transition-colors duration-150 focus:outline-none shadow-none resize-none ${
                           errors.message
-                            ? "border-red-500 focus:ring-red-200"
-                            : "focus:ring-secondary-indigo/20"
+                            ? "border-red-500"
+                            : "focus:border-secondary-indigo"
                         }`}
                         placeholder="Tell me about your project..."
                         disabled={loading}

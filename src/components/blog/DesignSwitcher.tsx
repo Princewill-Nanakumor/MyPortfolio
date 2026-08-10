@@ -55,7 +55,7 @@ const DesignSwitcher = ({
             id="layout-switcher"
             value={currentLayout}
             onChange={(e) => setCurrentLayout(e.target.value)}
-            className="w-36 px-3 py-2 pr-8 text-sm font-medium appearance-none rounded-full cursor-pointer bg-bg-accent text-text-primary border border-[rgb(var(--card-border))] focus:outline-none focus:ring-2 focus:ring-secondary-indigo"
+            className="w-36 px-3 py-2 pr-8 text-sm font-medium appearance-none rounded-full cursor-pointer bg-bg-accent text-text-primary border border-[rgb(var(--card-border))] shadow-none focus:outline-none focus:border-secondary-indigo"
           >
             {Object.entries(layoutOptions).map(([key, layout]) => (
               <option key={key} value={key} className="bg-white text-gray-900">

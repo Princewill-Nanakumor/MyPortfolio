@@ -9,6 +9,7 @@ import DesignThemeProvider from "@/context/DesignThemeContext";
 import CustomCursorGate from "@/components/common/CustomCursorGate";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import ScrollToTopOnRouteChange from "@/components/common/ScrollToTopOnRouteChange";
+import Footer from "@/components/common/Footer";
 import { ReactNode } from "react";
 import {
   DEFAULT_OG_IMAGE,
@@ -160,6 +161,7 @@ export default function RootLayout({
             <ScrollToTopOnRouteChange />
             <Navbar />
             {children}
+            <Footer />
             <ScrollToTop />
             <SpeedInsights />
           </DesignThemeProvider>

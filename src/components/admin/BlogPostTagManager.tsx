@@ -116,7 +116,7 @@ const BlogPostTagManager: React.FC<BlogPostTagManagerProps> = ({
               setNewTag(e.target.value)
             }
             onKeyDown={handleKeyDown}
-            className="flex-1 px-4 py-2 transition-colors border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="flex-1 px-4 py-2 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Add a tag (press Enter)"
           />
           <button

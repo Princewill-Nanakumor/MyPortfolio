@@ -45,7 +45,7 @@ const Skills: React.FC = () => {
   return (
     <section
       id="skills"
-      className="min-h-[80vh] w-full flex items-center bg-gradient-to-br from-bg-primary to-bg-secondary scroll-mt-20 relative overflow-hidden"
+      className="min-h-[80vh] w-full flex items-center bg-bg-primary scroll-mt-20 relative overflow-hidden"
     >
       {/* Particle Background - Only render on client */}
       {isClient && (
@@ -98,11 +98,6 @@ const Skills: React.FC = () => {
         </div>
       )}
 
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 w-96 h-96 bg-gradient-to-r from-secondary-indigo/5 to-accent-emerald/5 blur-3xl animate-pulse"></div>
-      </div>
-
       <div className="relative z-10 py-16 container-custom">
         <motion.div
           className="mb-16 text-center"
@@ -113,9 +108,9 @@ const Skills: React.FC = () => {
         >
           <h2 className="mb-4 heading-2 text-text-primary">My Tech Stack</h2>
           <div className="flex items-center justify-center space-x-4">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-secondary-indigo"></div>
+            <div className="w-16 h-px bg-secondary-indigo/40"></div>
             <div className="w-3 h-3 rounded-full bg-secondary-indigo"></div>
-            <div className="w-16 h-px bg-gradient-to-r from-secondary-indigo to-transparent"></div>
+            <div className="w-16 h-px bg-secondary-indigo/40"></div>
           </div>
         </motion.div>
 
@@ -141,7 +136,7 @@ const Skills: React.FC = () => {
                 }}
               >
                 <div className="relative">
-                  <div className="flex items-center justify-center w-24 h-24 transition-all duration-500 transform rotate-45 bg-gradient-to-br from-secondary-indigo/10 to-accent-emerald/10 rounded-2xl group-hover:shadow-glow group-hover:bg-gradient-to-br group-hover:from-secondary-indigo/20 group-hover:to-accent-emerald/20">
+                  <div className="flex items-center justify-center w-24 h-24 transition-all duration-500 transform rotate-45 bg-secondary-indigo/10 rounded-2xl group-hover:shadow-glow group-hover:bg-secondary-indigo/20">
                     <div className="transform -rotate-45">
                       <Image
                         src={skill.image}
@@ -153,7 +148,7 @@ const Skills: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="absolute inset-0 transition-opacity duration-300 transform rotate-45 opacity-0 bg-gradient-to-br from-secondary-indigo/20 to-accent-emerald/20 rounded-2xl group-hover:opacity-100"></div>
+                  <div className="absolute inset-0 transition-opacity duration-300 transform rotate-45 opacity-0 bg-secondary-indigo/20 rounded-2xl group-hover:opacity-100"></div>
                 </div>
                 <div className="mt-4 text-center">
                   <h3 className="text-sm font-medium text-text-primary sm:text-base">

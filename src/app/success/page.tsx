@@ -6,16 +6,7 @@ import { HiCheckCircle, HiArrowLeft, HiHome } from "react-icons/hi";
 
 const SuccessPage = (): JSX.Element => {
   return (
-    <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-accent">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute w-64 h-64 rounded-full top-20 left-20 bg-secondary-indigo/10 blur-3xl animate-pulse"></div>
-        <div
-          className="absolute rounded-full w-80 h-80 bottom-20 right-20 bg-accent-emerald/10 blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
-      </div>
-
+    <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-bg-primary">
       <div className="relative z-10 w-full max-w-md px-6 mx-auto">
         <motion.div
           className="text-center"

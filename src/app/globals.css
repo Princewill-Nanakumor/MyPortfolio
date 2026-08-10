@@ -62,10 +62,10 @@ html[data-design="editorial"] {
   --text-primary: 17 24 39;
   --text-secondary: 75 85 99;
   --text-muted: 107 114 128;
-  --bg-primary: 249 250 251;
-  --bg-secondary: 243 244 246;
-  --bg-accent: 229 231 235;
-  --card-bg: 254 226 226;
+  --bg-primary: 236 242 239;
+  --bg-secondary: 224 234 230;
+  --bg-accent: 210 224 218;
+  --card-bg: 255 255 255;
   --card-border: 209 213 219;
 }
 
@@ -116,14 +116,20 @@ html[data-layout="magazine"] {
     background-color: rgb(var(--bg-primary));
     color: rgb(var(--text-primary));
     border-color: rgb(var(--card-border));
+    box-shadow: none;
+    outline: none;
+    transition: border-color 150ms ease, background-color 150ms ease;
   }
 
   .form-control::placeholder {
     color: rgb(var(--text-muted));
   }
 
-  .form-control:focus {
+  .form-control:focus,
+  .form-control:focus-visible {
     border-color: rgb(var(--secondary-indigo));
+    box-shadow: none;
+    outline: none;
   }
 }
 
@@ -133,6 +139,26 @@ html[data-layout="magazine"] {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+/* No shadows / focus rings on form fields (Tailwind rings use box-shadow) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]),
+textarea,
+select {
+  box-shadow: none !important;
+  outline: none !important;
+  transition: border-color 150ms ease, background-color 150ms ease,
+    color 150ms ease !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 html {
@@ -165,14 +191,7 @@ html[data-design="editorial"] body {
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.035em;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--primary-slate)) 0%,
-    rgb(var(--secondary-indigo)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: rgb(var(--primary-slate));
 }
 
 .heading-1 {
@@ -329,10 +348,16 @@ html[data-design="editorial"] body {
   background: rgb(var(--text-secondary));
 }
 
-/* Focus Styles */
+/* Focus Styles — skip form fields (they use border-only focus) */
 *:focus-visible {
   outline: 2px solid rgb(var(--secondary-indigo));
   outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
 }
 
 /* Selection Styles */
@@ -397,11 +422,7 @@ html[data-design="editorial"] body {
   margin-left: -5px;
   margin-top: -5px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--secondary-indigo)),
-    rgb(var(--accent-emerald))
-  );
+  background: rgb(var(--secondary-indigo));
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 12px rgba(79, 70, 229, 0.4);
   pointer-events: none;
   z-index: 2147483647;

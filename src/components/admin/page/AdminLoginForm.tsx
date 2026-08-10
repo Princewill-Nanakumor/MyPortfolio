@@ -36,7 +36,7 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({
             id="password"
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
-            className="w-full px-4 py-3 pr-12 transition-colors border border-gray-300 rounded-xl focus:ring-2 focus:ring-secondary-indigo/20 focus:border-secondary-indigo"
+            className="w-full px-4 py-3 pr-12 transition-colors border border-gray-300 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Enter password"
             required
           />

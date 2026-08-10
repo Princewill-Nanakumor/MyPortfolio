@@ -19,12 +19,12 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ error, setError }) => {
         transition={{ duration: 0.6 }}
       >
         <h1 className="mb-4 heading-2 text-text-primary">
-          Blog <span className="gradient-text">Administration</span>
+          Blog <span className="text-secondary-indigo">Administration</span>
         </h1>
         <div className="flex items-center justify-center mb-4 space-x-2 sm:space-x-4">
-          <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-transparent to-secondary-indigo"></div>
+          <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
           <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
-          <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-secondary-indigo to-transparent"></div>
+          <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
         </div>
         <p className="max-w-2xl mx-auto body-large text-text-secondary">
           Manage your blog posts stored in MongoDB database

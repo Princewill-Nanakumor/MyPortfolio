@@ -122,9 +122,9 @@ const About: React.FC = () => {
           >
             <h2 className="mb-4 heading-2 text-text-primary">About Me</h2>
             <div className="flex items-center justify-center space-x-2 sm:space-x-4">
-              <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-transparent to-secondary-indigo"></div>
+              <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
               <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
-              <div className="w-8 h-px sm:w-16 bg-gradient-to-r from-secondary-indigo to-transparent"></div>
+              <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
             </div>
           </motion.div>
 
@@ -141,7 +141,7 @@ const About: React.FC = () => {
               <div>
                 <h3 className="mb-4 heading-3 text-text-primary">
                   Building the Future of Web with{" "}
-                  <span className="gradient-text">Next.js & React</span>
+                  <span className="text-secondary-indigo">Next.js & React</span>
                 </h3>
 
                 <div className="space-y-4 body-medium">
@@ -300,9 +300,6 @@ const About: React.FC = () => {
               viewport={{ once: true }}
             >
               <div className="relative">
-                {/* Background Decoration */}
-                <div className="absolute inset-0 bg-gradient-to-br from-secondary-indigo/10 to-accent-emerald/10 rounded-3xl blur-3xl"></div>
-
                 {/* Image Slider Container */}
                 <div
                   className="relative overflow-hidden rounded-3xl shadow-large"

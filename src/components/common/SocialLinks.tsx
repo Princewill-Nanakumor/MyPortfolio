@@ -76,7 +76,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
       {showEmail && (
         <Link href="#contact" aria-label="Contact" className="group">
           <div
-            className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-gradient-to-r from-secondary-indigo to-accent-emerald rounded-2xl hover:shadow-large hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
+            className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-secondary-indigo rounded-2xl hover:shadow-large hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
           >
             <AiOutlineMail />
           </div>
