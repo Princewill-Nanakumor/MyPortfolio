@@ -9,6 +9,7 @@ import DesignThemeProvider from "@/context/DesignThemeContext";
 import CustomCursorGate from "@/components/common/CustomCursorGate";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import ScrollToTopOnRouteChange from "@/components/common/ScrollToTopOnRouteChange";
+import NavigationLoader from "@/components/common/NavigationLoader";
 import Footer from "@/components/common/Footer";
 import { ReactNode } from "react";
 import {
@@ -159,6 +160,7 @@ export default function RootLayout({
           <DesignThemeProvider>
             <CustomCursorGate />
             <ScrollToTopOnRouteChange />
+            <NavigationLoader />
             <Navbar />
             {children}
             <Footer />

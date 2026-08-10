@@ -91,6 +91,7 @@ module.exports = {
         "slide-in-right": "slideInRight 0.8s ease-out",
         "scale-in": "scaleIn 0.6s ease-out",
         float: "float 3s ease-in-out infinite",
+        "nav-progress": "navProgress 1.1s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -120,6 +121,10 @@ module.exports = {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-8px)" },
+        },
+        navProgress: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(400%)" },
         },
       },
       backdropBlur: {
