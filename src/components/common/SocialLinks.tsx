@@ -31,57 +31,79 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
 
   const iconSizeClass = getIconSize();
 
+  const links = [
+    {
+      href: "https://www.linkedin.com/in/princewill-nanakumor-0a68b824a/",
+      label: "LinkedIn",
+      external: true,
+      icon: <FaLinkedinIn />,
+      className:
+        "bg-secondary-indigo hover:shadow-glow hover:scale-110 hover:-translate-y-1",
+    },
+    {
+      href: "https://github.com/Princewill-Nanakumor",
+      label: "GitHub",
+      external: true,
+      icon: <FaGithub />,
+      className:
+        "bg-gray-900 hover:bg-gray-800 hover:shadow-medium hover:scale-110 hover:-translate-y-1",
+    },
+    ...(showSkills
+      ? [
+          {
+            href: "#skills",
+            label: "Tech Stack",
+            external: false,
+            icon: <BsFillPersonLinesFill />,
+            className:
+              "bg-accent-emerald hover:shadow-glow-emerald hover:scale-110 hover:-translate-y-1",
+          },
+        ]
+      : []),
+    ...(showEmail
+      ? [
+          {
+            href: "#contact",
+            label: "Contact",
+            external: false,
+            icon: <AiOutlineMail />,
+            className:
+              "bg-secondary-indigo hover:shadow-large hover:scale-110 hover:-translate-y-1",
+          },
+        ]
+      : []),
+  ];
+
   return (
     <div
       className={`flex items-center justify-center gap-4 sm:gap-6 ${className}`}
     >
-      <Link
-        href="https://www.linkedin.com/in/princewill-nanakumor-0a68b824a/"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="LinkedIn"
-        className="group"
-      >
-        <div
-          className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-secondary-indigo rounded-2xl hover:shadow-glow hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
+      {links.map((link) => (
+        <Link
+          key={link.label}
+          href={link.href}
+          target={link.external ? "_blank" : undefined}
+          rel={link.external ? "noreferrer" : undefined}
+          aria-label={link.label}
+          className="relative group"
         >
-          <FaLinkedinIn />
-        </div>
-      </Link>
-
-      <Link
-        href="https://github.com/Princewill-Nanakumor"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="GitHub"
-        className="group"
-      >
-        <div
-          className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-gray-900 rounded-2xl hover:bg-gray-800 hover:shadow-medium hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
-        >
-          <FaGithub />
-        </div>
-      </Link>
-
-      {showSkills && (
-        <Link href="#skills" aria-label="Skills" className="group">
           <div
-            className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-accent-emerald rounded-2xl hover:shadow-glow-emerald hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
+            className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft rounded-2xl ${iconSizeClass} ${link.className}`}
           >
-            <BsFillPersonLinesFill />
+            {link.icon}
           </div>
-        </Link>
-      )}
-
-      {showEmail && (
-        <Link href="#contact" aria-label="Contact" className="group">
-          <div
-            className={`flex items-center justify-center text-white transition-all duration-300 ease-out shadow-soft bg-secondary-indigo rounded-2xl hover:shadow-large hover:scale-110 hover:-translate-y-1 ${iconSizeClass}`}
+          <span
+            role="tooltip"
+            className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-soft transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 translate-y-1"
           >
-            <AiOutlineMail />
-          </div>
+            {link.label}
+            <span
+              className="absolute left-1/2 bottom-full -mb-px -translate-x-1/2 border-4 border-transparent border-b-gray-900"
+              aria-hidden
+            />
+          </span>
         </Link>
-      )}
+      ))}
     </div>
   );
 };
