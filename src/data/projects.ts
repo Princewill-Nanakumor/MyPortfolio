@@ -207,7 +207,8 @@ export const projects: Project[] = [
       "Node.js, TypeScript, @laihoe/demoparser2, Counter-Strike 2 Demo Parser",
     github: "https://github.com/Princewill-Nanakumor/-cs2-demo-analyzer",
     year: "2026",
-    blogSlug: "building-a-counter-strike-2-demo-analyzer-with-node-js-and-typescript",
+    blogSlug:
+      "building-a-counter-strike-2-demo-analyzer-with-node-js-and-typescript",
     searchTerms: [
       "CS2 demo analyzer",
       "Counter-Strike 2 demoparser TypeScript",
@@ -293,7 +294,7 @@ export const projects: Project[] = [
   },
   {
     slug: "motherland-crm-solutions",
-    image: "/crm.jpg",
+    image: "/crm.png",
     name: "Motherland CRM Solutions",
     summary:
       "Multi-tenant SaaS CRM for high-volume lead sales teams — import, assign, collaborate, and track performance in real time.",
@@ -332,7 +333,8 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/MotherlandCrmSolutions",
     link: "https://motherlandcrmsolutions.com/",
     year: "2025",
-    blogSlug: "from-spreadsheets-to-a-full-saas-crm-building-motherland-crm-solutions",
+    blogSlug:
+      "from-spreadsheets-to-a-full-saas-crm-building-motherland-crm-solutions",
     searchTerms: [
       "Motherland CRM Solutions",
       "multi-tenant SaaS CRM Next.js",
@@ -378,7 +380,8 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/MyPortfolio",
     link: "https://princewillnanakumor.com/",
     year: "2023",
-    blogSlug: "building-a-modern-portfolio-website-with-next-js-and-blog-system",
+    blogSlug:
+      "building-a-modern-portfolio-website-with-next-js-and-blog-system",
   },
 ];
 
