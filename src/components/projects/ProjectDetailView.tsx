@@ -12,6 +12,40 @@ interface ProjectDetailViewProps {
   project: Project;
 }
 
+function DetailSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="mb-10 break-inside-avoid">
+      <h2 className="mb-3 text-lg font-semibold text-text-primary">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-3">
+      {items.map((item) => (
+        <li
+          key={item}
+          className="flex gap-3 text-sm sm:text-base text-text-secondary"
+        >
+          <span
+            className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-indigo"
+            aria-hidden
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /**
  * Project detail UI — themes/layouts come from global DesignThemeProvider.
  */
@@ -61,39 +95,37 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
             />
           </div>
 
-          <section className="mb-10 break-inside-avoid">
-            <h2 className="mb-3 text-lg font-semibold text-text-primary">
-              Overview
-            </h2>
+          <DetailSection title="Built for">
+            <p className="text-sm leading-relaxed sm:text-base text-text-secondary">
+              {project.builtFor}
+            </p>
+          </DetailSection>
+
+          <DetailSection title="Problem">
+            <p className="text-sm leading-relaxed sm:text-base text-text-secondary">
+              {project.problem}
+            </p>
+          </DetailSection>
+
+          <DetailSection title="Overview">
             <p className="text-sm leading-relaxed sm:text-base text-text-secondary">
               {project.overview}
             </p>
-          </section>
+          </DetailSection>
 
-          <section className="mb-10 break-inside-avoid">
-            <h2 className="mb-4 text-lg font-semibold text-text-primary">
-              What it includes
-            </h2>
-            <ul className="space-y-3">
-              {project.highlights.map((item) => (
-                <li
-                  key={item}
-                  className="flex gap-3 text-sm sm:text-base text-text-secondary"
-                >
-                  <span
-                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-indigo"
-                    aria-hidden
-                  />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <DetailSection title="Capabilities">
+            <BulletList items={project.capabilities} />
+          </DetailSection>
 
-          <section className="mb-10 break-inside-avoid">
-            <h2 className="mb-4 text-lg font-semibold text-text-primary">
-              Tech Stack
-            </h2>
+          <DetailSection title="Architecture notes">
+            <BulletList items={project.architecture} />
+          </DetailSection>
+
+          <DetailSection title="Outcomes">
+            <BulletList items={project.outcomes} />
+          </DetailSection>
+
+          <DetailSection title="Tech stack">
             <ul className="flex flex-wrap gap-2">
               {techList.map((tech) => (
                 <li
@@ -104,7 +136,7 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
                 </li>
               ))}
             </ul>
-          </section>
+          </DetailSection>
 
           <div className="flex flex-col gap-3 break-inside-avoid sm:flex-row">
             <Link

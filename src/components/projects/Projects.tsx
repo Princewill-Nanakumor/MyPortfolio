@@ -12,30 +12,43 @@ const projectsJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: `Featured Projects by ${SITE_NAME}`,
-  itemListElement: projects.map((project, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    item: {
-      "@type": "CreativeWork",
-      name: project.name,
-      description: project.summary,
-      url: `${SITE_URL}/projects/${project.slug}`,
-      image: project.image.startsWith("http")
-        ? project.image
-        : `${SITE_URL}${project.image}`,
-      codeRepository: project.github,
-      dateCreated: project.year,
-      ...(project.link ? { sameAs: [project.link] } : {}),
-      creator: {
-        "@type": "Person",
-        name: SITE_NAME,
-        url: SITE_URL,
-      },
-    },
-  })),
+  itemListElement: [] as Array<{
+    "@type": "ListItem";
+    position: number;
+    item: Record<string, unknown>;
+  }>,
 };
 
 const ProjectsSection: React.FC = () => {
+  // Homepage respects manual order from src/data/projects.ts.
+  const featuredProjects = projects.slice(0, 4);
+
+  // Keep JSON-LD aligned with what’s actually rendered.
+  const featuredProjectsJsonLd = {
+    ...projectsJsonLd,
+    itemListElement: featuredProjects.map((project, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: project.name,
+        description: project.summary,
+        url: `${SITE_URL}/projects/${project.slug}`,
+        image: project.image.startsWith("http")
+          ? project.image
+          : `${SITE_URL}${project.image}`,
+        codeRepository: project.github,
+        dateCreated: project.year,
+        ...(project.link ? { sameAs: [project.link] } : {}),
+        creator: {
+          "@type": "Person",
+          name: SITE_NAME,
+          url: SITE_URL,
+        },
+      },
+    })),
+  };
+
   return (
     <section
       id="projects"
@@ -43,7 +56,9 @@ const ProjectsSection: React.FC = () => {
     >
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(featuredProjectsJsonLd),
+        }}
       />
 
       <div className="relative z-10 w-full max-w-6xl px-6 mx-auto sm:px-8 lg:px-12">
@@ -66,7 +81,7 @@ const ProjectsSection: React.FC = () => {
           </motion.div>
 
           <div className="max-w-4xl mx-auto space-y-8 sm:space-y-12">
-            {projects.map((project, index) => (
+            {featuredProjects.map((project, index) => (
               <motion.div
                 key={project.slug}
                 className={`flex flex-col ${
