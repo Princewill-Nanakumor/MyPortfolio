@@ -15,6 +15,7 @@ const AdminPage = () => {
     filterStatus,
     setFilterStatus,
     isAuthenticated,
+    isCheckingAuth,
     isLocked,
     password,
     setPassword,
@@ -38,7 +39,15 @@ const AdminPage = () => {
     handleTogglePublish,
   } = useAdminPageController();
 
-  // Show authentication modal if not authenticated
+  // Wait for session check so the login form does not flash for logged-in users.
+  if (isCheckingAuth) {
+    return (
+      <AdminPageShell>
+        <AdminLoadingState message="Checking session..." />
+      </AdminPageShell>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <AdminPageShell>
@@ -59,7 +68,7 @@ const AdminPage = () => {
   if (loading) {
     return (
       <AdminPageShell>
-        <AdminLoadingState />
+        <AdminLoadingState message="Loading posts..." />
       </AdminPageShell>
     );
   }

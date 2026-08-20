@@ -98,7 +98,8 @@ export async function GET(
     const limit = limitParam ? Math.max(1, parseInt(limitParam, 10)) : undefined;
     const skip = skipParam ? Math.max(0, parseInt(skipParam, 10)) : undefined;
 
-    let postsQuery = blogPost.find(query).sort({ updatedAt: -1, createdAt: -1 });
+    // Match public blog: newest published/created posts first (not last-edited).
+    let postsQuery = blogPost.find(query).sort({ createdAt: -1, updatedAt: -1 });
 
     if (typeof skip === "number" && !Number.isNaN(skip)) {
       postsQuery = postsQuery.skip(skip);

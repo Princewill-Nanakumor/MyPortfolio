@@ -69,7 +69,9 @@ export async function getPublishedPosts(): Promise<BlogPost[]> {
 
   const docs = (await blogPost
     .find({ published: true })
-    .sort({ updatedAt: -1, createdAt: -1 })
+    // "Latest" should match the visible card date (createdAt / publish date),
+    // not only the last-edited time (updatedAt).
+    .sort({ createdAt: -1, updatedAt: -1 })
     .lean()) as LeanPostLike[];
 
   return docs.map(serializePost);

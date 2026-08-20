@@ -28,6 +28,17 @@ const upsertPost = (prevPosts: BlogPost[], nextPost: BlogPost): BlogPost[] => {
   return [nextPost, ...prevPosts];
 };
 
+const getPostTimestamp = (post: BlogPost): number => {
+  const raw = post.createdAt || post.date || post.updatedAt || 0;
+  const time = new Date(raw).getTime();
+  return Number.isNaN(time) ? 0 : time;
+};
+
+/** Newest posts first — matches public blog and card dates. */
+const sortPostsByNewest = (list: BlogPost[]): BlogPost[] => {
+  return [...list].sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a));
+};
+
 export const useAdminPageController = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
@@ -37,6 +48,7 @@ export const useAdminPageController = () => {
     null
   );
   const [loading, setLoading] = useState<boolean>(true);
+  const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<AdminFilterStatus>("all");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -70,6 +82,7 @@ export const useAdminPageController = () => {
   }, []);
 
   const checkAuthStatus = useCallback(async () => {
+    setIsCheckingAuth(true);
     try {
       const response = await fetch("/api/admin/verify", {
         method: "GET",
@@ -78,6 +91,8 @@ export const useAdminPageController = () => {
       setIsAuthenticated(response.ok);
     } catch {
       setIsAuthenticated(false);
+    } finally {
+      setIsCheckingAuth(false);
     }
   }, []);
 
@@ -112,7 +127,7 @@ export const useAdminPageController = () => {
       setLoading(true);
       setError(null);
       const fetchedPosts = await blogService.getAllPosts();
-      setPosts(fetchedPosts);
+      setPosts(sortPostsByNewest(fetchedPosts));
 
       if (fetchedPosts.length === 0) {
         showInfo("No posts found", "Create your first blog post to get started!");
@@ -136,13 +151,17 @@ export const useAdminPageController = () => {
   const filterPosts = useCallback(() => {
     switch (filterStatus) {
       case "published":
-        setFilteredPosts(posts.filter((post) => post.published === true));
+        setFilteredPosts(
+          sortPostsByNewest(posts.filter((post) => post.published === true))
+        );
         break;
       case "draft":
-        setFilteredPosts(posts.filter((post) => post.published === false));
+        setFilteredPosts(
+          sortPostsByNewest(posts.filter((post) => post.published === false))
+        );
         break;
       default:
-        setFilteredPosts(posts);
+        setFilteredPosts(sortPostsByNewest(posts));
     }
   }, [filterStatus, posts]);
 
@@ -193,7 +212,7 @@ export const useAdminPageController = () => {
     [editingPost?._id, isFormOpen, liveDraftPreview, posts]
   );
 
-  const displayedPosts = mergeLiveDraft(filteredPosts);
+  const displayedPosts = sortPostsByNewest(mergeLiveDraft(filteredPosts));
 
   const handleAddPost = useCallback(
     async (newPost: Partial<BlogPost>): Promise<void> => {
@@ -485,6 +504,7 @@ export const useAdminPageController = () => {
     filterStatus,
     setFilterStatus,
     isAuthenticated,
+    isCheckingAuth,
     isLocked,
     password,
     setPassword,
