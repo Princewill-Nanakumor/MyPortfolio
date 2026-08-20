@@ -39,11 +39,17 @@ module.exports = {
         "gradient-to": "rgb(var(--gradient-to) / <alpha-value>)",
       },
       fontFamily: {
-        // Primary: Inter - Modern, clean, highly readable
+        // Minimalist theme
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        // Secondary: Poppins - Modern geometric font (Google Fonts)
+        // Bold theme + site chrome (navbar, buttons)
         display: ["var(--font-poppins)", "system-ui", "sans-serif"],
-        // Mono: JetBrains Mono - Developer-focused, clean code font
+        // Dark Mode theme
+        space: ["var(--font-space)", "system-ui", "sans-serif"],
+        // Playful theme
+        nunito: ["var(--font-nunito)", "system-ui", "sans-serif"],
+        // Editorial theme
+        lora: ["var(--font-lora)", "Georgia", "serif"],
+        // Code blocks
         mono: ["var(--font-jetbrains)", "Consolas", "monospace"],
       },
       fontSize: {

@@ -35,9 +35,9 @@ const Navbar: React.FC = () => {
     >
       <div className="container flex items-center justify-between w-full h-full px-6 mx-auto max-w-7xl">
         <Link href="/" className="text-2xl font-bold text-secondary-indigo">
-          <h2 className="font-bold font-display text-secondary-indigo">
+          <span className="text-2xl font-bold nav-logo text-secondary-indigo">
             Princewill
-          </h2>
+          </span>
         </Link>
         <div>
           <ul className="items-center hidden space-x-8 md:flex">
@@ -110,9 +110,9 @@ const Navbar: React.FC = () => {
                 href="/"
                 className="text-2xl font-bold text-secondary-indigo"
               >
-                <h2 className="font-bold font-display text-secondary-indigo">
+                <span className="text-2xl font-bold nav-logo text-secondary-indigo">
                   Princewill
-                </h2>
+                </span>
               </Link>
               <button
                 type="button"

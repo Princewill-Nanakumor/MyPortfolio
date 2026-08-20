@@ -3,7 +3,14 @@ import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
-import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
+import {
+  Inter,
+  JetBrains_Mono,
+  Lora,
+  Nunito,
+  Poppins,
+  Space_Grotesk,
+} from "next/font/google";
 import { ToastProvider } from "@/context/ToastContext";
 import DesignThemeProvider from "@/context/DesignThemeContext";
 import CustomCursorGate from "@/components/common/CustomCursorGate";
@@ -30,6 +37,24 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  display: "swap",
+});
+
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
   display: "swap",
 });
 
@@ -130,7 +155,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="!scroll-smooth"
+      className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${nunito.variable} ${lora.variable} ${jetbrainsMono.variable} !scroll-smooth`}
       data-scroll-behavior="smooth"
       data-design="minimalist"
       data-layout="default"
@@ -153,9 +178,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased`}
-      >
+      <body className="antialiased">
         <ToastProvider>
           <DesignThemeProvider>
             <CustomCursorGate />

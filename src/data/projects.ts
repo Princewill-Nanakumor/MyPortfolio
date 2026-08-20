@@ -24,6 +24,10 @@ export interface Project {
   github: string;
   link?: string;
   linkLabel?: string;
+  /** Optional related blog post slug (used for the "Blog" button) */
+  blogSlug?: string;
+  /** Optional label override for the blog button */
+  blogLabel?: string;
   year: string;
   /** Extra phrases so search/AI don't confuse this with unrelated “Helix” brands */
   searchTerms?: string[];
@@ -70,6 +74,7 @@ export const projects: Project[] = [
     link: "https://motorlane-showroom.netlify.app",
     linkLabel: "Live Demo",
     year: "2026",
+    blogSlug: "motorlane-virtual-car-showroom-nextjs-dummyjson",
     searchTerms: [
       "Motorlane Virtual Car Showroom",
       "car showroom Next.js",
@@ -115,6 +120,7 @@ export const projects: Project[] = [
     link: "https://vin-decover.vercel.app",
     linkLabel: "Live Demo",
     year: "2026",
+    blogSlug: "vin-decoder-nextjs-zod-nhtsa-vpic",
     searchTerms: [
       "VIN Decoder",
       "NHTSA VPIC API",
@@ -201,6 +207,7 @@ export const projects: Project[] = [
       "Node.js, TypeScript, @laihoe/demoparser2, Counter-Strike 2 Demo Parser",
     github: "https://github.com/Princewill-Nanakumor/-cs2-demo-analyzer",
     year: "2026",
+    blogSlug: "building-a-counter-strike-2-demo-analyzer-with-node-js-and-typescript",
     searchTerms: [
       "CS2 demo analyzer",
       "Counter-Strike 2 demoparser TypeScript",
@@ -243,6 +250,8 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/aws_s3bucket_image_upload",
     link: "https://s3imageupload.netlify.app",
     year: "2026",
+    blogSlug:
+      "building-a-production-ready-aws-s3-image-upload-system-with-next-js-16-and-typescript",
   },
   {
     slug: "kyiv-electricity-survey-app",
@@ -279,6 +288,8 @@ export const projects: Project[] = [
       "https://github.com/Princewill-Nanakumor/MultipleStepForm_TelegramBot",
     link: "https://electricysurverybot.netlify.app/",
     year: "2026",
+    blogSlug:
+      "kyiv-electricity-availability-survey-multi-step-form-with-telegram-integration",
   },
   {
     slug: "motherland-crm-solutions",
@@ -321,6 +332,7 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/MotherlandCrmSolutions",
     link: "https://motherlandcrmsolutions.com/",
     year: "2025",
+    blogSlug: "from-spreadsheets-to-a-full-saas-crm-building-motherland-crm-solutions",
     searchTerms: [
       "Motherland CRM Solutions",
       "multi-tenant SaaS CRM Next.js",
@@ -366,6 +378,7 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/MyPortfolio",
     link: "https://princewillnanakumor.com/",
     year: "2023",
+    blogSlug: "building-a-modern-portfolio-website-with-next-js-and-blog-system",
   },
 ];
 

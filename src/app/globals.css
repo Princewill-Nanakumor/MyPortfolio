@@ -18,6 +18,7 @@
   --card-bg: 255 255 255;
   --card-border: 229 231 235;
   --content-max-width: 56rem;
+  --font-theme: var(--font-inter), system-ui, sans-serif;
 }
 
 /* Global design themes (DesignThemeProvider → data-design on <html>) */
@@ -31,6 +32,7 @@ html[data-design="minimalist"] {
   --bg-accent: 241 245 249;
   --card-bg: 255 255 255;
   --card-border: 229 231 235;
+  --font-theme: var(--font-inter), system-ui, sans-serif;
 }
 
 html[data-design="darkMode"] {
@@ -43,6 +45,7 @@ html[data-design="darkMode"] {
   --bg-accent: 38 38 38;
   --card-bg: 38 38 38;
   --card-border: 55 65 81;
+  --font-theme: var(--font-space), system-ui, sans-serif;
 }
 
 html[data-design="playful"] {
@@ -55,6 +58,7 @@ html[data-design="playful"] {
   --bg-accent: 251 207 232;
   --card-bg: 243 232 255;
   --card-border: 216 180 254;
+  --font-theme: var(--font-nunito), system-ui, sans-serif;
 }
 
 html[data-design="editorial"] {
@@ -67,6 +71,7 @@ html[data-design="editorial"] {
   --bg-accent: 210 224 218;
   --card-bg: 255 255 255;
   --card-border: 209 213 219;
+  --font-theme: var(--font-lora), Georgia, serif;
 }
 
 html[data-design="bold"] {
@@ -79,6 +84,7 @@ html[data-design="bold"] {
   --bg-accent: 31 41 55;
   --card-bg: 22 78 99;
   --card-border: 31 41 55;
+  --font-theme: var(--font-poppins), system-ui, sans-serif;
 }
 
 /* Match DesignConfig.containerClass (max-w-2xl / 4xl / 6xl / 7xl) */
@@ -164,14 +170,16 @@ select:focus-visible {
 html {
   scroll-behavior: smooth;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: var(--font-theme);
 }
 
 body {
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: inherit;
   line-height: 1.7;
   color: rgb(var(--text-primary));
   background-color: #ffffff;
-  transition: background-color 300ms ease, color 300ms ease;
+  transition: background-color 300ms ease, color 300ms ease,
+    font-family 200ms ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -184,9 +192,9 @@ html[data-design="editorial"] body {
   background-color: rgb(var(--bg-primary));
 }
 
-/* Modern Typography Scale */
+/* Modern Typography Scale — inherit theme font from <html> */
 .heading-hero {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: inherit;
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 700;
   line-height: 1.1;
@@ -195,7 +203,7 @@ html[data-design="editorial"] body {
 }
 
 .heading-1 {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: inherit;
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 1.2;
@@ -203,7 +211,7 @@ html[data-design="editorial"] body {
 }
 
 .heading-2 {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: inherit;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
   line-height: 1.3;
@@ -211,7 +219,7 @@ html[data-design="editorial"] body {
 }
 
 .heading-3 {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: inherit;
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 600;
   line-height: 1.4;
@@ -219,7 +227,7 @@ html[data-design="editorial"] body {
 }
 
 .heading-4 {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: inherit;
   font-size: clamp(1.25rem, 2.5vw, 1.875rem);
   font-weight: 600;
   line-height: 1.4;
@@ -255,7 +263,7 @@ html[data-design="editorial"] body {
 }
 
 .label-large {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: var(--font-theme);
   font-size: 0.875rem;
   line-height: 1.5;
   font-weight: 600;
@@ -264,12 +272,16 @@ html[data-design="editorial"] body {
 }
 
 .label-medium {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: var(--font-theme);
   font-size: 0.75rem;
   line-height: 1.5;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.nav-logo {
+  font-family: var(--font-theme);
 }
 
 .code-text {

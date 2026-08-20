@@ -45,7 +45,7 @@ const Hero: React.FC = () => {
       <div className="relative z-10 px-6 mx-auto w-full max-w-6xl sm:px-8 lg:px-12">
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] text-center">
           <div className="mx-auto space-y-6 max-w-4xl sm:space-y-8">
-            <div className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 backdrop-blur-sm sm:px-6 sm:py-3 label-medium text-secondary-indigo bg-white/80 shadow-soft">
+            <div className="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-wide uppercase rounded-full border border-gray-200 backdrop-blur-sm sm:px-6 sm:py-3 sm:text-sm text-secondary-indigo bg-white/80 shadow-soft">
               Welcome to my portfolio
             </div>
 

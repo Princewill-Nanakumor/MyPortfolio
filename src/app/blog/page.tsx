@@ -60,7 +60,7 @@ const BlogPage = async () => {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-bg-primary sm:pt-20">
+    <div className="pt-16 min-h-screen bg-bg-primary sm:pt-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
@@ -69,26 +69,26 @@ const BlogPage = async () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd) }}
       />
-      <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-12">
+      <div className="px-4 mx-auto max-w-6xl sm:px-6 lg:px-12">
         <div className="py-8 sm:py-12 lg:py-16">
           <Link
-            href="/"
+            href="/projects"
             className="inline-flex items-center mb-6 space-x-2 text-sm transition-colors duration-300 text-secondary-indigo hover:text-secondary-indigo/80 group sm:mb-8 sm:text-base"
           >
             <HiArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1 sm:w-5 sm:h-5" />
-            <span className="font-medium">Back to Home</span>
+            <span className="font-medium">Back to Projects</span>
           </Link>
 
           <div className="mb-8 text-center sm:mb-12">
             <h1 className="mb-3 text-2xl font-bold sm:text-3xl lg:text-4xl xl:text-5xl text-text-primary">
               Blog <span className="text-secondary-indigo">Articles</span>
             </h1>
-            <div className="flex items-center justify-center mb-3 space-x-1 sm:mb-4 sm:space-x-2 lg:space-x-4">
+            <div className="flex justify-center items-center mb-3 space-x-1 sm:mb-4 sm:space-x-2 lg:space-x-4">
               <div className="w-4 h-px sm:w-8 lg:w-16 bg-secondary-indigo/40"></div>
               <div className="w-1.5 h-1.5 rounded-full sm:w-2 sm:h-2 lg:w-3 lg:h-3 bg-secondary-indigo"></div>
               <div className="w-4 h-px sm:w-8 lg:w-16 bg-secondary-indigo/40"></div>
             </div>
-            <p className="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-text-secondary">
+            <p className="mx-auto max-w-2xl text-sm sm:text-base lg:text-lg text-text-secondary">
               Explore insights and thoughts on modern web development
             </p>
           </div>

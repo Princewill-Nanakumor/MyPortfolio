@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BsGithub, BsArrowUpRightSquare } from "react-icons/bs";
-import { HiArrowLeft } from "react-icons/hi";
+import { BsGithub } from "react-icons/bs";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useDesignTheme } from "@/context/DesignThemeContext";
 import { getProjectTechList, type Project } from "@/data/projects";
 import { SITE_NAME } from "@/lib/seo";
@@ -148,15 +148,14 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
               <BsGithub className="text-lg" />
               View Code
             </Link>
-            {project.link && (
+
+            {project.blogSlug && (
               <Link
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/blog/${project.blogSlug}`}
                 className="inline-flex items-center justify-center gap-2 btn-secondary"
               >
-                <BsArrowUpRightSquare className="text-lg" />
-                {project.linkLabel || "Live Demo"}
+                <HiArrowRight className="text-lg" />
+                {project.blogLabel || "Read Blog"}
               </Link>
             )}
           </div>

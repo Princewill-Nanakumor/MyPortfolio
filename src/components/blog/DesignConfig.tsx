@@ -58,7 +58,7 @@ export const designStyles: Record<string, DesignStyle> = {
       accentBg: "bg-violet-900/40",
       border: "border-gray-700",
     },
-    font: "font-sans",
+    font: "font-space",
     prose:
       "prose-invert prose-p:text-lg prose-p:leading-relaxed prose-h2:text-2xl prose-h2:font-bold prose-code:bg-gray-800/80 prose-ul:list-none prose-li:before:content-[''] prose-li:before:w-2 prose-li:before:h-2 prose-li:before:bg-violet-400 prose-li:before:rounded-full prose-li:before:mr-2 prose-li:before:inline-block",
     layout: "space-y-12",
@@ -74,7 +74,7 @@ export const designStyles: Record<string, DesignStyle> = {
       accentBg: "bg-purple-200/50",
       border: "border-purple-300",
     },
-    font: "font-inter",
+    font: "font-nunito",
     prose:
       "prose-p:text-lg prose-p:leading-relaxed prose-h2:text-3xl prose-h2:font-extrabold prose-code:bg-purple-100 prose-ul:space-y-3 prose-li:before:content-[''] prose-li:before:text-purple-600 prose-li:before:mr-2 prose-li:before:inline-block",
     layout: "space-y-10",
@@ -90,9 +90,9 @@ export const designStyles: Record<string, DesignStyle> = {
       accentBg: "bg-blue-50",
       border: "border-gray-300",
     },
-    font: "font-serif",
+    font: "font-lora",
     prose:
-      "prose-lg prose-p:leading-relaxed prose-h2:text-3xl prose-h2:font-serif prose-h2:font-normal prose-code:bg-gray-200 prose-ul:list-disc prose-li:pl-1",
+      "prose-lg prose-p:leading-relaxed prose-h2:text-3xl prose-h2:font-lora prose-h2:font-normal prose-code:bg-gray-200 prose-ul:list-disc prose-li:pl-1",
     layout: "space-y-16",
   },
   bold: {
@@ -106,7 +106,7 @@ export const designStyles: Record<string, DesignStyle> = {
       accentBg: "bg-cyan-900/30",
       border: "border-gray-800",
     },
-    font: "font-inter",
+    font: "font-display",
     prose:
       "prose-invert prose-p:text-lg prose-p:leading-relaxed prose-h2:text-4xl prose-h2:font-extrabold prose-h2:tracking-tight prose-code:bg-gray-800 prose-ul:list-none",
     layout: "space-y-14",
