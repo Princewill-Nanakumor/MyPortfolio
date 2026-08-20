@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BsGithub } from "react-icons/bs";
+import { BsArrowUpRightSquare, BsGithub } from "react-icons/bs";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useDesignTheme } from "@/context/DesignThemeContext";
 import { getProjectTechList, type Project } from "@/data/projects";
@@ -143,7 +143,7 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 btn-primary"
+              className="inline-flex gap-2 justify-center items-center btn-primary"
             >
               <BsGithub className="text-lg" />
               View Code
@@ -152,10 +152,23 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
             {project.blogSlug && (
               <Link
                 href={`/blog/${project.blogSlug}`}
-                className="inline-flex items-center justify-center gap-2 btn-secondary"
+                className="inline-flex gap-2 justify-center items-center btn-secondary"
               >
                 <HiArrowRight className="text-lg" />
                 {project.blogLabel || "Read Blog"}
+              </Link>
+            )}
+
+            {project.link && (
+              <Link
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex gap-2 justify-center items-center btn-secondary"
+                aria-label={`${project.name} live demo`}
+              >
+                <BsArrowUpRightSquare className="text-lg" />
+                {project.linkLabel || "Live Demo"}
               </Link>
             )}
           </div>

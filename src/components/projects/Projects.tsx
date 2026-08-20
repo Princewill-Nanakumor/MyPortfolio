@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BsGithub, BsArrowUpRightSquare } from "react-icons/bs";
+import { BsGithub } from "react-icons/bs";
 import { motion } from "framer-motion";
 import { projects } from "@/data/projects";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -152,18 +152,6 @@ const ProjectsSection: React.FC = () => {
                       <BsGithub className="text-lg" />
                       <span>View Code</span>
                     </Link>
-                    {project.link && (
-                      <Link
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center space-x-2 btn-secondary"
-                        aria-label={`${project.name} live demo`}
-                      >
-                        <BsArrowUpRightSquare className="text-lg" />
-                        <span>{project.linkLabel || "Live Demo"}</span>
-                      </Link>
-                    )}
                   </div>
                 </div>
               </motion.div>
