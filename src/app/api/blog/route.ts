@@ -2,6 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectDB from "@/db/mongodb";
 import blogPost from "@/models/blogPost";
+import { normalizeContentBlocks } from "@/utils/normalizeContentBlocks";
 
 interface ApiSuccess<T> {
   success: true;
@@ -55,7 +56,7 @@ const buildDraftDefaults = (
   return {
     title,
     excerpt: body.excerpt?.trim() || "Draft excerpt",
-    content: Array.isArray(body.content) ? body.content : [],
+    content: normalizeContentBlocks(body.content),
     image: body.image?.trim() || "",
     category: body.category?.trim() || "Draft",
     slug,
@@ -175,7 +176,7 @@ export async function POST(
         title: body.title,
         slug: body.slug,
         excerpt: body.excerpt,
-        content: body.content,
+        content: normalizeContentBlocks(body.content),
         image: body.image,
         readTime: body.readTime || "",
         category: body.category,
@@ -258,6 +259,7 @@ export async function POST(
     body.published = body.published !== undefined ? body.published : false;
     body.createdAt = new Date();
     body.updatedAt = new Date();
+    body.content = normalizeContentBlocks(body.content);
 
     const newPost = new blogPost(body);
     const savedPost = await newPost.save();

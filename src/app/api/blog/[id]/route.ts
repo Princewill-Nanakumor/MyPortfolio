@@ -7,6 +7,7 @@ import {
   escapeRegex,
   isMongoObjectId,
 } from "@/utils/blogQueries";
+import { normalizeContentBlocks } from "@/utils/normalizeContentBlocks";
 
 interface ApiSuccess<T> {
   success: true;
@@ -57,7 +58,9 @@ const buildDraftDefaults = (
   return {
     title,
     excerpt: body.excerpt?.trim() || "Draft excerpt",
-    content: Array.isArray(body.content) ? body.content : [],
+    content: normalizeContentBlocks(
+      Array.isArray(body.content) ? body.content : []
+    ),
     image: body.image?.trim() || "",
     category: body.category?.trim() || "Draft",
     slug: body.slug?.trim() || `${baseSlug || "untitled-draft"}-${timestamp}`,
@@ -133,6 +136,9 @@ export async function GET(
   }
 }
 
+const sanitizeContentBlocks = (content: unknown): unknown[] =>
+  normalizeContentBlocks(content);
+
 // PUT - Update blog post
 export async function PUT(
   request: NextRequest,
@@ -140,11 +146,21 @@ export async function PUT(
 ): Promise<NextResponse<ApiResponse<any>>> {
   try {
     const { id } = await context.params;
-    const body = (await request.json()) as Partial<BlogPostBody>;
+    const rawBody = (await request.json()) as Partial<BlogPostBody> & {
+      _id?: string;
+      id?: string | number;
+      __v?: number;
+    };
+
+    // Never allow client payloads to overwrite immutable Mongo fields.
+    const {
+      _id: _ignoredId,
+      id: _ignoredAltId,
+      __v: _ignoredVersion,
+      ...body
+    } = rawBody;
 
     const isPublishing = body.published === true;
-
-    body.updatedAt = new Date();
 
     const isConnected = await connectDB();
     if (!isConnected) {
@@ -178,7 +194,7 @@ export async function PUT(
         body.excerpt?.trim() || existingPost.excerpt || defaults.excerpt;
       body.content =
         Array.isArray(body.content) && body.content.length > 0
-          ? body.content
+          ? sanitizeContentBlocks(body.content)
           : existingPost.content || defaults.content;
       body.image = body.image?.trim() || existingPost.image || defaults.image;
       body.category =
@@ -204,16 +220,16 @@ export async function PUT(
 
       body.title = title;
       body.excerpt = excerpt;
-      body.content = content;
+      body.content = sanitizeContentBlocks(content);
       body.slug = body.slug?.trim() || existingPost.slug;
     }
 
     if (body.slug) {
-      const existingPost = await blogPost.findOne({
+      const slugConflict = await blogPost.findOne({
         slug: body.slug,
         _id: { $ne: id },
       });
-      if (existingPost) {
+      if (slugConflict) {
         return NextResponse.json<ApiError>(
           {
             success: false,
@@ -225,10 +241,20 @@ export async function PUT(
       }
     }
 
-    const updatedPost = await blogPost.findByIdAndUpdate(id, body, {
-      new: true,
-      runValidators: isPublishing,
-    });
+    const updatePayload: Record<string, unknown> = {
+      ...body,
+      updatedAt: new Date(),
+    };
+
+    // Prefer $set so we never accidentally replace the whole document shape.
+    const updatedPost = await blogPost.findByIdAndUpdate(
+      id,
+      { $set: updatePayload },
+      {
+        new: true,
+        runValidators: isPublishing,
+      }
+    );
 
     if (!updatedPost) {
       return NextResponse.json<ApiError>(
@@ -249,13 +275,20 @@ export async function PUT(
   } catch (error: unknown) {
     console.error("Error updating blog post:", error);
 
+    const message = error instanceof Error ? error.message : "Unknown error";
+    const isValidation =
+      typeof error === "object" &&
+      error !== null &&
+      "name" in error &&
+      (error as { name?: string }).name === "ValidationError";
+
     return NextResponse.json<ApiError>(
       {
         success: false,
-        error: "Failed to update blog post",
-        message: error instanceof Error ? error.message : "Unknown error",
+        error: isValidation ? "Validation failed" : "Failed to update blog post",
+        message,
       },
-      { status: 500 }
+      { status: isValidation ? 400 : 500 }
     );
   }
 }

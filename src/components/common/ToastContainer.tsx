@@ -13,12 +13,13 @@ const ToastContainer: React.FC<ToastContainerProps> = ({
   onRemoveToast,
 }) => {
   return (
-    <div className="fixed z-50 space-y-3 top-4 right-4 sm:top-6 sm:right-6">
+    <div className="fixed z-[10050] space-y-3 pointer-events-none top-4 right-4 sm:top-6 sm:right-6">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast, index) => (
           <motion.div
             key={toast.id}
             layout
+            className="pointer-events-auto"
             initial={{ opacity: 0, y: -20, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.8 }}

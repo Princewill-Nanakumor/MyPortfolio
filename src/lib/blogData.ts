@@ -6,6 +6,7 @@ import {
   escapeRegex,
   isMongoObjectId,
 } from "@/utils/blogQueries";
+import { normalizeContentBlocks } from "@/utils/normalizeContentBlocks";
 
 type LeanBlockLike = {
   type: ContentBlock["type"];
@@ -32,13 +33,8 @@ type LeanPostLike = {
 };
 
 function serializeBlock(block: LeanBlockLike): ContentBlock {
-  return {
-    type: block.type,
-    text: block.text || "",
-    items: block.items || [],
-    ...(block.imageUrl ? { imageUrl: block.imageUrl } : {}),
-    ...(block.videoUrl ? { videoUrl: block.videoUrl } : {}),
-  };
+  const [normalized] = normalizeContentBlocks([block]);
+  return normalized;
 }
 
 function serializePost(doc: LeanPostLike): BlogPost {

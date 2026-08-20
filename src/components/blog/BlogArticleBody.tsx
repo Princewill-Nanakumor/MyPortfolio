@@ -33,7 +33,10 @@ function linkifyText(text: string): React.ReactNode {
 }
 
 function renderBlock(block: ContentBlock, index: number): React.ReactNode {
-  switch (block.type) {
+  const type =
+    (block.type as string) === "heading" ? "h2" : block.type;
+
+  switch (type) {
     case "h1":
       return (
         <h1

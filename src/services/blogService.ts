@@ -166,16 +166,22 @@ class BlogService {
   }
 
   async updatePost(id: string, postData: Partial<BlogPost>): Promise<BlogPost> {
-    console.log("�� blogService.updatePost called with:", { id, postData });
+    console.log("🔄 blogService.updatePost called with:", { id, postData });
 
     try {
+      const {
+        _id: _ignoredId,
+        id: _ignoredAltId,
+        ...safePostData
+      } = postData as Partial<BlogPost> & { id?: string | number };
+
       const response = await fetch(`${this.baseUrl}/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...postData,
+          ...safePostData,
           published: postData.published ?? true,
           updatedAt: new Date().toISOString(),
         }),
