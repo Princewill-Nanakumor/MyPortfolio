@@ -10,6 +10,9 @@ import { SITE_NAME } from "@/lib/seo";
 
 interface ProjectDetailViewProps {
   project: Project;
+  /** Resolved from Mongo when a published post exists for this project */
+  blogSlug?: string | null;
+  blogLabel?: string;
 }
 
 function DetailSection({
@@ -49,10 +52,17 @@ function BulletList({ items }: { items: string[] }) {
 /**
  * Project detail UI — themes/layouts come from global DesignThemeProvider.
  */
-export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
+export default function ProjectDetailView({
+  project,
+  blogSlug,
+  blogLabel,
+}: ProjectDetailViewProps) {
   const { designStyle, layoutStyle } = useDesignTheme();
   const techList = getProjectTechList(project);
   const s = designStyle.colors;
+  const resolvedBlogSlug = blogSlug || project.blogSlug || null;
+  const resolvedBlogLabel =
+    blogLabel || project.blogLabel || "Read Blog";
 
   return (
     <div
@@ -149,13 +159,13 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
               View Code
             </Link>
 
-            {project.blogSlug && (
+            {resolvedBlogSlug && (
               <Link
-                href={`/blog/${project.blogSlug}`}
+                href={`/blog/${resolvedBlogSlug}`}
                 className="inline-flex gap-2 justify-center items-center btn-secondary"
               >
                 <HiArrowRight className="text-lg" />
-                {project.blogLabel || "Read Blog"}
+                {resolvedBlogLabel}
               </Link>
             )}
 

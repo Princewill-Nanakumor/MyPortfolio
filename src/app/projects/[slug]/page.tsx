@@ -7,7 +7,10 @@ import {
   projects,
 } from "@/data/projects";
 import ProjectDetailView from "@/components/projects/ProjectDetailView";
+import { resolveBlogSlugForProject } from "@/lib/blogData";
 import { SITE_NAME, SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
+
+export const dynamic = "force-dynamic";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -123,7 +126,10 @@ const ProjectDetailPage = async ({ params }: ProjectPageProps) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
       />
-      <ProjectDetailView project={project} />
+      <ProjectDetailView
+        project={project}
+        blogSlug={await resolveBlogSlugForProject(project)}
+      />
     </>
   );
 };

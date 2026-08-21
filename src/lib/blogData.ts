@@ -7,6 +7,7 @@ import {
   isMongoObjectId,
 } from "@/utils/blogQueries";
 import { normalizeContentBlocks } from "@/utils/normalizeContentBlocks";
+import { selectBlogSlugForProject } from "@/utils/resolveProjectBlog";
 
 type LeanBlockLike = {
   type: ContentBlock["type"];
@@ -28,6 +29,7 @@ type LeanPostLike = {
   tags?: string[];
   published?: boolean;
   likes?: number;
+  projectSlug?: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -50,6 +52,7 @@ function serializePost(doc: LeanPostLike): BlogPost {
     tags: Array.isArray(doc.tags) ? doc.tags : [],
     published: Boolean(doc.published),
     likes: typeof doc.likes === "number" ? doc.likes : 0,
+    ...(doc.projectSlug ? { projectSlug: doc.projectSlug } : {}),
     createdAt: doc.createdAt
       ? new Date(doc.createdAt).toISOString()
       : undefined,
@@ -71,6 +74,18 @@ export async function getPublishedPosts(): Promise<BlogPost[]> {
     .lean()) as LeanPostLike[];
 
   return docs.map(serializePost);
+}
+
+/**
+ * Resolve the published blog slug for a portfolio project.
+ * Order: explicit project.blogSlug → post.projectSlug → slug contains project.slug
+ */
+export async function resolveBlogSlugForProject(project: {
+  slug: string;
+  blogSlug?: string;
+}): Promise<string | null> {
+  const posts = await getPublishedPosts();
+  return selectBlogSlugForProject(project, posts);
 }
 
 export async function getPostBySlug(

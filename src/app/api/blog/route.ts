@@ -27,6 +27,7 @@ interface BlogPostBody {
   category?: string;
   tags?: string[];
   published?: boolean;
+  projectSlug?: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }
@@ -181,6 +182,7 @@ export async function POST(
         readTime: body.readTime || "",
         category: body.category,
         tags: body.tags || [],
+        projectSlug: body.projectSlug?.trim() || "",
         published: false,
         likes: 0,
         updatedAt: new Date(),

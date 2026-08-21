@@ -164,6 +164,8 @@ export const projects: Project[] = [
     github: "https://github.com/Princewill-Nanakumor/ticketing_app",
     link: "https://hilex-ticketing-app.netlify.app",
     year: "2026",
+    blogSlug: "helix-ticketing-app-nextjs-postgresql-prisma-jwt",
+    blogLabel: "Read Blog",
     searchTerms: [
       "Helix Ticketing App Nanakumor Princewill",
       "Next.js helpdesk",

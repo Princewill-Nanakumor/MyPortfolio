@@ -32,6 +32,7 @@ interface BlogPostBody {
   tags?: string[];
   published?: boolean;
   likes?: number;
+  projectSlug?: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

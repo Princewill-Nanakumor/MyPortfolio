@@ -12,6 +12,8 @@ export interface BlogPost {
   tags: string[];
   published: boolean;
   likes: number;
+  /** Portfolio project slug this post documents (enables Read Blog on /projects/[slug]) */
+  projectSlug?: string;
   date?: string;
   author?: {
     name?: string;

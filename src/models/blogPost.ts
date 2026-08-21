@@ -38,6 +38,8 @@ export interface IBlogPost extends Document {
   tags: string[];
   published: boolean;
   likes: number;
+  /** Links this post to a portfolio project (`Project.slug`) for Read Blog */
+  projectSlug?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -116,6 +118,13 @@ const BlogPostSchema = new Schema<IBlogPost>(
       type: Boolean,
       default: true,
     },
+    projectSlug: {
+      type: String,
+      required: false,
+      default: "",
+      trim: true,
+      index: true,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -135,6 +144,7 @@ BlogPostSchema.index({ title: "text", excerpt: "text", tags: "text" });
 BlogPostSchema.index({ slug: 1 });
 BlogPostSchema.index({ category: 1 });
 BlogPostSchema.index({ published: 1 });
+BlogPostSchema.index({ projectSlug: 1 });
 
 // Type-safe model creation
 const BlogPost: Model<IBlogPost> =

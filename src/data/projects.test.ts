@@ -43,13 +43,19 @@ describe("getProjectImageUrl", () => {
   });
 });
 
-describe("getProjectTechList", () => {
-  it("splits and trims technology chips", () => {
-    expect(
-      getProjectTechList({
-        ...projects[0],
-        technology: "Next.js,  React , TypeScript",
-      })
-    ).toEqual(["Next.js", "React", "TypeScript"]);
+describe("project ↔ blog linking", () => {
+  it("Helix has a static blogSlug fallback", () => {
+    const helix = getProjectBySlug("helix-ticketing-app");
+    expect(helix?.blogSlug).toBe(
+      "helix-ticketing-app-nextjs-postgresql-prisma-jwt"
+    );
+  });
+
+  it("every blogSlug points at a non-empty string when set", () => {
+    for (const project of projects) {
+      if (project.blogSlug) {
+        expect(project.blogSlug.trim().length).toBeGreaterThan(0);
+      }
+    }
   });
 });

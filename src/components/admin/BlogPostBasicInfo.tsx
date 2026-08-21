@@ -5,6 +5,7 @@ import Image from "next/image";
 import { HiUpload, HiX } from "react-icons/hi";
 import { BlogPost } from "@/types/Blog";
 import { BLOG_CATEGORY_OPTIONS } from "@/constants/blog";
+import { projects } from "@/data/projects";
 
 interface BlogPostBasicInfoProps {
   formData: Partial<BlogPost>;
@@ -166,6 +167,29 @@ const BlogPostBasicInfo: React.FC<BlogPostBasicInfoProps> = ({
             className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
             placeholder="Auto-generated from title"
           />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block mb-2 text-sm font-medium text-text-primary">
+            Related project
+          </label>
+          <select
+            name="projectSlug"
+            value={formData.projectSlug || ""}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 transition-colors border border-gray-200 rounded-xl shadow-none focus:outline-none focus:border-secondary-indigo"
+          >
+            <option value="">None (no Read Blog button)</option>
+            {projects.map((project) => (
+              <option key={project.slug} value={project.slug}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-text-muted">
+            Links this post to a portfolio project so Read Blog appears on that
+            project page.
+          </p>
         </div>
       </div>
 
