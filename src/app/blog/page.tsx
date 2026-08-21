@@ -91,6 +91,9 @@ const BlogPage = async () => {
             <p className="mx-auto max-w-2xl text-sm sm:text-base lg:text-lg text-text-secondary">
               Explore insights and thoughts on modern web development
             </p>
+            <p className="mt-2 text-sm font-medium sm:text-base text-secondary-indigo">
+              {posts.length} {posts.length === 1 ? "article" : "articles"}
+            </p>
           </div>
 
           <BlogListClient posts={posts} />

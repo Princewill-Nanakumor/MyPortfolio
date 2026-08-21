@@ -24,5 +24,11 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "car-showroom", "vin-decoder"]
+  "exclude": [
+    "node_modules",
+    "car-showroom",
+    "vin-decoder",
+    "aws_s3project",
+    "helix-ticketing-app"
+  ]
 }

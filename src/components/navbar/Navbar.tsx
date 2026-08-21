@@ -1,18 +1,33 @@
 // src/components/navbar/Navbar.tsx
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AiOutlineClose, AiOutlineMail, AiOutlineMenu } from "react-icons/ai";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 
 const Navbar: React.FC = () => {
+  const pathname = usePathname();
   const [nav, setNav] = useState<boolean>(false);
   const [shadow, setShadow] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const handleNav = (): void => {
     setNav(!nav);
   };
+
+  const checkAdminSession = useCallback(async () => {
+    try {
+      const response = await fetch("/api/admin/verify", {
+        method: "GET",
+        credentials: "include",
+      });
+      setIsAdmin(response.ok);
+    } catch {
+      setIsAdmin(false);
+    }
+  }, []);
 
   useEffect(() => {
     const handleShadow = (): void => {
@@ -23,7 +38,20 @@ const Navbar: React.FC = () => {
       }
     };
     window.addEventListener("scroll", handleShadow);
+    return () => window.removeEventListener("scroll", handleShadow);
   }, []);
+
+  useEffect(() => {
+    void checkAdminSession();
+  }, [checkAdminSession, pathname]);
+
+  useEffect(() => {
+    const onFocus = () => {
+      void checkAdminSession();
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [checkAdminSession]);
 
   return (
     <div
@@ -71,6 +99,13 @@ const Navbar: React.FC = () => {
                 Contact
               </Link>
             </li>
+            {isAdmin && (
+              <li className="font-medium tracking-wide transition-colors duration-300 hover:text-secondary-indigo">
+                <Link href="/admin" className="label-large">
+                  Admin
+                </Link>
+              </li>
+            )}
           </ul>
           {/* Hamburger Icon */}
           <button
@@ -181,6 +216,17 @@ const Navbar: React.FC = () => {
                   <span className="label-large">Contact</span>
                 </Link>
               </li>
+              {isAdmin && (
+                <li>
+                  <Link
+                    href="/admin"
+                    onClick={() => setNav(false)}
+                    className="block px-4 py-3 font-medium tracking-wide transition-all duration-300 rounded-lg hover:text-secondary-indigo hover:bg-gray-50"
+                  >
+                    <span className="label-large">Admin</span>
+                  </Link>
+                </li>
+              )}
             </ul>
 
             <div className="pt-12 mt-8 border-t border-gray-200">
