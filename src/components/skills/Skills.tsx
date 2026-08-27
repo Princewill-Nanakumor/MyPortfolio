@@ -30,6 +30,8 @@ const skills: Skill[] = [
   },
   { image: "/github1.png", description: "Github", category: "Tools" },
   { image: "/git.png", description: "Git", category: "Tools" },
+  { image: "/docker.png", description: "Docker", category: "Tools" },
+  { image: "/jestimage.webp", description: "Jest", category: "Tools" },
   { image: "/cursor-logo.png", description: "Cursor Ai", category: "Tools" },
   { image: "/vercel.png", description: "Vercel", category: "Tools" },
   { image: "/Npm-logo.svg.png", description: "NPM", category: "Tools" },
@@ -77,7 +79,7 @@ const Skills: React.FC = () => {
           {[...Array(8)].map((_, i) => (
             <motion.div
               key={`orb-${i}`}
-              className="absolute w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-accent-emerald/20 blur-sm"
+              className="absolute w-2 h-2 rounded-full blur-sm sm:w-3 sm:h-3 bg-accent-emerald/20"
               animate={{
                 x: [0, 100, 0],
                 y: [0, -100, 0],
@@ -107,7 +109,7 @@ const Skills: React.FC = () => {
           viewport={{ once: true }}
         >
           <h2 className="mb-4 heading-2 text-text-primary">My Tech Stack</h2>
-          <div className="flex items-center justify-center space-x-4">
+          <div className="flex justify-center items-center space-x-4">
             <div className="w-16 h-px bg-secondary-indigo/40"></div>
             <div className="w-3 h-3 rounded-full bg-secondary-indigo"></div>
             <div className="w-16 h-px bg-secondary-indigo/40"></div>
@@ -115,7 +117,7 @@ const Skills: React.FC = () => {
         </motion.div>
 
         <div className="flex justify-center">
-          <div className="grid max-w-5xl grid-cols-3 gap-8 md:grid-cols-4 lg:grid-cols-5">
+          <div className="grid grid-cols-3 gap-8 max-w-5xl md:grid-cols-4 lg:grid-cols-5">
             {skills.map((skill, index) => (
               <motion.div
                 key={skill.description}
@@ -136,7 +138,7 @@ const Skills: React.FC = () => {
                 }}
               >
                 <div className="relative">
-                  <div className="flex items-center justify-center w-24 h-24 transition-all duration-500 transform rotate-45 bg-secondary-indigo/10 rounded-2xl group-hover:shadow-glow group-hover:bg-secondary-indigo/20">
+                  <div className="flex justify-center items-center w-24 h-24 rounded-2xl transition-all duration-500 transform rotate-45 bg-secondary-indigo/10 group-hover:shadow-glow group-hover:bg-secondary-indigo/20">
                     <div className="transform -rotate-45">
                       <Image
                         src={skill.image}
@@ -148,7 +150,7 @@ const Skills: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="absolute inset-0 transition-opacity duration-300 transform rotate-45 opacity-0 bg-secondary-indigo/20 rounded-2xl group-hover:opacity-100"></div>
+                  <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 transform rotate-45 bg-secondary-indigo/20 group-hover:opacity-100"></div>
                 </div>
                 <div className="mt-4 text-center">
                   <h3 className="text-sm font-medium text-text-primary sm:text-base">
