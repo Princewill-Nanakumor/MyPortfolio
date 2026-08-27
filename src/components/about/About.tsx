@@ -10,6 +10,78 @@ interface ImageItem {
   alt: string;
 }
 
+const HIGHLIGHTS = [
+  {
+    title: "Scalable",
+    subtitle: "Built for Growth",
+    description: "Designed for growing data, users, and workloads.",
+    iconBg: "bg-secondary-indigo/10",
+    iconColor: "text-secondary-indigo",
+    icon: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+      />
+    ),
+  },
+  {
+    title: "Production Ready",
+    subtitle: "Built to Last",
+    description: "Auth, validation, monitoring, and solid error handling.",
+    iconBg: "bg-accent-emerald/10",
+    iconColor: "text-accent-emerald",
+    icon: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+      />
+    ),
+  },
+  {
+    title: "Real-Time",
+    subtitle: "Always in Sync",
+    description:
+      "Real-time updates that keep users, interfaces, and data synchronized.",
+    iconBg: "bg-secondary-indigo/10",
+    iconColor: "text-secondary-indigo",
+    icon: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+      />
+    ),
+  },
+  {
+    title: "Tested",
+    subtitle: "Confidence in Every Release",
+    description:
+      "Unit, API, component, and E2E tests — plus load testing when it matters.",
+    iconBg: "bg-accent-emerald/10",
+    iconColor: "text-accent-emerald",
+    icon: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      />
+    ),
+  },
+] as const;
+
+const PROOF_METRICS = [
+  "200+ source files",
+  "15,000+ lines of TypeScript",
+  "237+ automated tests",
+  "100k+ records load-tested",
+] as const;
+
 const About: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -20,7 +92,7 @@ const About: React.FC = () => {
   const images: ImageItem[] = [
     {
       src: "/myPhoto.jpg",
-      alt: "Princewill - Next.js Developer",
+      alt: "Princewill - Full-Stack Software Engineer",
     },
     {
       src: "/image2.jpg", // Add your second image
@@ -110,7 +182,7 @@ const About: React.FC = () => {
       id="about"
       className="min-h-[80vh] flex items-center bg-bg-secondary scroll-mt-20"
     >
-      <div className="w-full max-w-6xl px-6 mx-auto sm:px-8 lg:px-12">
+      <div className="px-6 mx-auto w-full max-w-6xl sm:px-8 lg:px-12">
         <div className="py-12 sm:py-16">
           {/* Section Header */}
           <motion.div
@@ -121,7 +193,7 @@ const About: React.FC = () => {
             viewport={{ once: true }}
           >
             <h2 className="mb-4 heading-2 text-text-primary">About Me</h2>
-            <div className="flex items-center justify-center space-x-2 sm:space-x-4">
+            <div className="flex justify-center items-center space-x-2 sm:space-x-4">
               <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
               <div className="w-2 h-2 rounded-full sm:w-3 sm:h-3 bg-secondary-indigo"></div>
               <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
@@ -129,7 +201,7 @@ const About: React.FC = () => {
           </motion.div>
 
           {/* Main Content */}
-          <div className="grid items-center gap-8 lg:gap-12 lg:grid-cols-2">
+          <div className="grid gap-8 items-center lg:gap-12 lg:grid-cols-2">
             {/* Text Content */}
             <motion.div
               className="order-2 space-y-6 lg:order-1"
@@ -140,155 +212,77 @@ const About: React.FC = () => {
             >
               <div>
                 <h3 className="mb-4 heading-3 text-text-primary">
-                  Building the Future of Web with{" "}
-                  <span className="text-secondary-indigo">Next.js & React</span>
+                  Engineering Modern SaaS{" "}
+                  <span className="text-secondary-indigo">
+                    & Web Applications
+                  </span>
                 </h3>
 
                 <div className="space-y-4 body-medium">
                   <p>
-                    I&apos;m a Next.js developer specializing in building fast,
-                    scalable web applications that deliver exceptional user
-                    experiences. With expertise spanning frontend development
-                    and backend API integration, I create complete,
-                    production-ready solutions that drive business results.
+                    I&apos;m a Full-Stack Software Engineer building scalable,
+                    production-ready applications — from intuitive interfaces
+                    and secure APIs to databases, authentication, multi-tenant
+                    architecture, real-time systems, background jobs, and
+                    automated testing.
                   </p>
 
                   <p>
-                    I leverage modern technologies including React, TypeScript,
-                    Tailwind CSS, and MongoDB, while utilizing Next.js&#39;s
-                    advanced capabilities—server-side rendering, static site
-                    generation, and API routes—to optimize application
-                    performance, SEO, and scalability.
+                    My work covers RBAC, resilient data-import pipelines,
+                    performance optimization, and production-focused
+                    architecture. I focus on building software that is secure,
+                    maintainable, and reliable under real-world usage — whether
+                    shipping a SaaS platform from scratch or improving an
+                    existing product.
                   </p>
 
-                  <p>
-                    Whether building from scratch or optimizing existing
-                    applications, I focus on delivering products that are both
-                    visually stunning and technically robust, leaving a lasting
-                    impression on users and clients alike.
-                  </p>
-
-                  <p>
-                    The real power comes when combining these new Ai tools with
-                    existing Technologies that you already know and love
+                  <p className="text-sm text-text-muted">
+                    I use AI tools to speed up research and iteration, while
+                    keeping architecture, quality, and security decisions in
+                    human hands.
                   </p>
                 </div>
               </div>
 
-              {/* Key Highlights - Compact Grid */}
+              {/* Key Highlights */}
               <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2">
-                <div className="p-4 border rounded-xl shadow-soft surface-card">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary-indigo/10">
-                      <svg
-                        className="w-4 h-4 text-secondary-indigo"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                {HIGHLIGHTS.map((item) => (
+                  <div
+                    key={item.title}
+                    className="p-4 rounded-xl border shadow-soft surface-card"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div
+                        className={`flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg ${item.iconBg}`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-text-primary">
-                        Performance
-                      </h4>
-                      <p className="text-xs text-text-secondary">
-                        Lightning Fast
-                      </p>
+                        <svg
+                          className={`w-4 h-4 ${item.iconColor}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          {item.icon}
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-text-primary">
+                          {item.title}
+                        </h4>
+                        <p className="text-xs font-medium text-secondary-indigo">
+                          {item.subtitle}
+                        </p>
+                        <p className="mt-1 text-xs leading-relaxed text-text-secondary">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="p-4 border rounded-xl shadow-soft surface-card">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-emerald/10">
-                      <svg
-                        className="w-4 h-4 text-accent-emerald"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-text-primary">
-                        Innovation
-                      </h4>
-                      <p className="text-xs text-text-secondary">
-                        Modern Solutions
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 border rounded-xl shadow-soft surface-card">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary-indigo/10">
-                      <svg
-                        className="w-4 h-4 text-secondary-indigo"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-text-primary">
-                        Responsive
-                      </h4>
-                      <p className="text-xs text-text-secondary">
-                        Mobile First
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 border rounded-xl shadow-soft surface-card">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-emerald/10">
-                      <svg
-                        className="w-4 h-4 text-accent-emerald"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-text-primary">
-                        SEO Optimized
-                      </h4>
-                      <p className="text-xs text-text-secondary">
-                        Search Ready
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
+
+              <p className="pt-4 text-xs leading-relaxed text-center text-text-muted sm:text-sm sm:text-left">
+                {PROOF_METRICS.join(" · ")}
+              </p>
             </motion.div>
 
             {/* Image Slider Section */}
@@ -302,7 +296,7 @@ const About: React.FC = () => {
               <div className="relative">
                 {/* Image Slider Container */}
                 <div
-                  className="relative overflow-hidden rounded-3xl shadow-large"
+                  className="overflow-hidden relative rounded-3xl shadow-large"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
                 >
@@ -379,15 +373,15 @@ const About: React.FC = () => {
                 </div>
 
                 {/* Floating Elements */}
-                <div className="absolute w-8 h-8 rounded-full sm:w-16 sm:h-16 -top-2 -right-2 sm:-top-4 sm:-right-4 bg-secondary-indigo/10 blur-xl animate-float"></div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full blur-xl sm:w-16 sm:h-16 sm:-top-4 sm:-right-4 bg-secondary-indigo/10 animate-float"></div>
                 <div
-                  className="absolute w-6 h-6 rounded-full sm:w-12 sm:h-12 -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 bg-accent-emerald/10 blur-xl animate-float"
+                  className="absolute -bottom-2 -left-2 w-6 h-6 rounded-full blur-xl sm:w-12 sm:h-12 sm:-bottom-4 sm:-left-4 bg-accent-emerald/10 animate-float"
                   style={{ animationDelay: "1s" }}
                 ></div>
               </div>
 
               {/* Experience Badge */}
-              <div className="absolute p-2 border sm:p-3 -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 rounded-xl shadow-large surface-card">
+              <div className="absolute -bottom-2 -left-2 p-2 rounded-xl border sm:p-3 sm:-bottom-4 sm:-left-4 shadow-large surface-card">
                 <div className="text-center">
                   <div className="text-lg font-bold sm:text-xl text-secondary-indigo">
                     3+
@@ -398,14 +392,14 @@ const About: React.FC = () => {
                 </div>
               </div>
 
-              {/* Next.js Badge */}
-              <div className="absolute p-2 border sm:p-3 -top-2 -right-2 sm:-top-4 sm:-right-4 rounded-xl shadow-large surface-card">
+              {/* Full-Stack Badge */}
+              <div className="absolute -top-2 -right-2 p-2 rounded-xl border sm:p-3 sm:-top-4 sm:-right-4 shadow-large surface-card">
                 <div className="text-center">
                   <div className="text-xs font-bold text-secondary-indigo">
-                    NEXT.JS
+                    FULL-STACK
                   </div>
                   <div className="text-xs font-medium text-text-secondary">
-                    Developer
+                    Engineer
                   </div>
                 </div>
               </div>

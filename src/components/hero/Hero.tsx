@@ -5,15 +5,20 @@ import Link from "next/link";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 import SocialLinks from "@/components/common/SocialLinks";
 
-const TYPEWRITER_WORDS = ["Princewill", "React", "TypeScript"] as const;
+const TYPEWRITER_WORDS = [
+  "Princewill",
+  "React",
+  "TypeScript",
+  "Node.js",
+] as const;
 const LONGEST_WORD = TYPEWRITER_WORDS.reduce((longest, word) =>
-  word.length > longest.length ? word : longest
+  word.length > longest.length ? word : longest,
 );
 
 /** Keeps typewriter width stable so shorter words don't collapse the hero layout. */
 function TypewriterSlot({ text }: { text: string }) {
   return (
-    <span className="relative inline-grid justify-items-start text-left align-baseline">
+    <span className="inline-grid relative justify-items-start text-left align-baseline">
       <span
         className="invisible col-start-1 row-start-1 whitespace-nowrap"
         aria-hidden="true"
@@ -53,14 +58,14 @@ const Hero: React.FC = () => {
               <h1 className="heading-hero">
                 <span className="sr-only">
                   Nanakumor Princewill, Princewill Nanakumor, Prince Nanakumor —
-                  Next.js Developer
+                  Full-Stack Software Engineer
                 </span>
 
                 <span className="block md:hidden" aria-hidden="true">
                   Hi, I&lsquo;m
                 </span>
                 <span
-                  className="relative flex justify-center md:hidden"
+                  className="flex relative justify-center md:hidden"
                   aria-hidden="true"
                 >
                   <TypewriterSlot text={typeEffect} />
@@ -70,13 +75,15 @@ const Hero: React.FC = () => {
                   Hi, I&lsquo;m{" "}
                 </span>
                 <span
-                  className="hidden relative md:inline-block align-baseline"
+                  className="hidden relative align-baseline md:inline-block"
                   aria-hidden="true"
                 >
                   <TypewriterSlot text={typeEffect} />
                 </span>
               </h1>
-              <h2 className="heading-2 text-text-primary">Next.js Developer</h2>
+              <h2 className="heading-2 text-text-primary">
+                Full-Stack Software Engineer
+              </h2>
             </div>
 
             <div className="flex justify-center items-center space-x-2 sm:space-x-4">
@@ -85,10 +92,12 @@ const Hero: React.FC = () => {
               <div className="w-8 h-px sm:w-16 bg-secondary-indigo/40"></div>
             </div>
 
-            <p className="px-4 mx-auto max-w-2xl body-hero">
-              I build modern web applications with Next.js and React.
-              Specializing in creating seamless user experiences with clean
-              code, responsive design, and cutting-edge web technologies.
+            <p className="px-4 mx-auto max-w-3xl body-hero">
+              I design and build scalable, production-ready web applications
+              with Next.js, React, TypeScript, and Node.js. From multi-tenant
+              architecture and real-time systems to secure APIs, database
+              design, background jobs, and automated testing — I build software
+              that goes beyond the interface.
             </p>
 
             <div className="flex flex-col gap-4 justify-center items-center px-4 sm:gap-6 sm:flex-row">
