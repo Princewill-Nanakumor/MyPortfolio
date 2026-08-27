@@ -313,9 +313,11 @@ export const projects: Project[] = [
     problem:
       "Spreadsheets don’t show live lead status, can’t safely share ownership across a team, and collapse under volume. Teams need workspace isolation, granular RBAC, bulk import/export, dialer-aware call history, and realtime updates without building five separate tools.",
     overview:
-      "Motherland CRM Solutions is a multi-tenant SaaS CRM I designed and shipped: admins import and assign leads, sub-admins get opt-in permissions, agents work assigned queues, and everyone stays in sync over Ably. Board status charts, softphone call logs, seasonal holiday animations, host-based branding, reminders, billing, and a Vitest/Playwright suite sit on a Next.js + MongoDB stack aimed at real sales throughput — live at motherlandcrmsolutions.com.",
+      "Motherland CRM Solutions is a multi-tenant SaaS CRM I designed and shipped: admins import and assign leads through a chunked staging + detached worker pipeline, sub-admins get opt-in permissions, agents work assigned queues, and everyone stays in sync over Ably. Board status charts, softphone call logs, seasonal holiday animations, host-based branding, billing, and a 237-passing Vitest suite plus Playwright lifecycle/smoke (with opt-in import load/soak harnesses proven through 50k–100k rows) sit on a Next.js + MongoDB stack — live at motherlandcrmsolutions.com.",
     capabilities: [
-      "CSV/Excel import with fuzzy header mapping, validation, preview, batch insert, and export",
+      "CSV/Excel import with fuzzy header mapping, validation, preview, chunked staging, and export",
+      "Detached import worker — queue/lease jobs, process ImportStagingChunk batches, resume from nextChunkIndex, Ably progress",
+      "One active processing import per tenant; other same-tenant jobs stay queued; multi-tenant workers drain in parallel",
       "ADMIN / SUBADMIN / AGENT roles — sub-admins get grantable permissions (assign, status, reminders, comments)",
       "Admin vs agent dashboards with server-side pagination and include/exclude multi-filters",
       "Lead detail panel with status, comments, activity log, reminders, and prev/next navigation",
@@ -331,19 +333,22 @@ export const projects: Project[] = [
     architecture: [
       "Shared-DB multi-tenancy: every record scoped by `adminId` (workspace boundary)",
       "Tenant RBAC matrix in roles.ts — ADMIN full access; SUBADMIN via permissions[]; AGENT assigned-only",
+      "Import pipeline: client 5k chunks → stage API → ImportStagingChunk → leased importWorker (job-level quota, drain 100 chunks/tick)",
+      "Import crash safety: worker leases, midflight Mongo kill+resume (400 → 2400 completed in harness), upsert bulkWrite path",
       "NextAuth credentials JWTs with hard 24h expiry enforced in token, middleware, and client",
       "TanStack Query for server state; Zustand for panel/selection UI; filters live in the URL",
       "Ably channels per workspace (+ per-open lead) invalidate the right query caches",
       "Holiday effects: date-window rules resolve without loading animation chunks; overlay dynamic-imported + localStorage toggle",
       "MongoDB models/indexes tuned for filtered lead lists, unique email-per-workspace, and imports",
       "Zod + React Hook Form shared validation; dnd-kit column order; Radix dialogs/selects",
-      "Layered tests: ~146 Vitest + Playwright smoke/lifecycle; CI on Node 22; optional Vercel Speed Insights",
+      "Tests: 237 Vitest passing (1 skipped gate) in src/tests/; Playwright smoke + seeded lifecycle; opt-in import-load / HTTP soak / bench / concurrent / same-tenant / browser-pressure / midflight-kill",
     ],
     outcomes: [
-      "Production CRM covering auth, tenancy, realtime, import/export, billing, dialer logs, and RBAC",
+      "Production CRM covering auth, tenancy, realtime, resilient import/export, billing, dialer logs, and RBAC",
+      "Measured 50k HTTP bench: ~9.3 min → ~3.8 min (−59%), 89 → 217 leads/s, Mongo RTs 210 → 12 (−94%) with 5k chunks + job quota",
+      "Load harness: 100k single-tenant (~582/s) and 10×10k concurrent isolation; 5 tenants × 50k HTTP concurrent completed (~684–739 aggregate leads/s)",
+      "Browser UI pressure survived 10k (~59s) and 50k (~3.5 min) CSV uploads end-to-end",
       "Sub-admin model that extends agent capacity without creating a second workspace owner",
-      "Tables that stay fast under large lead counts via server pagination + compound indexes",
-      "Automated regression coverage and a live product URL for demos",
     ],
     technology:
       "Next.js 15, React 19, TypeScript, MongoDB, Mongoose, Tailwind CSS v4, Radix UI, NextAuth, TanStack React Query, TanStack Table, Zustand, Ably, Framer Motion, Recharts, dnd-kit, React Hook Form, Zod, Resend, Vitest, Playwright, Vercel",
@@ -360,6 +365,8 @@ export const projects: Project[] = [
       "SUBADMIN CRM permissions",
       "Vertex CRM branding",
       "holiday animations CRM dashboard",
+      "CSV Excel import worker load testing",
+      "multi-tenant import soak Playwright",
     ],
   },
   {
